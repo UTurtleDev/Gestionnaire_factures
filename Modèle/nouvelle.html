@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gestionnaire de Factures</div>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="clients.html" class="nav-link">Clients</a></li>
+            <li class="nav-item"><a href="factures.html" class="nav-link">Factures</a></li>
+            <li class="nav-item"><a href="reglements.html" class="nav-link">Règlements</a></li>
+            <li class="nav-item"><a href="parametres.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </nav>
+
+    
+    <!-- FORMULAIRE NOUVELLE FACTURE -->
+    <div class="container">
+        <h1 style="margin: 20px 0;">Créer une Nouvelle Facture</h1>
+        
+        <div class="card mb-3">
+            <div class="card-header">Formulaire de Création</div>
+            <div class="card-body">
+                <div class="grid-2">
+                    <div>
+                        <h3 class="mb-3">Informations Facture</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Numéro de Facture</label>
+                            <input type="text" class="form-control" value="F2025-048" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" value="2025-02-28">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Client</label>
+                            <select class="form-control">
+                                <option>Sélectionnez un client</option>
+                                <option>Dupont SARL</option>
+                                <option>Martin & Co</option>
+                                <option>Tech Solutions</option>
+                                <option>InfoTech</option>
+                                <option>BureauPlus</option>
+                                <option>Web Experts</option>
+                                <option>ABC Services</option>
+                                <option>Durand Consulting</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Objet</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="mb-3">Détails Financiers</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Montant HT</label>
+                            <input type="number" step="0.01" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Taux TVA (%)</label>
+                            <input type="number" step="0.1" class="form-control" value="20">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Montant TTC (calculé automatiquement)</label>
+                            <input type="text" class="form-control" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Commentaire</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr style="margin: 20px 0;">
+                
+                <div class="text-right">
+                    <button class="btn btn-danger">Annuler</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

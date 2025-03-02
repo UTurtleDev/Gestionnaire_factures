@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gestionnaire de Factures</div>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="clients.html" class="nav-link">Clients</a></li>
+            <li class="nav-item"><a href="factures.html" class="nav-link">Factures</a></li>
+            <li class="nav-item"><a href="reglements.html" class="nav-link">Règlements</a></li>
+            <li class="nav-item"><a href="parametres.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </nav>
+
+    <!-- DASHBOARD -->
+    <div class="container">
+        <h1 style="margin: 20px 0;">Dashboard</h1>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>MONTANT TOTAL FACTURÉ (2025)</h3>
+                <p>45 850,00 €</p>
+            </div>
+            <div class="stat-card">
+                <h3>MONTANT TOTAL RÉGLÉ (2025)</h3>
+                <p>38 200,00 €</p>
+            </div>
+            <div class="stat-card">
+                <h3>MONTANT EN ATTENTE</h3>
+                <p>7 650,00 €</p>
+            </div>
+            <div class="stat-card">
+                <h3>FACTURES EN RETARD</h3>
+                <p class="text-danger">4</p>
+            </div>
+        </div>
+        
+        <div class="card mb-3">
+            <div class="card-header">Évolution des factures et règlements</div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <!-- Ici serait inséré un graphique avec une bibliothèque comme Chart.js -->
+                    <div style="height:100%; display:flex; align-items:center; justify-content:center; color:#777; border:1px dashed #ddd; border-radius:5px;">
+                        [Graphique: Évolution mensuelle des factures et règlements]
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">Factures en retard</div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Facture</th>
+                                <th>Client</th>
+                                <th>Montant</th>
+                                <th>Retard</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>F2025-042</td>
+                                <td>Dupont SARL</td>
+                                <td>1 250,00 €</td>
+                                <td><span class="badge badge-danger">15 jours</span></td>
+                                <td><a href="#" class="btn btn-primary btn-sm">Rappel</a></td>
+                            </tr>
+                            <tr>
+                                <td>F2025-039</td>
+                                <td>Martin & Co</td>
+                                <td>2 450,00 €</td>
+                                <td><span class="badge badge-danger">22 jours</span></td>
+                                <td><a href="#" class="btn btn-primary btn-sm">Rappel</a></td>
+                            </tr>
+                            <tr>
+                                <td>F2025-036</td>
+                                <td>Tech Solutions</td>
+                                <td>3 100,00 €</td>
+                                <td><span class="badge badge-danger">30 jours</span></td>
+                                <td><a href="#" class="btn btn-primary btn-sm">Rappel</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">Factures à échéance proche</div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N° Facture</th>
+                                <th>Client</th>
+                                <th>Montant</th>
+                                <th>Échéance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>F2025-045</td>
+                                <td>Durand Consulting</td>
+                                <td>1 800,00 €</td>
+                                <td><span class="badge badge-warning">3 jours</span></td>
+                            </tr>
+                            <tr>
+                                <td>F2025-046</td>
+                                <td>ABC Services</td>
+                                <td>950,00 €</td>
+                                <td><span class="badge badge-warning">5 jours</span></td>
+                            </tr>
+                            <tr>
+                                <td>F2025-047</td>
+                                <td>Web Experts</td>
+                                <td>2 100,00 €</td>
+                                <td><span class="badge badge-primary">7 jours</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LISTE DES FACTURES -->
+    <div class="container" style="display:none;">
+        <h1 style="margin: 20px 0;">Gestion des Factures</h1>
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                <span>Liste des factures</span>
+                <a href="#" class="btn btn-primary">Nouvelle Facture</a>
+            </div>
+            <div class="card-body">
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label class="form-label">Client</label>
+                        <select class="form-control">
+                            <option value="">Tous les clients</option>
+                            <option>Dupont SARL</option>
+                            <option>Martin & Co</option>
+                            <option>Tech Solutions</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Statut</label>
+                        <select class="form-control">
+                            <option value="">Tous les statuts</option>
+                            <option>À payer</option>
+                            <option>Partiellement payée</option>
+                            <option>Payée</option>
+                            <option>En retard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Période</label>
+                        <select class="form-control">
+                            <option>Ce mois</option>
+                            <option>Ce trimestre</option>
+                            <option>Cette année</option>
+                            <option>Personnalisé</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Filtrer</button>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N° Facture</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Objet</th>
+                            <th>Montant TTC</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F2025-047</td>
+                            <td>22/02/2025</td>
+                            <td>Web Experts</td>
+                            <td>Développement site web</td>
+                            <td>2 520,00 €</td>
+                            <td><span class="badge badge-primary">À payer</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-046</td>
+                            <td>20/02/2025</td>
+                            <td>ABC Services</td>
+                            <td>Maintenance mensuelle</td>
+                            <td>1 140,00 €</td>
+                            <td><span class="badge badge-primary">À payer</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-045</td>
+                            <td>18/02/2025</td>
+                            <td>Durand Consulting</td>
+                            <td>Audit sécurité</td>
+                            <td>2 160,00 €</td>
+                            <td><span class="badge badge-primary">À payer</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-044</td>
+                            <td>15/02/2025</td>
+                            <td>InfoTech</td>
+                            <td>Maintenance serveurs</td>
+                            <td>1 800,00 €</td>
+                            <td><span class="badge badge-success">Payée</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-043</td>
+                            <td>10/02/2025</td>
+                            <td>BureauPlus</td>
+                            <td>Fournitures bureau</td>
+                            <td>540,00 €</td>
+                            <td><span class="badge badge-warning">Partiellement payée</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-042</td>
+                            <td>05/02/2025</td>
+                            <td>Dupont SARL</td>
+                            <td>Formation Excel</td>
+                            <td>1 500,00 €</td>
+                            <td><span class="badge badge-danger">En retard</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                                <a href="#" class="btn btn-danger btn-sm">Rappel</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- DÉTAIL D'UNE FACTURE -->
+    <div class="container" style="display:none;">
+        <h1 style="margin: 20px 0;">Détail de la Facture</h1>
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                <span>Facture N° F2025-042</span>
+                <div>
+                    <a href="#" class="btn btn-primary btn-sm">Exporter PDF</a>
+                    <a href="#" class="btn btn-success btn-sm">Ajouter Règlement</a>
+                    <a href="#" class="btn btn-danger btn-sm">Envoyer Rappel</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="grid-2">
+                    <div>
+                        <h3>Informations Facture</h3>
+                        <table style="margin-bottom: 20px;">
+                            <tr>
+                                <th style="width: 150px;">Numéro</th>
+                                <td>F2025-042</td>
+                            </tr>
+                            <tr>
+                                <th>Date</th>
+                                <td>05/02/2025</td>
+                            </tr>
+                            <tr>
+                                <th>Échéance</th>
+                                <td class="text-danger">07/03/2025 (Retard: 15 jours)</td>
+                            </tr>
+                            <tr>
+                                <th>Objet</th>
+                                <td>Formation Excel avancé - 2 journées</td>
+                            </tr>
+                            <tr>
+                                <th>Statut</th>
+                                <td><span class="badge badge-danger">En retard</span></td>
+                            </tr>
+                        </table>
+                        
+                        <h3>Détails Financiers</h3>
+                        <table>
+                            <tr>
+                                <th style="width: 150px;">Montant HT</th>
+                                <td>1 250,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Taux TVA</th>
+                                <td>20%</td>
+                            </tr>
+                            <tr>
+                                <th>Montant TVA</th>
+                                <td>250,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Montant TTC</th>
+                                <td>1 500,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Réglé</th>
+                                <td>0,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Solde dû</th>
+                                <td class="text-danger">1 500,00 €</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h3>Client</h3>
+                        <table style="margin-bottom: 20px;">
+                            <tr>
+                                <th style="width: 150px;">Entité</th>
+                                <td>Dupont SARL</td>
+                            </tr>
+                            <tr>
+                                <th>Contact</th>
+                                <td>Jean Dupont</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse</th>
+                                <td>12 rue des Entrepreneurs</td>
+                            </tr>
+                            <tr>
+                                <th>Code Postal</th>
+                                <td>75001</td>
+                            </tr>
+                            <tr>
+                                <th>Ville</th>
+                                <td>Paris</td>
+                            </tr>
+                            <tr>
+                                <th>Téléphone</th>
+                                <td>01 23 45 67 89</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>j.dupont@dupontsarl.fr</td>
+                            </tr>
+                        </table>
+                        
+                        <h3>Historique des Règlements</h3>
+                        <p>Aucun règlement enregistré pour cette facture.</p>
+                        
+                        <h3>Commentaires</h3>
+                        <div class="payment-details">
+                            <p><strong>22/02/2025 par Sophie Martin:</strong> Client contacté par téléphone, promet un paiement pour la semaine prochaine.</p>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label class="form-label">Ajouter un commentaire</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <button class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FORMULAIRE NOUVELLE FACTURE -->
+    <div class="container" style="display:none;">
+        <h1 style="margin: 20px 0;">Créer une Nouvelle Facture</h1>
+        
+        <div class="card mb-3">
+            <div class="card-header">Formulaire de Création</div>
+            <div class="card-body">
+                <div class="grid-2">
+                    <div>
+                        <h3 class="mb-3">Informations Facture</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Numéro de Facture</label>
+                            <input type="text" class="form-control" value="F2025-048" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" value="2025-02-28">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Client</label>
+                            <select class="form-control">
+                                <option>Sélectionnez un client</option>
+                                <option>Dupont SARL</option>
+                                <option>Martin & Co</option>
+                                <option>Tech Solutions</option>
+                                <option>InfoTech</option>
+                                <option>BureauPlus</option>
+                                <option>Web Experts</option>
+                                <option>ABC Services</option>
+                                <option>Durand Consulting</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Objet</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="mb-3">Détails Financiers</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Montant HT</label>
+                            <input type="number" step="0.01" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Taux TVA (%)</label>
+                            <input type="number" step="0.1" class="form-control" value="20">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Montant TTC (calculé automatiquement)</label>
+                            <input type="text" class="form-control" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Commentaire</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr style="margin: 20px 0;">
+                
+                <div class="text-right">
+                    <button class="btn btn-danger">Annuler</button>
+                    <button class="btn btn-primary">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

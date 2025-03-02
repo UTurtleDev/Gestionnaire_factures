@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gestionnaire de Factures</div>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="clients.html" class="nav-link">Clients</a></li>
+            <li class="nav-item"><a href="factures.html" class="nav-link">Factures</a></li>
+            <li class="nav-item"><a href="reglements.html" class="nav-link">Règlements</a></li>
+            <li class="nav-item"><a href="parametres.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </nav>
+
+        <!-- LISTE DES RÈGLEMENTS -->
+        <div class="container">
+            <h1 style="margin: 20px 0;">Gestion des Règlements</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    <span>Liste des règlements</span>
+                    <a href="reglementsnouveau.html" class="btn btn-primary">Nouveau Règlement</a>
+                </div>
+                <div class="card-body">
+                    <div class="filter-section">
+                        <div class="form-group">
+                            <label class="form-label">Client</label>
+                            <select class="form-control">
+                                <option value="">Tous les clients</option>
+                                <option>Dupont SARL</option>
+                                <option>Martin & Co</option>
+                                <option>Tech Solutions</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mode de paiement</label>
+                            <select class="form-control">
+                                <option value="">Tous les modes</option>
+                                <option>Virement</option>
+                                <option>Chèque</option>
+                                <option>Carte bancaire</option>
+                                <option>Espèces</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Période</label>
+                            <select class="form-control">
+                                <option>Ce mois</option>
+                                <option>Ce trimestre</option>
+                                <option>Cette année</option>
+                                <option>Personnalisé</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary">Filtrer</button>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Référence</th>
+                                <th>Client</th>
+                                <th>N° Facture</th>
+                                <th>Montant</th>
+                                <th>Mode</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>28/02/2025</td>
+                                <td>REG-2025-087</td>
+                                <td>InfoTech</td>
+                                <td>F2025-044</td>
+                                <td>1 800,00 €</td>
+                                <td>Virement</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>25/02/2025</td>
+                                <td>REG-2025-086</td>
+                                <td>BureauPlus</td>
+                                <td>F2025-043</td>
+                                <td>180,00 €</td>
+                                <td>Chèque</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>20/02/2025</td>
+                                <td>REG-2025-085</td>
+                                <td>Martin & Co</td>
+                                <td>F2025-035</td>
+                                <td>1 200,00 €</td>
+                                <td>Virement</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>15/02/2025</td>
+                                <td>REG-2025-084</td>
+                                <td>Tech Solutions</td>
+                                <td>F2025-032</td>
+                                <td>950,00 €</td>
+                                <td>Carte bancaire</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10/02/2025</td>
+                                <td>REG-2025-083</td>
+                                <td>Dupont SARL</td>
+                                <td>F2025-030</td>
+                                <td>2 400,00 €</td>
+                                <td>Virement</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

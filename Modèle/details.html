@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gestionnaire de Factures</div>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="clients.html" class="nav-link">Clients</a></li>
+            <li class="nav-item"><a href="factures.html" class="nav-link">Factures</a></li>
+            <li class="nav-item"><a href="reglements.html" class="nav-link">Règlements</a></li>
+            <li class="nav-item"><a href="parametres.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </nav>
+
+    
+    <!-- DÉTAIL D'UNE FACTURE -->
+    <div class="container">
+        <h1 style="margin: 20px 0;">Détail de la Facture</h1>
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                <span>Facture N° F2025-042</span>
+                <div>
+                    <a href="#" class="btn btn-primary btn-sm">Exporter PDF</a>
+                    <a href="#" class="btn btn-success btn-sm">Ajouter Règlement</a>
+                    <a href="#" class="btn btn-danger btn-sm">Envoyer Rappel</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="grid-2">
+                    <div>
+                        <h3>Informations Facture</h3>
+                        <table style="margin-bottom: 20px;">
+                            <tr>
+                                <th style="width: 150px;">Numéro</th>
+                                <td>F2025-042</td>
+                            </tr>
+                            <tr>
+                                <th>Date</th>
+                                <td>05/02/2025</td>
+                            </tr>
+                            <tr>
+                                <th>Échéance</th>
+                                <td class="text-danger">07/03/2025 (Retard: 15 jours)</td>
+                            </tr>
+                            <tr>
+                                <th>Objet</th>
+                                <td>Formation Excel avancé - 2 journées</td>
+                            </tr>
+                            <tr>
+                                <th>Statut</th>
+                                <td><span class="badge badge-danger">En retard</span></td>
+                            </tr>
+                        </table>
+                        
+                        <h3>Détails Financiers</h3>
+                        <table>
+                            <tr>
+                                <th style="width: 150px;">Montant HT</th>
+                                <td>1 250,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Taux TVA</th>
+                                <td>20%</td>
+                            </tr>
+                            <tr>
+                                <th>Montant TVA</th>
+                                <td>250,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Montant TTC</th>
+                                <td>1 500,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Réglé</th>
+                                <td>0,00 €</td>
+                            </tr>
+                            <tr>
+                                <th>Solde dû</th>
+                                <td class="text-danger">1 500,00 €</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div>
+                        <h3>Client</h3>
+                        <table style="margin-bottom: 20px;">
+                            <tr>
+                                <th style="width: 150px;">Entité</th>
+                                <td>Dupont SARL</td>
+                            </tr>
+                            <tr>
+                                <th>Contact</th>
+                                <td>Jean Dupont</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse</th>
+                                <td>12 rue des Entrepreneurs</td>
+                            </tr>
+                            <tr>
+                                <th>Code Postal</th>
+                                <td>75001</td>
+                            </tr>
+                            <tr>
+                                <th>Ville</th>
+                                <td>Paris</td>
+                            </tr>
+                            <tr>
+                                <th>Téléphone</th>
+                                <td>01 23 45 67 89</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>j.dupont@dupontsarl.fr</td>
+                            </tr>
+                        </table>
+                        
+                        <h3>Historique des Règlements</h3>
+                        <p>Aucun règlement enregistré pour cette facture.</p>
+                        
+                        <h3>Commentaires</h3>
+                        <div class="payment-details">
+                            <p><strong>22/02/2025 par Sophie Martin:</strong> Client contacté par téléphone, promet un paiement pour la semaine prochaine.</p>
+                        </div>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label class="form-label">Ajouter un commentaire</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                        <button class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gestionnaire de Factures</div>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="clients.html" class="nav-link">Clients</a></li>
+            <li class="nav-item"><a href="factures.html" class="nav-link">Factures</a></li>
+            <li class="nav-item"><a href="reglements.html" class="nav-link">Règlements</a></li>
+            <li class="nav-item"><a href="parametres.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- LISTE DES FACTURES -->
+    <div class="container">
+        <h1 style="margin: 20px 0;">Gestion des Factures</h1>
+        
+        <div class="card mb-3">
+            <div class="card-header">
+                <span>Liste des factures</span>
+                <a href="nouvelle.html" class="btn btn-primary">Nouvelle Facture</a>
+            </div>
+            <div class="card-body">
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label class="form-label">Client</label>
+                        <select class="form-control">
+                            <option value="">Tous les clients</option>
+                            <option>Dupont SARL</option>
+                            <option>Martin & Co</option>
+                            <option>Tech Solutions</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Statut</label>
+                        <select class="form-control">
+                            <option value="">Tous les statuts</option>
+                            <option>À payer</option>
+                            <option>Partiellement payée</option>
+                            <option>Payée</option>
+                            <option>En retard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Période</label>
+                        <select class="form-control">
+                            <option>Ce mois</option>
+                            <option>Ce trimestre</option>
+                            <option>Cette année</option>
+                            <option>Personnalisé</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Filtrer</button>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N° Facture</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Objet</th>
+                            <th>Montant TTC</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F2025-047</td>
+                            <td>22/02/2025</td>
+                            <td>Web Experts</td>
+                            <td>Développement site web</td>
+                            <td>2 520,00 €</td>
+                            <td><span class="badge badge-primary">À payer</span></td>
+                            <td>
+                                <a href="details.html" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-046</td>
+                            <td>20/02/2025</td>
+                            <td>ABC Services</td>
+                            <td>Maintenance mensuelle</td>
+                            <td>1 140,00 €</td>
+                            <td><span class="badge badge-primary">À payer</span></td>
+                            <td>
+                                <a href="details.html" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="reglements.html" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-045</td>
+                            <td>18/02/2025</td>
+                            <td>Durand Consulting</td>
+                            <td>Audit sécurité</td>
+                            <td>2 160,00 €</td>
+                            <td><span class="badge badge-primary">À payer</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-044</td>
+                            <td>15/02/2025</td>
+                            <td>InfoTech</td>
+                            <td>Maintenance serveurs</td>
+                            <td>1 800,00 €</td>
+                            <td><span class="badge badge-success">Payée</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-043</td>
+                            <td>10/02/2025</td>
+                            <td>BureauPlus</td>
+                            <td>Fournitures bureau</td>
+                            <td>540,00 €</td>
+                            <td><span class="badge badge-warning">Partiellement payée</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>F2025-042</td>
+                            <td>05/02/2025</td>
+                            <td>Dupont SARL</td>
+                            <td>Formation Excel</td>
+                            <td>1 500,00 €</td>
+                            <td><span class="badge badge-danger">En retard</span></td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm">Voir</a>
+                                <a href="#" class="btn btn-success btn-sm">Règlement</a>
+                                <a href="#" class="btn btn-danger btn-sm">Rappel</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

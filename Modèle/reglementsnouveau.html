@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Factures</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gestionnaire de Factures</div>
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li class="nav-item"><a href="clients.html" class="nav-link">Clients</a></li>
+            <li class="nav-item"><a href="factures.html" class="nav-link">Factures</a></li>
+            <li class="nav-item"><a href="reglements.html" class="nav-link">Règlements</a></li>
+            <li class="nav-item"><a href="parametres.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </nav>
+
+        <!-- FORMULAIRE NOUVEAU RÈGLEMENT -->
+        <div class="container">
+            <h1 style="margin: 20px 0;">Nouveau Règlement</h1>
+            
+            <div class="card mb-3">
+                <div class="card-header">Enregistrer un règlement</div>
+                <div class="card-body">
+                    <div class="grid-2">
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label">Référence</label>
+                                <input type="text" class="form-control" value="REG-2025-088" readonly>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" value="2025-03-01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Client</label>
+                                <select class="form-control">
+                                    <option>Sélectionnez un client</option>
+                                    <option>Dupont SARL</option>
+                                    <option>Martin & Co</option>
+                                    <option>Tech Solutions</option>
+                                    <option>InfoTech</option>
+                                    <option>BureauPlus</option>
+                                    <option>Web Experts</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Facture</label>
+                                <select class="form-control" disabled>
+                                    <option>Sélectionnez d'abord un client</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label">Montant</label>
+                                <input type="number" step="0.01" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Mode de paiement</label>
+                                <select class="form-control">
+                                    <option>Virement</option>
+                                    <option>Chèque</option>
+                                    <option>Carte bancaire</option>
+                                    <option>Espèces</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Informations complémentaires</label>
+                                <textarea class="form-control" rows="3" placeholder="Numéro de chèque, référence de virement..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr style="margin: 20px 0;">
+                    
+                    <div class="text-right">
+                        <button class="btn btn-danger">Annuler</button>
+                        <button class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+</html>
