@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime, timedelta  
 
 # Create your models here.
 
@@ -35,7 +36,7 @@ class Invoice(models.Model):
     
     @property
     def due_date(self):
-        return self.date + models.Duration(days=30)
+        return self.date + timedelta(days=30)
     
     @property
     def balance(self):
@@ -50,6 +51,8 @@ class Invoice(models.Model):
             self.statut = 'payee'
         elif total_payments > 0:
             self.statut = 'partiellement_payee'
+        elif self.due_date < datetime.date.today():
+            self.statut = 'en_retard'
         else:
             self.statut = 'a_payer'
 

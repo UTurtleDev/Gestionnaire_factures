@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .models import Invoice, Payment
 
 # Register your models here.
 
@@ -14,3 +15,9 @@ class InvoiceAdmin(admin.ModelAdmin):
         return 0
     
     day_late.short_description = 'Jours en retard'
+
+    
+
+
+admin.site.register(Invoice, InvoiceAdmin)
+admin.site.register(Payment)

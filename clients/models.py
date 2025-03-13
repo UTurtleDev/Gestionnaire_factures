@@ -12,4 +12,4 @@ class Client(models.Model):
     email = models.EmailField()
 
     def __str__(self):
-        return self.company
+        return self.entity_name
