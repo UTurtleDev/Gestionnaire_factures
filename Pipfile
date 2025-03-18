@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django = "*"
 reportlab = "*"
+django-browser-reload = "*"
 
 [dev-packages]
 
