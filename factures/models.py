@@ -1,5 +1,6 @@
 from django.db import models
-from datetime import datetime, timedelta  
+from datetime import datetime, timedelta
+
 
 # Create your models here.
 
@@ -33,6 +34,9 @@ class Invoice(models.Model):
     @property
     def amount_ttc(self):
         return self.amount_ht * (1 + self.vat_rate / 100)
+    
+    def formatted_amount_ttc(self):
+        return f"{self.amount_ttc:,.2f} €".replace(",", " ").replace(".", ",")
     
     @property
     def due_date(self):
