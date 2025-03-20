@@ -1,4 +1,6 @@
 from django.db import models
+from factures.models import Invoice
+
 
 # Create your models here.
 
@@ -7,6 +9,7 @@ class Affaire(models.Model):
     affaire_number = models.CharField(max_length=10, unique=True, db_index=True)
     affaire_description = models.TextField(max_length=200)
     budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    factures = models.ManyToManyField('factures.Invoice', related_name='affaires')
 
     class Meta:
         verbose_name = "Affaire"
@@ -19,4 +22,7 @@ class Affaire(models.Model):
         return f"{self.budget:.2f} €".replace(",", " ").replace(".", ",")
     @property
     def total_facture_ht(self):
-        return sum(invoice.amount_ht for invoice in self.invoices.all())
+        print("self.factures =", self.factures)
+        print("self.factures.all() =", self.factures.all())
+        print("invoice.amount_ht =", Invoice.amount_ht)
+        return sum(invoice.amount_ht for invoice in self.factures.all()) 

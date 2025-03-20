@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime, timedelta
 
 
+
 # Create your models here.
 
 class Invoice(models.Model):
@@ -21,7 +22,7 @@ class Invoice(models.Model):
 
     date = models.DateField()
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='facture')
-    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.CASCADE, related_name="facture")
+    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.CASCADE, related_name="invoices")
     invoice_number = models.CharField(max_length=10, unique=True, db_index=True)
     client = models.ForeignKey('clients.Client', on_delete=models.CASCADE, related_name='invoices', db_index=True)
     invoice_object = models.TextField(max_length=200)
