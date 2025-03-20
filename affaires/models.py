@@ -22,7 +22,7 @@ class Affaire(models.Model):
         return f"{self.budget:.2f} €".replace(",", " ").replace(".", ",")
     @property
     def total_facture_ht(self):
-        print("self.factures =", self.factures)
-        print("self.factures.all() =", self.factures.all())
-        print("invoice.amount_ht =", Invoice.amount_ht)
+        # print("self.factures =", self.factures)
+        # print("self.factures.all() =", self.factures.all())
+        # print("invoice.amount_ht =", Invoice.amount_ht)
         return sum(invoice.amount_ht for invoice in self.factures.all()) 

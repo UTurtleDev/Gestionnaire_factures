@@ -35,6 +35,9 @@
 
     --adresse-color: rgb(100, 116, 139);
 
+    --btn_new_color: rgba(0, 255, 255, 0.3);
+    --btn_new_hover: rgba(0, 255, 255, 0.5);
+
 
     --svg-color: rgb(148 163 184);
 }
@@ -127,6 +130,104 @@ h2 {
     margin-left: 25px;
 }
 
+.title_btn {
+    cursor: pointer;
+}
+
+.new {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--btn_new_color);
+    border-radius: 10px;
+}
+
+.title_btn:hover .new {
+    background-color: var(--btn_new_hover);
+}
+
+.card {
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: var(--light-grey);
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.form_categories {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    width: 100%;
+    position: relative;
+}
+
+.form-label {
+    color: var(--text-color);
+    line-height: var(--h2-line-height);
+}
+
+.form-input {
+    max-width: 250px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.form_btn_group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.form_btn_group a {
+    margin-right: 40px;
+}
+
+.form_btn {
+    cursor: pointer;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #d0d3d063;
+}
+
+.form_btn:hover {
+    background-color: #aef4ba;
+}
+
+.form_btn_group a:hover {
+    color: red;
+}
 
 /* clients */
 

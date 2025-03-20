@@ -13,6 +13,6 @@ def factures(request):
     affaires= Affaire.objects.all()
     for facture in sorted_factures:
         facture.day_late = (date - facture.due_date).days
-    return render(request, 'pages/factures.html', context={"factures": sorted_factures, "date": date, "affaires": affaires})  
+    return render(request, 'pages/factures/factures.html', context={"factures": sorted_factures, "date": date, "affaires": affaires})  
 
 

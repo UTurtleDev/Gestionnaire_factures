@@ -1,0 +1,85 @@
+{% extends "base_form.html" %}
+
+{% block title %} Nouveau client {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Nouveau Client</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="">
+                    <div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.entity_name.label }}</label>
+                                {{ form.entity_name }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">{{ form.contact.label }}</label>
+                                {{ form.contact }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.address.label }}</label>
+                            {{ form.address }}
+                        </div>
+
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.zip_code.label }}</label>
+                                {{ form.zip_code }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">{{ form.city.label }}</label>
+                                {{ form.city }}
+                            </div>
+                        </div>
+                        
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.phone_number.label }}</label>
+                                {{ form.phone_number }}
+                                {% if form.phone_number.help_text %}
+                                    <small>{{ form.phone_number.help_text }}</small>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.help_text %}
+                                    <small>{{ form.email.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="form_btn_group">
+                    <a href="{% url 'clients:clients' %}" class="">Annuler</a>
+                    <button type="submit" class="form_btn">Créer le client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+
+</section>
+
+
+
+
+
+{% endblock content %}
