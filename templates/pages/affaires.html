@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Factures{% endblock title %}
+{% block title %}Affaires{% endblock title %}
 
 {% block content %}
 
 <div class="title">
-    <H2>Factures</H2>
+    <H2>Affaires</H2>
     <div class="title_btn">
-        <div class="new">+ Nouvelle facture</div>
+        <div class="new">+ Nouvelle affaire</div>
     </div>
 </div>
 
@@ -32,7 +32,7 @@
                 </th>
                 <th>
                     <div class="th-div">
-                        <span>MONTANT TTC</span>
+                        <span>DÉSIGNATION</span>
                     </div>
                 </th>
                 <th>
@@ -42,17 +42,17 @@
                 </th>
                 <th>
                     <div class="th-div">
-                        <span>AFFAIRE</span>
+                        <span>BUDGET</span>
                     </div>
                 </th>
                 <th>
                     <div class="th-div">
-                        <span>DATE D'ÉMISSION</span>
+                        <span>FACTURÉ</span>
                     </div>
                 </th>
                 <th>
                     <div class="th-div">
-                        <span>ECHÉANCE</span>
+                        <span>A FACTURER</span>
                     </div>
                 </th>
                 <th>
@@ -65,28 +65,28 @@
             </tr>
         </thead>
         
-        {% if factures %}
+        {% if affaires %}
         <tbody>
-            {% for facture in factures %}
+            {% for affaire in affaires %}
             <tr>
                 <td clospan="1">
                     <div class="">
-                        <p>{{ facture.invoice_number }}</p>
+                        <p>{{ affaire.affaire_number }}</p>
                     </div>
                 </td>
                 <td clospan="1">
                     <div>
-                        <p>{{ facture.formatted_amount_ttc }}</p>
+                        <p>{{ affaire.affaire_description }}</p>
                     </div>
                 </td>
                 <td clospan="1">
                     <div class="">
-                        <P>{{ facture.client }}</P>
+                        <P>{{ affaire.client }}</P>
                     </div>
                 </td>
                 <td clospan="1">
                     <div class="">
-                        <P>{{ affaires.affaire_description }}</P>
+                        <P>{{ affaire.budget }}</P>
                     </div>
                 </td>
                 <td clospan="1">
@@ -96,15 +96,7 @@
                 </td>
                 <td clospan="1">
                     <div>
-                        {% if facture.statut != "payee" %}
-                            {% if facture.due_date > date %}
-                                <P>{{ facture.due_date }}</P>
-                            {% else %}
-                                <p>{{ facture.day_late }} jours de retard</p>
-                            {% endif %}
-                        {% else %}
-                            <div class="cercle-vert"></div>
-                        {% endif %}
+
                     </div>
                 </td>
                 <td clospan="1">

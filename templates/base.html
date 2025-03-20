@@ -16,8 +16,10 @@
         <div>P2 Ingénierie</div>
         <div>
             <p>Dashboard</p>
-            <p>Clients</p>
-            <p>Factures</p>
+            <div><a href="{% url "clients:clients" %}">Clients</a></div>
+            <div><a href="{% url "factures:factures" %}">Factures</a></div>
+            <div><a href="{% url "affaires:affaires" %}">Affaires</a></div>
+
         </div>
         <div>UTurtle Facts</div>
     </div>

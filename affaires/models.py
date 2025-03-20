@@ -1,0 +1,22 @@
+from django.db import models
+
+# Create your models here.
+
+class Affaire(models.Model):
+    client = models.ForeignKey('clients.Client', on_delete=models.CASCADE, related_name='affaires')
+    affaire_number = models.CharField(max_length=10, unique=True, db_index=True)
+    affaire_description = models.TextField(max_length=200)
+    budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+    class Meta:
+        verbose_name = "Affaire"
+        verbose_name_plural = "Affaires"
+
+    def __str__(self):
+        return f"{self.affaire_number} : {self.client.entity_name} - {self.affaire_description}"
+    
+    def formatted_budget(self):
+        return f"{self.budget:.2f} €".replace(",", " ").replace(".", ",")
+    @property
+    def total_facture_ht(self):
+        return sum(invoice.amount_ht for invoice in self.invoices.all())

@@ -21,8 +21,9 @@ class Invoice(models.Model):
 
     date = models.DateField()
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='facture')
-    invoice_number = models.CharField(max_length=10, unique=True)
-    client = models.ForeignKey('clients.Client', on_delete=models.CASCADE, related_name='invoices')
+    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.CASCADE, related_name="facture")
+    invoice_number = models.CharField(max_length=10, unique=True, db_index=True)
+    client = models.ForeignKey('clients.Client', on_delete=models.CASCADE, related_name='invoices', db_index=True)
     invoice_object = models.TextField(max_length=200)
     amount_ht = models.DecimalField(max_digits=10, decimal_places=2)
     vat_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20.0)
@@ -30,6 +31,9 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"Facture {self.invoice_number} - {self.client.entity_name}"
+    
+    def formatted_amount_ht(self):
+        return f"{self.amount_ht:,.2f} €".replace(",", " ").replace(".", ",")
     
     @property
     def amount_ttc(self):
@@ -72,12 +76,16 @@ class Payment(models.Model):
     def __str__(self):
         return f"Paiement de {self.amount}€ pour la facture {self.invoice.invoice_number}"
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.invoice.update_statut()
 
-class comment(models.Model):
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='comments')
-    date = models.DateTimeField(auto_now_add=True)
-    content = models.TextField(max_length=200)
-    author = models.CharField(max_length=100, blank=True, null=True)
+# class Comment(models.Model):
+#     invoice_number = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='comments')
+#     date = models.DateTimeField(auto_now_add=True)
+#     content = models.TextField(max_length=200)
+#     author = models.CharField(max_length=100, blank=True, null=True)
 
-    def __str__(self):
-        return f"Commentaire du {self.date.strftime('%d/%m/%Y')}"
+#     def __str__(self):
+#         return f"Commentaire du {self.date.strftime('%d/%m/%Y')}"
+    

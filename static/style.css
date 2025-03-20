@@ -119,6 +119,14 @@ h2 {
     line-height: var(--h2-line-height);
 }
 
+.cercle-vert {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #a2e5bb;
+    margin-left: 25px;
+}
+
 
 /* clients */
 
