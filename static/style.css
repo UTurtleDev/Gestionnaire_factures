@@ -195,6 +195,7 @@ h2 {
     padding-top: 8px;
     padding-bottom: 8px;
     margin-bottom: 8px;
+    background-color: #fff;
 }
 
 .form_btn_group {
@@ -225,7 +226,7 @@ h2 {
     background-color: #aef4ba;
 }
 
-.form_btn_group a:hover {
+.form_btn_group .supprimer:hover {
     color: red;
 }
 
@@ -411,4 +412,55 @@ td:last-child {
 
 a {
     color: black;
+}
+
+/* <!-- Le CSS pour la modale --> */
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.close {
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #777;
 }

@@ -1,0 +1,76 @@
+{% extends "base_form.html" %}
+
+{% block title %} {{ client.entity_name }} {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>{{ client.entity_name }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <div class="">
+                <div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Entité</p>
+                            <p class="form-input">{{ client.entity_name }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Contact</p>
+                            <p class="form-input">{{ client.contact }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <p class="form-label">Adresse</p>
+                        <p class="form-input">{{ client.address }}</p>
+                    </div>
+
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Code Postal</p>
+                            <p class="form-input">{{ client.zip_code }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Ville</p>
+                            <p class="form-input">{{ client.city }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Téléphone</p>
+                            <p class="form-input">{{ client.phone_number }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Email</p>
+                            <p class="form-input">{{ client.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="form_btn_group">
+                <a href="{% url 'clients:clients' %}" class="form_btn">Retour</a>
+                <a href="{% url 'clients:modifier' client.pk %}" class="form_btn">Modifier</a>
+            </div>
+        </div>
+    </div>
+
+    
+
+</section>
+
+
+
+
+
+{% endblock content %}

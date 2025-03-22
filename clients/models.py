@@ -13,3 +13,8 @@ class Client(models.Model):
 
     def __str__(self):
         return self.entity_name
+    
+    
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"

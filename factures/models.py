@@ -1,8 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
 
-
-
 # Create your models here.
 
 class Invoice(models.Model):
@@ -66,6 +64,7 @@ class Invoice(models.Model):
             self.statut = 'a_payer'
 
         self.save()
+
     
 
 class Payment(models.Model):

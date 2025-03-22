@@ -1,12 +1,12 @@
 {% extends "base_form.html" %}
 
-{% block title %} Nouveau client {% endblock title %}
+{% block title %} Update client {% endblock title %}
 
 {% block content %}
 
 
 <div class="title">
-    <H2>Nouveau Client</H2>
+    <H2>Modifications du client : {{ client.entity_name }}</H2>
 </div>
 
 <section class="tableau">
@@ -67,14 +67,53 @@
                 
                 
                 <div class="form_btn_group">
-                    <a href="{% url 'clients:clients' %}" class="supprimer">Annuler</a>
-                    <button type="submit" class="form_btn">Créer le client</button>
+                    <a href="{% url 'clients:clients' %}" class="form_btn">Retour</a>
+                    <button type="submit" class="form_btn">Enregistrer</button>
                 </div>
+                <button type="button" class="" onclick="openDeleteModal()">Supprimer</button>
             </form>
         </div>
     </div>
 
+    <!-- La modale de confirmation -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmer la suppression</h3>
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le client <strong>{{ client.entity_name }}</strong> ?</p>
+                <p>Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+                <form method="post" action="{% url 'clients:delete' client.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        
+        // Ferme la modale si l'utilisateur clique en dehors
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('deleteModal')) {
+                closeDeleteModal();
+            }
+        }
+    </script>
 
 </section>
 
