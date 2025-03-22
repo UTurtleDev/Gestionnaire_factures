@@ -81,7 +81,11 @@
                 </td>
                 <td clospan="1">
                     <div class="">
-                        <P>{{ facture.client }}</P>
+                        {% if facture.client %}
+                            <a href="{% url 'clients:detail' facture.client.id %}">{{ facture.client.entity_name }}</a>
+                        {% else %}
+                            {{ facture.client_entity_name }}
+                        {% endif %}
                     </div>
                 </td>
                 <td clospan="1">
