@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
+
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field must be set')
@@ -30,6 +31,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name= "Utilisateur"
+        verbose_name_plural= "Utilisateurs"
 
     def __str__(self):
         return self.email

@@ -1,0 +1,78 @@
+{% extends "base_form.html" %}
+
+{% block title %} Facture {{ facture.invoice_number }} {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Facture {{ facture.invoice_number }} - {{ facture.client.entity_name }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <div class="">
+                <div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Date</p>
+                            <p class="form-input">{{ facture.date }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">N° Facture</p>
+                            <p class="form-input">{{ facture.invoice_number }}</p>
+                        </div>
+                        
+                    </div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Client</p>
+                            <p class="form-input">{{ facture.client.entity_name }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">N° Affaire</p>
+                            <p class="form-input">{{ facture.affaire.affaire_number }}</p>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Montant HT</p>
+                            <p class="form-input">{{ facture.formatted_amount_ht }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">Taux TVA</p>
+                            <p class="form-input">{{ facture.vat_rate }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="form-label">Déscription</p>
+                        <p class="form-area">{{ facture.invoice_object }}</p>
+                    </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="form_btn_group">
+                <a href="{% url 'factures:factures' %}" class="form_btn">Retour</a>
+                {% comment %} <a href="{% url 'factures:modifier' facture.pk %}" class="form_btn">Modifier</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+    
+
+</section>
+
+
+
+
+
+{% endblock content %}

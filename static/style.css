@@ -37,6 +37,8 @@
 
     --btn_new_color: rgba(0, 255, 255, 0.3);
     --btn_new_hover: rgba(0, 255, 255, 0.5);
+    --btn_delete_color: rgba(255, 144, 144, 0.915);
+    --btn_delete_hover: rgba(255, 105, 105, 0.915);
 
 
     --svg-color: rgb(148 163 184);
@@ -230,6 +232,43 @@ h2 {
     color: red;
 }
 
+.div_btn-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-delete {
+    cursor: pointer;
+    background-color: var(--btn_delete_color);
+    color: var(--h2-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    height: 40px;
+}
+
+.btn-delete:hover {
+    background-color: var(--btn_delete_hover);
+}
+
+.form-area {
+    width: 100%;
+    height: 200px;
+    resize: none;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    background-color: #fff;
+}
+
 /* clients */
 
 .tableau {
@@ -283,7 +322,6 @@ svg {
     height: 16px;
     vertical-align: -1.5px;
     color: var(--th-color);
-    margin-left: 8px;
 }
 
 .param-btn {
@@ -297,8 +335,8 @@ svg {
 }
 
 .param-svg {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
 }
 
 td {
@@ -362,14 +400,19 @@ td:last-child {
 
 .actions {
     border: 1px solid var(--mail-border-color);
-    border-radius: 50px;
+    border-radius: 100px;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-right: 8px;
     cursor: pointer;
-    width: 100px;
+    width: 40px;
+    height: 40px;
     background-color: #fff;
+}
+
+.actions:hover {
+    background-color: #b7ffd1;
 }
 
 .svg-actions {
@@ -380,7 +423,7 @@ td:last-child {
     padding: 8px;
 }
 
-.svg-actions:nth-child(2) {
+/* .svg-actions:nth-child(2) {
     padding-right: 2px;
     margin-left: 12px;
 }
@@ -390,7 +433,7 @@ td:last-child {
 }
 .svg-actions:nth-child(2):hover {
     background-color: rgb(177, 236, 177);
-}
+} */
 
 
 
@@ -451,7 +494,7 @@ a {
     padding: 15px 20px;
     border-top: 1px solid #ddd;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-evenly;
     gap: 10px;
 }
 

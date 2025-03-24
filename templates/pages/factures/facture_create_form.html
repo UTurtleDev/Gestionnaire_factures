@@ -1,12 +1,12 @@
 {% extends "base_form.html" %}
 
-{% block title %} Nouveau Client {% endblock title %}
+{% block title %} Nouvelle Facture {% endblock title %}
 
 {% block content %}
 
 
 <div class="title">
-    <H2>Nouveau Client</H2>
+    <H2>Nouvelle Facture</H2>
 </div>
 
 <section class="tableau">
@@ -18,22 +18,22 @@
                     <div>
                         <div class="form_categories">
                             <div class="form-group">
-                                <label class="form-label">{{ form.entity_name.label }}</label>
-                                {{ form.entity_name }}
+                                <label class="form-label">{{ form.date.label }}</label>
+                                {{ form.date }}
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label">{{ form.contact.label }}</label>
+                                <label class="form-label">{{ form.invoice_number }}</label>
                                 {{ form.contact }}
                             </div>
                         </div>
                         
-                        <div class="form-group">
+                        {% comment %} <div class="form-group">
                             <label class="form-label">{{ form.address.label }}</label>
                             {{ form.address }}
-                        </div>
+                        </div> {% endcomment %}
 
-                        <div class="form_categories">
+                        {% comment %} <div class="form_categories">
                             <div class="form-group">
                                 <label class="form-label">{{ form.zip_code.label }}</label>
                                 {{ form.zip_code }}
@@ -43,9 +43,9 @@
                                 <label class="form-label">{{ form.city.label }}</label>
                                 {{ form.city }}
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         
-                        <div class="form_categories">
+                        {% comment %} <div class="form_categories">
                             <div class="form-group">
                                 <label class="form-label">{{ form.phone_number.label }}</label>
                                 {{ form.phone_number }}
@@ -61,20 +61,19 @@
                                     <small>{{ form.email.help_text }}</small>
                                 {% endif %}
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
                 
                 
                 <div class="form_btn_group">
-                    <a href="{% url 'clients:clients' %}" class="supprimer">Annuler</a>
-                    <button type="submit" class="form_btn">Créer le client</button>
+                    <a href="{% url 'factures:factures' %}" class="supprimer">Annuler</a>
+                    <button type="submit" class="form_btn">Créer la facture</button>
                 </div>
             </form>
         </div>
     </div>
 
-    
 
 </section>
 

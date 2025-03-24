@@ -29,6 +29,9 @@ class Invoice(models.Model):
     vat_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20.0)
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='a_payer')
 
+    class Meta:
+        verbose_name = "Facture"
+        verbose_name_plural = "Factures"
     def __str__(self):
         client_name = self.client_entity_name if self.client is None else self.client.entity_name
         return f"Facture {self.invoice_number} - {client_name}"
@@ -80,6 +83,11 @@ class Payment(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='payments')
     payment_method = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = "Paiement"
+        verbose_name_plural = "Paiements"
+
 
     def __str__(self):
         return f"Paiement de {self.amount}€ pour la facture {self.invoice.invoice_number}"

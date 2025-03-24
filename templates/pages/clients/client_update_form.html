@@ -70,7 +70,7 @@
                     <a href="{% url 'clients:clients' %}" class="form_btn">Retour</a>
                     <button type="submit" class="form_btn">Enregistrer</button>
                 </div>
-                <button type="button" class="" onclick="openDeleteModal()">Supprimer</button>
+                <div class="div_btn-delete"><button type="button" class="btn-delete" onclick="openDeleteModal()">Supprimer</button></div>
             </form>
         </div>
     </div>
@@ -87,10 +87,10 @@
                 <p>Cette action est irréversible.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+                <button type="button" class="form_btn" onclick="closeDeleteModal()">Annuler</button>
                 <form method="post" action="{% url 'clients:delete' client.pk %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <button type="submit" class="btn-delete">Supprimer</button>
                 </form>
             </div>
         </div>
