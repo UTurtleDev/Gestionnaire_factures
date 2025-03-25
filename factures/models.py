@@ -34,7 +34,7 @@ class Invoice(models.Model):
         verbose_name_plural = "Factures"
     def __str__(self):
         client_name = self.client_entity_name if self.client is None else self.client.entity_name
-        return f"Facture {self.invoice_number} - {client_name}"
+        return self.invoice_number
 
     
     def formatted_amount_ht(self):
@@ -93,6 +93,9 @@ class Payment(models.Model):
     def __str__(self):
         return f"Paiement de {self.amount}€ pour la facture {self.invoice.invoice_number}"
     
+    def formatted_amount(self):
+        return f"{self.amount:,.2f} €".replace(",", " ").replace(".", ",")
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.invoice.update_statut()

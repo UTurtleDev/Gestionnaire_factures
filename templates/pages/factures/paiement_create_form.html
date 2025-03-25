@@ -6,7 +6,8 @@
 
 
 <div class="title">
-    <H2>Nouveau règlement - facture : {{ facture.invoice_number }}</H2>
+    <H2>Nouveau règlement de facture</H2>
+    {% comment %} <H2>Nouveau règlement - facture : {{ facture.invoice_number }}</H2> {% endcomment %}
 </div>
 
 <section class="tableau">
@@ -16,6 +17,16 @@
                 {% csrf_token %}
                 <div class="">
                     <div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label for="" class="form-label">{{ form.invoice.label }}</label>
+                                {{ form.invoice }}
+                            </div>
+                            <div class="form-group">
+                                <p class="form-label">Client</p>
+                                <p class="form-input">{{ facture.client }}</p>
+                            </div>
+                        </div>
                         <div class="form_categories">
                             <div class="form-group">
                                 <label class="form-label">{{ form.date.label }}</label>
@@ -31,10 +42,6 @@
                             <div class="form-group">
                                 <label for="" class="form-label">{{ form.payment_method.label }}</label>
                                 {{ form.payment_method }}
-                            </div>
-                            <div class="form-group">
-                                <label for="" class="form-label">{{ form.invoice.label }}</label>
-                                {{ form.invoice }}
                             </div>
                         </div>
         

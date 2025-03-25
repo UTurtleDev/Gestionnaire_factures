@@ -31,8 +31,7 @@ def facture_create(request):
             return redirect('factures:factures')
     else:
         form = InvoiceForm(initial={'type': 'facture', 'date': datetime.today().strftime('%Y-%m-%d'), 'vat_rate': 20.00})
-        # form = InvoiceForm(initial={'type': 'facture', 'date': datetime.today().date(), 'vat_rate': 20.00})
-    
+           
     return render(request, 'pages/factures/facture_create_form.html', {'form': form})
 
 def facture_detail(request, pk):
@@ -60,21 +59,38 @@ def facture_delete(request, pk):
     if request.method == 'POST':
         facture.delete()
         return redirect('factures:factures')
-    
+   
+def reglements(request):
+    paiements = Payment.objects.all()
+    factures = Invoice.objects.all()
+
+    for facture in factures:
+        if facture.client is None and not facture.client_entity_name:
+            facture.client_entity_name = "Client supprimé"
+            facture.save()
+
+    return render(request, 'pages/factures/paiements.html', {'paiements': paiements, 'factures': factures})
+
 def reglement_create(request, pk):
     facture = get_object_or_404(Invoice, pk=pk)
+
     if request.method == 'POST':
-        print("POST ok")
         form = PaymentForm(request.POST)
         if form.is_valid():
-            print("form ok")
-            form.save()
+            paiement = form.save(commit=False)
+            paiement.invoice = facture  # Assigne la facture au paiement
+            paiement.save()
             return redirect('factures:factures')
-        else:
-            print("form pas ok")
     else:
-        print("pas POST")
-        form = PaymentForm(initial={'date': datetime.today().strftime('%Y-%m-%d'), 'amount': facture.amount_ttc, 'payment_method': 'VRT'})
+        form = PaymentForm(initial={
+            'date': datetime.today().strftime('%Y-%m-%d'), 
+            'amount': round(facture.amount_ttc, 2), 
+            'payment_method': 'VRT le',
+            'invoice': facture
+            })
     
-
     return render(request, 'pages/factures/paiement_create_form.html', {'form': form, 'facture': facture})
+
+def reglement_detail(request, pk):
+    paiement_detail = get_object_or_404(Payment, pk=pk)
+    return render(request, 'pages/factures/paiement_detail.html', {'paiement': paiement_detail})

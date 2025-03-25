@@ -1,0 +1,63 @@
+{% extends "base_form.html" %}
+
+{% block title %} Détail paiement {{ facture.invoice_number }} {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Détail du paiement</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <div class="">
+                <div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">N° Facture</p>
+                            <p class="form-input">{{ paiement.invoice }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">Client</p>
+                            <p class="form-input">{{ paiement.invoice.client }}</p>
+                        </div>
+                    </div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Date</p>
+                            <p class="form-input">{{ paiement.date }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">Montant</p>
+                            <p class="form-input">{{ paiement.formatted_amount }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Moyen de paiement</p>
+                            <p class="form-input">{{ paiement.payment_method }}</p>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+            
+            
+            <div class="form_btn_group">
+                <a href="{% url 'factures:reglements' %}" class="form_btn">Retour</a>
+                {% comment %} <a href="{% url 'factures:modifier' paiement.pk %}" class="form_btn">Modifier</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    
+
+</section>
+
+
+
+
+
+{% endblock content %}
