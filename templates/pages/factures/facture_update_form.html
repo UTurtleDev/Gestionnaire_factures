@@ -1,12 +1,12 @@
 {% extends "base_form.html" %}
 
-{% block title %} Modification client {% endblock title %}
+{% block title %} Modification Facture {% endblock title %}
 
 {% block content %}
 
 
 <div class="title">
-    <H2>Modifications du client : {{ client.entity_name }}</H2>
+    <H2>Modifications de la facture : {{ facture.invoice_number }}</H2>
 </div>
 
 <section class="tableau">
@@ -18,56 +18,54 @@
                     <div>
                         <div class="form_categories">
                             <div class="form-group">
-                                <label class="form-label">{{ form.entity_name.label }}</label>
-                                {{ form.entity_name }}
+                                <label class="form-label">{{ form.date.label }}</label>
+                                {{ form.date }}
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label">{{ form.contact.label }}</label>
-                                {{ form.contact }}
+                                <label class="form-label">{{ form.invoice_number.label }}</label>
+                                {{ form.invoice_number }}
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">{{ form.address.label }}</label>
-                            {{ form.address }}
+                            <div class="form-group">
+                                <label class="form-label">{{ form.type.label }}</label>
+                                {{ form.type }}
+                            </div>
                         </div>
 
                         <div class="form_categories">
                             <div class="form-group">
-                                <label class="form-label">{{ form.zip_code.label }}</label>
-                                {{ form.zip_code }}
+                                <label class="form-label">{{ form.client.label }}</label>
+                                {{ form.client }}
                             </div>
-                            
                             <div class="form-group">
-                                <label class="form-label">{{ form.city.label }}</label>
-                                {{ form.city }}
+                                <label for="" class="form-label">{{ form.affaire.label }}</label>
+                                {{ form.affaire }}
+                            </div>
+                        </div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.invoice_object.label }}</label>
+                                {{ form.invoice_object }}
+                            </div>
+                        </div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.amount_ht.label }}</label>
+                                {{ form.amount_ht }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ form.vat_rate.label }}</label>
+                                {{ form.vat_rate }}
                             </div>
                         </div>
                         
-                        <div class="form_categories">
-                            <div class="form-group">
-                                <label class="form-label">{{ form.phone_number.label }}</label>
-                                {{ form.phone_number }}
-                                {% if form.phone_number.help_text %}
-                                    <small>{{ form.phone_number.help_text }}</small>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">{{ form.email.label }}</label>
-                                {{ form.email }}
-                                {% if form.email.help_text %}
-                                    <small>{{ form.email.help_text }}</small>
-                                {% endif %}
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 
                 
                 <div class="form_btn_group">
-                    <a href="{% url 'clients:clients' %}" class="form_btn">Retour</a>
+                    <a href="{% url 'factures:factures' %}" class="supprimer">Annuler</a>
                     <button type="submit" class="form_btn">Enregistrer</button>
                 </div>
                 <div class="div_btn-delete"><button type="button" class="btn-delete" onclick="openDeleteModal()">Supprimer</button></div>
@@ -88,7 +86,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="form_btn" onclick="closeDeleteModal()">Annuler</button>
-                <form method="post" action="{% url 'clients:delete' client.pk %}">
+                <form method="post" action="{% url 'factures:delete' facture.pk %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-delete">Supprimer</button>
                 </form>

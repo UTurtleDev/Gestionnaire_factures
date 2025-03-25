@@ -17,7 +17,7 @@ class Affaire(models.Model):
         verbose_name_plural = "Affaires"
 
     def __str__(self):
-        return f"{self.affaire_number} : {self.client_entity_name} - {self.affaire_description}"
+        return f"{self.affaire_number} : {self.client_entity_name}"
     
     def formatted_budget(self):
         return f"{self.budget:.2f} €".replace(",", " ").replace(".", ",")

@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 class Invoice(models.Model):
     TYPE_CHOICES = [
         ('facture', 'Facture'),
-        ('proforma', 'Proforma'),
         ('avoir', 'Avoir'),
+        ('proforma', 'Proforma'),
         ]
 
     STATUT_CHOICES = [
@@ -35,6 +35,7 @@ class Invoice(models.Model):
     def __str__(self):
         client_name = self.client_entity_name if self.client is None else self.client.entity_name
         return f"Facture {self.invoice_number} - {client_name}"
+
     
     def formatted_amount_ht(self):
         return f"{self.amount_ht:,.2f} €".replace(",", " ").replace(".", ",")

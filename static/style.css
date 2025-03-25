@@ -423,6 +423,21 @@ td:last-child {
     padding: 8px;
 }
 
+
+/* factures */
+
+.factures p,
+.factures a {
+    font-size: 14px;
+    color: var(--adresse-color);
+    padding-bottom: 2px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 2px;
+    text-wrap: nowrap;
+    line-height: 20px;
+}
+
 /* .svg-actions:nth-child(2) {
     padding-right: 2px;
     margin-left: 12px;

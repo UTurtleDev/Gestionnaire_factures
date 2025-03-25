@@ -23,45 +23,43 @@
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label">{{ form.invoice_number }}</label>
-                                {{ form.contact }}
+                                <label class="form-label">{{ form.invoice_number.label }}</label>
+                                {{ form.invoice_number }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ form.type.label }}</label>
+                                {{ form.type }}
+                            </div>
+                        </div>
+
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.client.label }}</label>
+                                {{ form.client }}
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="form-label">{{ form.affaire.label }}</label>
+                                {{ form.affaire }}
+                            </div>
+                        </div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.invoice_object.label }}</label>
+                                {{ form.invoice_object }}
+                            </div>
+                        </div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.amount_ht.label }}</label>
+                                {{ form.amount_ht }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ form.vat_rate.label }}</label>
+                                {{ form.vat_rate }}
                             </div>
                         </div>
                         
-                        {% comment %} <div class="form-group">
-                            <label class="form-label">{{ form.address.label }}</label>
-                            {{ form.address }}
-                        </div> {% endcomment %}
 
-                        {% comment %} <div class="form_categories">
-                            <div class="form-group">
-                                <label class="form-label">{{ form.zip_code.label }}</label>
-                                {{ form.zip_code }}
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">{{ form.city.label }}</label>
-                                {{ form.city }}
-                            </div>
-                        </div> {% endcomment %}
-                        
-                        {% comment %} <div class="form_categories">
-                            <div class="form-group">
-                                <label class="form-label">{{ form.phone_number.label }}</label>
-                                {{ form.phone_number }}
-                                {% if form.phone_number.help_text %}
-                                    <small>{{ form.phone_number.help_text }}</small>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">{{ form.email.label }}</label>
-                                {{ form.email }}
-                                {% if form.email.help_text %}
-                                    <small>{{ form.email.help_text }}</small>
-                                {% endif %}
-                            </div>
-                        </div> {% endcomment %}
                     </div>
                 </div>
                 

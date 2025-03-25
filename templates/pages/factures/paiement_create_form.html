@@ -1,0 +1,60 @@
+{% extends "base_form.html" %}
+
+{% block title %} Nouveau règlement {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Nouveau règlement - facture : {{ facture.invoice_number }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="">
+                    <div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.date.label }}</label>
+                                {{ form.date }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ form.amount.label }}</label>
+                                {{ form.amount }}
+                            </div>
+                        </div>
+
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label for="" class="form-label">{{ form.payment_method.label }}</label>
+                                {{ form.payment_method }}
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="form-label">{{ form.invoice.label }}</label>
+                                {{ form.invoice }}
+                            </div>
+                        </div>
+        
+                    </div>
+                </div>
+                
+                
+                <div class="form_btn_group">
+                    <a href="{% url 'factures:factures' %}" class="supprimer">Annuler</a>
+                    <button type="submit" class="form_btn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</section>
+
+
+
+
+
+{% endblock content %}
