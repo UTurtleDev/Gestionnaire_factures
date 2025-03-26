@@ -1,13 +1,12 @@
 {% extends "base_form.html" %}
 
-{% block title %} Nouveau règlement {% endblock title %}
+{% block title %} Modification règlement {% endblock title %}
 
 {% block content %}
 
 
 <div class="title">
-    <H2>Nouveau règlement de facture</H2>
-    {% comment %} <H2>Nouveau règlement - facture : {{ facture.invoice_number }}</H2> {% endcomment %}
+    <H2>Modification règlement</H2>
 </div>
 
 <section class="tableau">
@@ -23,7 +22,7 @@
                                 {{ form.invoice }}
                             </div>
                             <div class="form-group">
-                                <p class="form-label">Client</p>
+                                <label class="form-label">Client</label>
                                 <p class="form-input">{{ facture.client }}</p>
                             </div>
                         </div>
@@ -53,9 +52,48 @@
                     <a href="{% url 'factures:factures' %}" class="supprimer">Annuler</a>
                     <button type="submit" class="form_btn">Enregistrer</button>
                 </div>
+                <div class="div_btn-delete"><button type="button" class="btn-delete" onclick="openDeleteModal()">Supprimer</button></div>
             </form>
         </div>
     </div>
+
+    <!-- La modale de confirmation -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmer la suppression</h3>
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le règlement <strong>{{ client.entity_name }}</strong> ?</p>
+                <p>Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="form_btn" onclick="closeDeleteModal()">Annuler</button>
+                <form method="post" action="{% url 'factures:reglement_delete' paiement.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        
+        // Ferme la modale si l'utilisateur clique en dehors
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('deleteModal')) {
+                closeDeleteModal();
+            }
+        }
+    </script>
 
 
 </section>

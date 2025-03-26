@@ -80,7 +80,7 @@ def reglement_create(request, pk):
             paiement = form.save(commit=False)
             paiement.invoice = facture  # Assigne la facture au paiement
             paiement.save()
-            return redirect('factures:factures')
+            return redirect('factures:reglements')
     else:
         form = PaymentForm(initial={
             'date': datetime.today().strftime('%Y-%m-%d'), 
@@ -94,3 +94,45 @@ def reglement_create(request, pk):
 def reglement_detail(request, pk):
     paiement_detail = get_object_or_404(Payment, pk=pk)
     return render(request, 'pages/factures/paiement_detail.html', {'paiement': paiement_detail})
+
+def reglement_update(request, pk):
+    # Récupère le paiement existant à partir de son ID
+    paiement = get_object_or_404(Payment, pk=pk)
+    facture = paiement.invoice  # Récupère la facture associée au paiement
+    paiement.date = paiement.date.strftime('%Y-%m-%d')
+    
+    if request.method == 'POST':
+        form = PaymentForm(request.POST, instance=paiement)  # Utilise l'instance existante
+        if form.is_valid():
+            form.save()  # Sauvegarde les modifications
+            return redirect('factures:reglements')
+        else:
+            print("Erreurs de formulaire:", form.errors)
+    else:
+        # Initialise le formulaire avec les données du paiement existant
+        # Convertis la date au format string pour l'affichage
+        form = PaymentForm(instance=paiement)
+        
+        # # Si tu utilises le format de date pour le widget DateInput
+        # if isinstance(form.initial.get('date'), datetime.date):
+            # form.initial['date'] = form.initial['date'].strftime('%Y-%m-%d')
+    
+    return render(request, 'pages/factures/paiement_update_form.html', {
+        'form': form, 
+        'facture': facture,
+        'paiement': paiement
+    })
+
+def reglement_delete(request, pk):
+    paiement = get_object_or_404(Payment, pk=pk)
+    facture  = paiement.invoice  # Récupère la facture associée au paiement  
+
+    if request.method == 'POST':
+        paiement.delete()
+        facture.update_statut() # Mise à jour du statut de la facture
+        return redirect('factures:reglements')    
+
+    return redirect('factures:reglements') 
+
+    
+    
