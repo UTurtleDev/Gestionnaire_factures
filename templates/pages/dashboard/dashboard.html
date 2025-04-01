@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Factures{% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Dashboard</H2>
+</div>
+
+<section class="tableau">
+
+    
+
+</section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+
+
+{% endblock content %}

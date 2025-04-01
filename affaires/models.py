@@ -26,7 +26,7 @@ class Affaire(models.Model):
         # print("self.factures =", self.factures)
         # print("self.factures.all() =", self.factures.all())
         # print("invoice.amount_ht =", Invoice.amount_ht)
-        return sum(invoice.amount_ht for invoice in self.factures.all()) 
+        return sum(facture.amount_ht for facture in self.factures.all()) 
     
     def save(self, *args, **kwargs):
         # Sauvegarde le nom du client

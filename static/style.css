@@ -15,11 +15,13 @@
     --police: 'lato', sans-serif;
 
     --sidebar-size: 255px;
+    --sidebar-color: #7FAEDC;
 
     --h2-size: 30px;
     --h2-weight: 500;
     --h2-line-height: 36px;
-    --h2-color: #334155;
+    --h2-color: #7FAEDC;
+    /* --h2-color: #334155; */
 
     --text-color: #050505;
 
@@ -35,8 +37,8 @@
 
     --adresse-color: rgb(100, 116, 139);
 
-    --btn_new_color: rgba(0, 255, 255, 0.3);
-    --btn_new_hover: rgba(0, 255, 255, 0.5);
+    --btn_new_color: #7FAEDC;
+    --btn_new_hover: #a3cef9;
     --btn_delete_color: rgba(255, 144, 144, 0.915);
     --btn_delete_hover: rgba(255, 105, 105, 0.915);
 
@@ -52,7 +54,7 @@ body {
 
 .sidebar {
     background-color: var(--light-grey);
-    color: var(--text-color);
+    color: var(--sidebar-color);
     height: 100vh;
     width: var(--sidebar-size);
     position: fixed;
@@ -64,6 +66,42 @@ body {
     display: flex;
     flex-direction: column;
     justify-content:space-between;
+    font-size: 20px;
+}
+
+.sidebar .logo {
+    width: 100%;
+    height: auto;
+}
+
+.sidebar .logo img {
+    width: 100%;
+    object-fit: contain;
+}
+
+.sidebar a {
+    color: var(--sidebar-color);
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-left: 8px;
+}
+
+.sidebar .menu {
+    margin-top: -200px;
+}
+
+.sidebar .menu-item {
+    height: 35px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .menu-item:hover {
+    background-color: #d6e7f9;
 }
 
 .main-container {

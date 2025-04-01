@@ -64,7 +64,7 @@ class Invoice(models.Model):
             self.statut = 'payee'
         elif total_payments > 0:
             self.statut = 'partiellement_payee'
-        elif self.due_date < datetime.date.today():
+        elif self.due_date < datetime.now().date():
             self.statut = 'en_retard'
         else:
             self.statut = 'a_payer'
