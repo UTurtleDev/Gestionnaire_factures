@@ -8,9 +8,14 @@ django = "*"
 reportlab = "*"
 django-browser-reload = "*"
 django-environ = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.12"
 python_full_version = "3.12.4"
+pytest = "*"
+pytest-django = "*"
+flake8 = "*"

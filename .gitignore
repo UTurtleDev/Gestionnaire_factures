@@ -3,3 +3,4 @@
 plan.md
 .modele
 .env
+db.sqlite3
