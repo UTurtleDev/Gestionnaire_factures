@@ -8,11 +8,30 @@
     <link rel="stylesheet" href="{% static "style.css" %}">
     <title>Login</title>
 </head>
-<body>
+<body class="body">
 
-    <button class=entrez>
-        <a href="{% url "clients:clients" %}">Entrez</a>
-    </button>
+    <div class="connexion">
+        <div class="connexion_text">
+            <img src="static/logo.png" alt="">
+            <h1>Gestion de factures</h1>
+            <img class="connexion_text_svg"src="static/business.svg" alt="">
+        </div>
+        <div class="connexion_form">
+            <div class="signin">Sign In</div>
+            <div class="signin_input">
+                <input type="text" placeholder="Email">
+                <input type="password" placeholder="Password">
+            </div>
+            <button class="signin_btn">
+                <a href="{% url "dashboard:dashboard" %}">Sign In</a>
+            </button>
+        </div>
+    </div>
+    <div class="fixe">
+        <div class="copyright">&copy; UTurtle GestFacts - 2025</div>
+    </div>
+    
+    
     
 </body>
 </html>
