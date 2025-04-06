@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
     networks:
-      - app_network
+      - tunnel
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --no-input &&
@@ -26,7 +26,7 @@ services:
     env_file:
       - .env
     networks:
-      - app_network
+      - tunnel
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -45,7 +45,7 @@ services:
     depends_on:
       - web
     networks:
-      - app_network
+      - tunnel
 
 volumes:
   postgres_data:
@@ -54,5 +54,5 @@ volumes:
   backups:
 
 networks:
-  app_network:
+  tunnel:
     driver: bridge
