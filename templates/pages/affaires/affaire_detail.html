@@ -1,0 +1,73 @@
+{% extends "base_form.html" %}
+
+{% block title %} Affaire {{ affaire.affaire_number }} {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Affaire {{ affaire.affaire_number }} - {{ affaire.client.entity_name }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <div class="">
+                <div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">N° Affaire</p>
+                            <p class="form-input">{{ affaire.affaire_number }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">Client</p>
+                            <p class="form-input">{{ affaire.client.entity_name }}</p>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Budget HT</p>
+                            <p class="form-input">{{ affaire.formatted_budget }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">Facturé</p>
+                            <p class="form-input">{{ affaire.formatted_total_facture_ht }}</p>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <p class="form-label">Déscription</p>
+                        <p class="form-area">{{ affaire.affaire_description }}</p>
+                    </div>
+                    <div>
+                        <p class="form-label">Facturation</p>
+                        <div class="form-area">
+                            {% for facture in affaire.invoices.all %}
+                                <p>{{ facture.invoice_number }} - {{ facture.formatted_amount_ht }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            
+            <div class="form_btn_group">
+                <a href="{% url 'affaires:affaires' %}" class="form_btn">Retour</a>
+                {% comment %} <a href="{% url 'affaires:modifier' affaire.pk %}" class="form_btn">Modifier</a> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+    
+
+</section>
+
+
+
+
+
+{% endblock content %}

@@ -68,7 +68,7 @@
         {% if affaires %}
         <tbody>
             {% for affaire in affaires %}
-            <tr>
+            <tr data-url="{% url 'affaires:detail' affaire.pk %}" class="clickable-row">
                 <td clospan="1">
                     <div class="addresse">
                         <p>{{ affaire.affaire_number }}</p>
@@ -86,16 +86,17 @@
                 </td>
                 <td clospan="1">
                     <div class="addresse">
-                        <P>{{ affaire.budget }}</P>
+                        <P>{{ affaire.formatted_budget }}</P>
                     </div>
                 </td>
                 <td clospan="1">
                     <div class="addresse">
-                        <P>{{ affaire.total_facture_ht }}</P>
+                        <P>{{ affaire.formatted_total_facture_ht }}</P>
                     </div>
                 </td>
                 <td clospan="1">
                     <div class="addresse">
+                        <p>{{ affaire.formatted_reste_a_facturer }}</p>
 
                     </div>
                 </td>
@@ -116,7 +117,16 @@
 
 </section>
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
 
 
 

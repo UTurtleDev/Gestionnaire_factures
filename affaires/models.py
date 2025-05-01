@@ -10,8 +10,7 @@ class Affaire(models.Model):
     affaire_number = models.CharField(max_length=10, unique=True, db_index=True)
     affaire_description = models.TextField(max_length=200)
     budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    factures = models.ManyToManyField('factures.Invoice', related_name='affaires', blank=True, null=True)
-
+    
     class Meta:
         verbose_name = "Affaire"
         verbose_name_plural = "Affaires"
@@ -20,13 +19,24 @@ class Affaire(models.Model):
         return f"{self.affaire_number} : {self.client_entity_name}"
     
     def formatted_budget(self):
-        return f"{self.budget:.2f} €".replace(",", " ").replace(".", ",")
+        return f"{self.budget:,.2f} €".replace(",", " ").replace(".", ",")
     @property
     def total_facture_ht(self):
-        # print("self.factures =", self.factures)
-        # print("self.factures.all() =", self.factures.all())
-        # print("invoice.amount_ht =", Invoice.amount_ht)
-        return sum(facture.amount_ht for facture in self.factures.all()) 
+        # Calcule le montant total des factures HT associées à cette affaire
+        # en utilisant la relation inverse depuis le modèle Invoice
+        # et en filtrant par l'affaire actuelle
+        return sum(facture.amount_ht for facture in self.invoices.all())
+    
+    def formatted_total_facture_ht(self):
+        return f"{self.total_facture_ht:,.2f} €".replace(",", " ").replace(".", ",")
+    
+    @property
+    def reste_a_facturer(self):
+        # Calcule le montant restant à facturer pour cette affaire
+        return self.budget - self.total_facture_ht
+    
+    def formatted_reste_a_facturer(self):
+        return f"{self.reste_a_facturer:,.2f} €".replace(",", " ").replace(".", ",")
     
     def save(self, *args, **kwargs):
         # Sauvegarde le nom du client
