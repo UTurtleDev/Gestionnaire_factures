@@ -9,7 +9,7 @@ class Affaire(models.Model):
     client_entity_name = models.CharField(max_length=100, blank=True, null=True)
     affaire_number = models.CharField(max_length=10, unique=True, db_index=True)
     affaire_description = models.TextField(max_length=200)
-    budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    budget = models.DecimalField(max_digits=10, decimal_places=2)
     
     class Meta:
         verbose_name = "Affaire"

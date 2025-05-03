@@ -1,0 +1,74 @@
+{% extends "base_form.html" %}
+
+{% block title %} Nouvelle Affaire {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Nouvelle Affaire</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="">
+                    <div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.affaire_number.label }}</label>
+                                {{ form.affaire_number }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">{{ form.client.label }}</label>
+                                {{ form.client }}
+                            </div>
+                
+                        </div>
+                
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.budget.label }}</label>
+                                {{ form.budget }}
+                            </div>
+                            {% comment %} <div class="form-group">
+                                <p class="form-label">Facturé</p>
+                                <p class="form-input">{{ affaire.formatted_total_facture_ht }}</p>
+                            </div> {% endcomment %}
+                        </div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.affaire_description.label }}</label>
+                                {{ form.affaire_description }}
+                            </div>
+                        </div>
+                        {% comment %} <div>
+                            <p class="form-label">Facturation</p>
+                            <div class="form-area">
+                                {% for facture in affaire.invoices.all %}
+                                    <p>{{ facture.invoice_number }} - {{ facture.formatted_amount_ht }}</p>
+                                {% endfor %}
+                            </div>
+                        </div> {% endcomment %}
+                    </div>
+                </div>
+                         
+                <div class="form_btn_group">
+                    <a href="{% url 'affaires:affaires' %}" class="form_btn">Retour</a>
+                    <button type="submit" class="form_btn">Créer l'affaire</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+
+</section>
+
+
+
+
+
+{% endblock content %}

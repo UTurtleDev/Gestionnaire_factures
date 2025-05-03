@@ -1,7 +1,6 @@
 from django import forms
 from factures.models import Invoice, Payment
-from affaires.models import Affaire
-from clients.models import Client
+
 
 class InvoiceForm(forms.ModelForm):
     class Meta:
