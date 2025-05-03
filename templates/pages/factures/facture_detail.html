@@ -7,6 +7,11 @@
 
 <div class="title">
     <H2>Facture {{ facture.invoice_number }} - {{ facture.client.entity_name }}</H2>
+    <div class="form_btn_group_H2">
+        <a href="{% url 'factures:factures' %}" class="form_btn">Retour</a>
+        <a href="{% url 'factures:modifier' facture.pk %}" class="form_btn">Modifier</a>
+    </div>
+    
 </div>
 
 <section class="tableau">
@@ -53,17 +58,9 @@
                         <p class="form-area">{{ facture.invoice_object }}</p>
                     </div>
 
-
-
-                    </div>
                 </div>
             </div>
-            
-            
-            <div class="form_btn_group">
-                <a href="{% url 'factures:factures' %}" class="form_btn">Retour</a>
-                <a href="{% url 'factures:modifier' facture.pk %}" class="form_btn">Modifier</a>
-            </div>
+                     
         </div>
     </div>
 

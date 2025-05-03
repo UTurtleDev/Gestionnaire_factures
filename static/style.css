@@ -250,6 +250,13 @@ h2 {
     margin-top: 24px;
     margin-bottom: 24px;
 }
+.form_btn_group_H2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+}
 
 .form_btn_group a {
     margin-right: 40px;
