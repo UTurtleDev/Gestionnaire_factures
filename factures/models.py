@@ -20,7 +20,7 @@ class Invoice(models.Model):
 
     date = models.DateField()
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='facture')
-    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.CASCADE, related_name="invoices")
+    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.CASCADE, related_name="invoices", db_index=True)
     invoice_number = models.CharField(max_length=10, unique=True, db_index=True)
     client = models.ForeignKey('clients.Client', on_delete=models.SET_NULL, related_name='invoices', db_index=True, null=True)
     client_entity_name = models.CharField(max_length=100, blank=True, null=True)
@@ -33,7 +33,7 @@ class Invoice(models.Model):
         verbose_name = "Facture"
         verbose_name_plural = "Factures"
     def __str__(self):
-        client_name = self.client_entity_name if self.client is None else self.client.entity_name
+        # client_name = self.client_entity_name if self.client is None else self.client.entity_name
         return self.invoice_number
 
     
