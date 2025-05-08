@@ -98,14 +98,6 @@ Gestionnaire_factures/
 └── manage.py        # Script de gestion Django
 ```
 
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou proposer une pull request.
-
-## 📄 Licence
-
-Ce projet est sous licence [MIT](LICENSE).
-
 ---
 
 Développé avec ❤️ par UTurtle
