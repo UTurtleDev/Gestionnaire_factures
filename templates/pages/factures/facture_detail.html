@@ -51,6 +51,10 @@
                             <p class="form-label">Taux TVA</p>
                             <p class="form-input">{{ facture.vat_rate }}</p>
                         </div>
+                        <div class="form-group">
+                            <p class="form-label">Montant TTC</p>
+                            <p class="form-input">{{ facture.formatted_amount_ttc }}</p>
+                        </div>
                     </div>
 
                     <div>
@@ -61,7 +65,7 @@
                         <p class="form-label">Réglements</p>
                             <div class="form-area">
                                 {% for reglement in facture.payments.all %}
-                                    <p>{{ reglement.date }} - {{ facture.formatted_amount_ttc }}</p>
+                                    <p>{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p>
                                 {% endfor %}
                             </div>
                     </div>
