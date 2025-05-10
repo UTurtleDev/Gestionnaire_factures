@@ -85,7 +85,7 @@ def reglement_create(request, pk):
         form = PaymentForm(initial={
             'date': datetime.today().strftime('%Y-%m-%d'), 
             'amount': round(facture.amount_ttc, 2), 
-            'payment_method': 'VRT le',
+            'payment_method': 'VRT',
             'invoice': facture
             })
     

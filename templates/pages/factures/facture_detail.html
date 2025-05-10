@@ -57,6 +57,14 @@
                         <p class="form-label">Déscription</p>
                         <p class="form-area">{{ facture.invoice_object }}</p>
                     </div>
+                    <div>
+                        <p class="form-label">Réglements</p>
+                            <div class="form-area">
+                                {% for reglement in facture.payments.all %}
+                                    <p>{{ reglement.date }} - {{ facture.formatted_amount_ttc }}</p>
+                                {% endfor %}
+                            </div>
+                    </div>
 
                 </div>
             </div>

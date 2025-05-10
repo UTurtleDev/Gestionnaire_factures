@@ -54,6 +54,13 @@
                             <p class="form-input">{{ client.email }}</p>
                         </div>
                     </div>
+                        <p class="form-label">Affaires</p>
+                        <div class="form-area">
+                            {% for affaire in client.affaires.all %}
+                                <p>{{ affaire.affaire_number }} - {{ affaire.affaire_description }} - {{ affaire.formatted_budget }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
             

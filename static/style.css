@@ -319,6 +319,10 @@ h2 {
     background-color: #fff;
 }
 
+.form-area p {
+    padding-top: 12px;
+}
+
 /* clients */
 
 .tableau {
