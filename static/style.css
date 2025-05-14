@@ -625,6 +625,20 @@ a {
     color: black;
 }
 
+/* Dashboard */
+
+.dashboard-card {
+    /* max-width: 900px; */
+    width: 95%;
+    margin: 30px auto;
+    background-color: var(--light-grey);
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    padding: 20px;
+}
+
+
+
 /* <!-- Le CSS pour la modale --> */
 .modal {
     position: fixed;

@@ -9,13 +9,23 @@
 </div>
 
 <section class="tableau">
+    <div class="cards-container">
+        <h3>Chiffre d'affaires</h3>
+        <div class="dashboard-card">
+            <div>Chiffre d'affaires : {{ total_facturation }}</div>
+            {% comment %} <div>Chiffre d'affaires : {{ facturation.total_amount_ht }}</div> {% endcomment %}
+        </div>
+        <h3>Affaires en cours</h3>
+        <h3>Factures en retard</h3>
+    </div>
+
 
     
 
 </section>
 
 
-<script>
+{% comment %} <script>
     document.addEventListener('DOMContentLoaded', function() {
         const clickableRows = document.querySelectorAll('.clickable-row');
         clickableRows.forEach(row => {
@@ -24,7 +34,7 @@
             });
         });
     });
-</script>
+</script> {% endcomment %}
 
 
 {% endblock content %}

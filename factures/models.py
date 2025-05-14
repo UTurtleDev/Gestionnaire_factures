@@ -46,7 +46,11 @@ class Invoice(models.Model):
     
     def formatted_amount_ttc(self):
         return f"{self.amount_ttc:,.2f} €".replace(",", " ").replace(".", ",")
-    
+
+    # @property
+    # def total_amount_ht():
+    #     return sum(invoice.amount_ht for invoice in Invoice.objects.all())
+
     @property
     def due_date(self):
         return self.date + timedelta(days=30)
