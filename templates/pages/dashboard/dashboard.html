@@ -10,13 +10,49 @@
 
 <section class="tableau">
     <div class="cards-container">
-        <h3>Chiffre d'affaires</h3>
+        <h3>Chiffre d'affaires : {{ formatted_total_facturation }}</h3>
         <div class="dashboard-card">
             <div>Chiffre d'affaires : {{ formatted_total_facturation }}</div>
-            {% comment %} <div>Chiffre d'affaires : {{ facturation.total_amount_ht }}</div> {% endcomment %}
         </div>
-        <h3>Affaires en cours</h3>
-        <h3>Factures en retard</h3>
+        <h3>Créances : {{ total_factures_dues }}</h3>
+        <h3>Il y a {{ affaires_en_cours|length }} affaires en cour{% if affaires_en_cours|length != 1 %}s{% endif %} : {{ total_affaires_en_cours }} restant à facturer</h3>
+        <div class="dashboard-card">
+            <table>
+                <tbody>
+                    {% if affaires_en_cours %}
+                        {% for affaire in affaires_en_cours %}
+                        <tr class="clickable-row" data-url="{% url 'affaires:detail' affaire.id %}">
+                            <td clospan="1">
+                                {{ affaire.affaire_number }}
+                            </td>
+                            <td clospan="1">{{ affaire.client.entity_name }}</td>
+                            <td clospan="1">{{ affaire.formatted_reste_a_facturer }}</td>
+                        </tr>
+                        {% endfor %}           
+                    {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+        <h3>Factures en retard : {{ total_factures_retard }}</h3>
+        <div class="dashboard-card">
+            <table>
+                <tbody>
+                    {% if factures_retard %}
+                        {% for facture in factures_retard %}
+                        <tr class="clickable-row" data-url="{% url 'factures:detail' facture.id %}">
+                            <td clospan="1">
+                                {{ facture.invoice_number }}
+                            </td>
+                            <td clospan="1">{{ facture.client.entity_name }}</td>
+                            <td clospan="1">{{ facture.formatted_amount_ttc }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
@@ -25,7 +61,7 @@
 </section>
 
 
-{% comment %} <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         const clickableRows = document.querySelectorAll('.clickable-row');
         clickableRows.forEach(row => {
@@ -34,7 +70,7 @@
             });
         });
     });
-</script> {% endcomment %}
+</script>
 
 
 {% endblock content %}
