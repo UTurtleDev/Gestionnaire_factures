@@ -24,7 +24,8 @@ RUN pip install --upgrade pip \
 COPY Pipfile Pipfile.lock ./
 
 # Installer les dépendances
-RUN pipenv install --deploy --system
+# RUN pipenv install --deploy --system
+RUN pipenv install  --system
 
 # Copier le projet
 COPY . .
