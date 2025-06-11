@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Client
+from .models import Client, Contact
 
 # Register your models here.
 
@@ -7,3 +7,4 @@ from .models import Client
 
 
 admin.site.register(Client)
+admin.site.register(Contact)
