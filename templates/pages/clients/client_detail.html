@@ -20,10 +20,10 @@
                             <p class="form-input">{{ client.entity_name }}</p>
                         </div>
                         
-                        <div class="form-group">
+                        {% comment %} <div class="form-group">
                             <p class="form-label">Contact</p>
                             <p class="form-input">{{ client.contact }}</p>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                     
                     <div class="form-group">
@@ -42,8 +42,32 @@
                             <p class="form-input">{{ client.city }}</p>
                         </div>
                     </div>
+
+                    <div class="form-label">Contacts</div>
+                    <div class="form-group">
+                        {% if  client.contact_principal %}
+                            <p class="form-label">Contact Principal:</p>
+                            <p class="form-label">{{ client.contact_principal }}</p>
+                            <p class="form-label">Fonction : {{ client.contact_principal.fonction }}</p>
+                            <p class="form-label">Email : {{ client.contact_principal.email }}</p>
+                            <p class="form-label">Téléphone : {{ client.contact_principal.phone_number }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-label">Autres Contacts</div>
+                    <div class="form-group">
+                        {% for contact in client.contacts.all %}
+                            {% if contact != client.contact_principal %}
+                            <p class="form-label">Contact : {{ contact }}</p>
+                            <p class="form-label">Fonction : {{ contact.fonction }}</p>
+                            <p class="form-label">Email : {{ contact.email }}</p>
+                            <p class="form-label">Téléphone : {{ contact.phone_number }}</p>
+                            {% endif %}
+                        {% endfor %}
+                        </if>
+                    </div>
                     
-                    <div class="form_categories">
+                    {% comment %} <div class="form_categories">
                         <div class="form-group">
                             <p class="form-label">Téléphone</p>
                             <p class="form-input">{{ client.phone_number }}</p>
@@ -53,8 +77,8 @@
                             <p class="form-label">Email</p>
                             <p class="form-input">{{ client.email }}</p>
                         </div>
-                    </div>
-                        <p class="form-label">Affaires</p>
+                    </div> {% endcomment %}
+                        <p class="form-label">Affaires : {{ client.formatted_total_affaire_client }}</p>
                         <div class="form-area">
                             {% for affaire in client.affaires.all %}
                                 <p>{{ affaire.affaire_number }} - {{ affaire.affaire_description }} - {{ affaire.formatted_budget }}</p>

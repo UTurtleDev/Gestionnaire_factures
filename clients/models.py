@@ -10,7 +10,7 @@ class Client(models.Model):
     contact = models.CharField(max_length=100, blank=True, null=True)
     phone_number = models.CharField(max_length=10, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-
+    
     
     
     class Meta:
@@ -29,6 +29,13 @@ class Client(models.Model):
     @property
     def tous_les_contacts(self):
         return self.contacts.all()
+    
+    @property
+    def total_affaire_client(self):
+        return sum(affaire.budget for affaire in self.affaires.all())
+    
+    def formatted_total_affaire_client(self):
+        return f"{self.total_affaire_client:,.2f} €".replace(",", " ").replace(".", ",")
     
 
 class Contact(models.Model):
@@ -58,7 +65,7 @@ class Contact(models.Model):
     def __str__(self):
         nom_complet = f"{self.prenom} {self.nom}".strip()
         if self.fonction:
-            return f"{nom_complet} ({self.fonction})"
+            return f"{nom_complet}"
         return nom_complet
     
 

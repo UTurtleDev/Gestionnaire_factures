@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Client
+from affaires.models import Affaire
 from .forms import ClientForm
 
 # Create your views here.
@@ -24,7 +25,12 @@ def client_create(request):
 
 def client_detail(request, pk):
     client_detail = get_object_or_404(Client, pk=pk)
-    return render(request, 'pages/clients/client_detail.html', {'client': client_detail})
+    contact = client_detail.contacts.all()
+    contact_principal = client_detail.contact_principal
+
+
+
+    return render(request, 'pages/clients/client_detail.html', {'client': client_detail, 'contact': contact, 'contact_principal': contact_principal})
 
 
 def client_update(request, pk):
