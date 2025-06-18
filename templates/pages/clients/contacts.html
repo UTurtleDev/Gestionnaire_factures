@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts{% endblock title %}
+
+{% block content %}
+
+    <div class="title">
+        <h2>Contacts</h2>
+        <div class="title_btn">
+            <div class="new"><a href="{% url 'clients:create_contact' %}">+ Nouveau contact</a></div>
+        </div>
+    </div>
+
+    <section class="tableau">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <div class="th-div">
+                            <span>NOM</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-div">
+                            <span>PRÉNOM</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-div">
+                            <span>CLIENT</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-div">
+                            <span>EMAIL</span>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="th-div">
+                            <span>TELEPHONE</span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+
+            {% if contacts %}
+            <tbody>
+                {% for contact in contacts %}
+                <tr data-url="{% url 'clients:detail_contact' contact.pk %}" class="clickable-row">
+                    <td clospan="1">
+                        <div class="addresse">
+                            <p>{{ contact.nom }}</p>
+                        </div>
+                    </td>
+                    <td clospan="1">
+                        <div class="addresse">
+                            <p>{{ contact.prenom }}</p>
+                        </div>
+                    </td>
+                    <td clospan="1">
+                        <div class="addresse">
+                            <p>{{ contact.client }}</p>
+                        </div>
+                    </td>
+                    <td clospan="1">
+                        <div class="addresse">
+                            <p>{{ contact.email }}</p>
+                        </div>
+                    </td>
+                    <td clospan="1">
+                        <div class="addresse">
+                            <p>{{ contact.phone_number }}</p>
+                        </div>
+                    </td>
+                    <td clospan="1">
+
+                    </td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+
+            {% endif %}
+        </table>
+    </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+
+{% endblock content%}
