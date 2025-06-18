@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Client
+from .models import Client, Contact
 from affaires.models import Affaire
-from .forms import ClientForm
+from .forms import ClientForm, ContactForm
 
 # Create your views here.
 
@@ -56,3 +56,51 @@ def client_delete(request, pk):
     
     return redirect('clients:clients')
 
+
+def contacts(request):
+    contacts = Contact.objects.all()
+    sorted_contacts = sorted(contacts, key=lambda contact: contact.nom.lower())
+    return render(request, 'pages/clients/contacts.html', context={'contacts': sorted_contacts})
+
+
+def contact_create(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('clients:contacts')
+        
+    else:
+        form = ContactForm()
+    
+    return render(request, 'pages/clients/contact_create_form.html', {'form': form})
+
+def contact_detail(request, pk):
+    contact_detail = get_object_or_404(Contact, pk=pk)
+
+    return render(request, 'pages/clients/contact_detail.html', {'contact': contact_detail})
+
+def contact_update(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST, instance=contact)
+        if form.is_valid():
+            form.save()
+            return redirect('clients:contacts')
+    else:
+        form = ContactForm(instance=contact)
+    
+    return render(request, 'pages/clients/contact_update_form.html', {'form': form, 'contact': contact})
+
+
+def contact_delete(request, pk):
+    contact = get_object_or_404(Contact, pk=pk)
+
+    if request.method == "POST":
+        contact.delete()
+        return redirect('clients:contacts')
+    
+    return redirect('clients:contacts')
+    
+   
