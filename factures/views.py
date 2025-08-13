@@ -71,12 +71,17 @@ def reglements(request):
     paiements = Payment.objects.all()
     factures = Invoice.objects.all()
 
+    paginator = Paginator(paiements,10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     for facture in factures:
         if facture.client is None and not facture.client_entity_name:
             facture.client_entity_name = "Client supprimé"
             facture.save()
 
-    return render(request, 'pages/factures/paiements.html', {'paiements': paiements, 'factures': factures})
+    return render(request, 'pages/factures/paiements.html', {'paiements': page_obj, 'factures': factures})
 
 def reglement_create(request, pk):
     facture = get_object_or_404(Invoice, pk=pk)

@@ -128,6 +128,36 @@
         {% endif %}
 
     </table>
+    <!-- Navigation de pagination -->
+    <div class="pagination-container">
+        
+        <div class="pagination-nav">
+            <!-- Bouton Précédent -->
+            {% if paiements.has_previous %}
+            <a href="?page=1" class="btn">«</a>
+            {% endif %}
+            
+            <!-- Numéros de pages -->
+            {% for num in paiements.paginator.page_range %}
+            {% if paiements.number == num %}
+            <span class="current-page">{{ num }}</span>
+            {% else %}
+            <a href="?page={{ num }}" class="btn">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            
+            <!-- Bouton Suivant -->
+            {% if paiements.has_next %}
+            {% comment %} <a href="?page={{ factures.next_page_number }}" class="btn">Suivant ›</a> {% endcomment %}
+            <a href="?page={{ paiements.paginator.num_pages }}" class="btn">»</a>
+            {% endif %}
+        </div>
+        <div class="pagination-info">
+            <p>
+                Page {{ paiements.number }} sur {{ paiements.paginator.num_pages }}
+            </p>
+        </div>
+    </div>
     
 
 </section>
