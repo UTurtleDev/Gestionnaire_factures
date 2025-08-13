@@ -40,9 +40,15 @@
                             <p class="form-input">{{ facture.affaire.affaire_number }}</p>
                         </div>
                     </div>
-                    <div class="from_categories">
-                        <p class="form-label">Contact</p>
-                        <p class="form-input">{{ facture.client.contact_principal }}</p>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Contact</p>
+                            <p class="form-input">{{ facture.client.contact_principal }}</p>
+                        </div>
+                        <div class="form-group">
+                            <p class="form-label">Auteur</p>
+                            <p class="form-input">{{ facture.author|default:"Non défini" }}</p>
+                        </div>
                     </div>
 
 

@@ -24,6 +24,7 @@ class Invoice(models.Model):
     invoice_number = models.CharField(max_length=10, unique=True, db_index=True)
     client = models.ForeignKey('clients.Client', on_delete=models.SET_NULL, related_name='invoices', db_index=True, null=True)
     contact = models.ForeignKey('clients.Contact', on_delete=models.SET_NULL, related_name='invoices', blank=True, null=True)
+    author = models.ForeignKey('users.CustomUser', on_delete=models.SET_NULL, related_name='invoices', null=True, blank=True)
     client_entity_name = models.CharField(max_length=100, blank=True, null=True)
     invoice_object = models.TextField(max_length=200)
     amount_ht = models.DecimalField(max_digits=10, decimal_places=2)

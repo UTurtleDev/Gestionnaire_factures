@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from .models import Client, Contact
 from affaires.models import Affaire
-from .forms import ClientForm, ContactForm, ContactFormSet
+from .forms import ClientForm, ContactForm, ContactFormSet, ContactInlineFormSet
 
 # Create your views here.
 
@@ -64,13 +64,25 @@ def client_update(request, pk):
     
     if request.method == 'POST':
         form = ClientForm(request.POST, instance=client)
-        if form.is_valid():
+        contact_formset = ContactInlineFormSet(request.POST, instance=client, prefix='contact')
+        
+        if form.is_valid() and contact_formset.is_valid():
+            # Save the client
             form.save()
+            
+            # Save contacts
+            contact_formset.save()
+            
             return redirect('clients:clients')
     else:
         form = ClientForm(instance=client)
+        contact_formset = ContactInlineFormSet(instance=client, prefix='contact')
     
-    return render(request, 'pages/clients/client_update_form.html', {'form': form, 'client': client})
+    return render(request, 'pages/clients/client_update_form.html', {
+        'form': form, 
+        'client': client,
+        'contact_formset': contact_formset
+    })
 
 
 def client_delete(request, pk):

@@ -25,6 +25,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_author = models.BooleanField(default=False, verbose_name="Peut être auteur")
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()
@@ -37,4 +38,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural= "Utilisateurs"
 
     def __str__(self):
-        return self.email
+        return self.first_name + " " + self.last_name

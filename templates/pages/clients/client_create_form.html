@@ -142,7 +142,8 @@
                                 <div class="form-group">
                                     <label class="form-label">
                                         {{ contact_form.is_principal }}
-                                        {{ contact_form.is_principal.label }}
+                                        <span style="display: none;">{{ contact_form.is_principal.label }}</span>
+                                        Contact principal
                                     </label>
                                     {% if contact_form.is_principal.errors %}
                                         <div class="field-error">{{ contact_form.is_principal.errors }}</div>
@@ -151,7 +152,7 @@
                                 
                                 <!-- Delete checkbox (hidden, managed by JavaScript) -->
                                 {% if contact_form.DELETE %}
-                                    {{ contact_form.DELETE }}
+                                    <div style="display: none;">{{ contact_form.DELETE }}</div>
                                 {% endif %}
                             </div>
                         {% endfor %}

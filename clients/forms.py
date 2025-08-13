@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory
+from django.forms import formset_factory, inlineformset_factory
 from clients.models import Client, Contact
 
 class ClientForm(forms.ModelForm):
@@ -118,6 +118,34 @@ ContactFormSet = formset_factory(
     ContactForm,
     formset=BaseContactFormSet,
     extra=1,  # Start with 1 empty form
+    min_num=1,  # Require at least 1 contact
+    max_num=10,  # Limit to 10 contacts max
+    validate_min=True,
+    can_delete=True
+)
+
+# Create ContactInlineFormSet for client updates
+ContactInlineFormSet = inlineformset_factory(
+    Client, 
+    Contact,
+    fields=['nom', 'prenom', 'fonction', 'phone_number', 'email', 'is_principal'],
+    widgets={
+        'nom': forms.TextInput(attrs={'class': 'form-input'}),
+        'prenom': forms.TextInput(attrs={'class': 'form-input'}),
+        'fonction': forms.TextInput(attrs={'class': 'form-input'}),
+        'phone_number': forms.TextInput(attrs={'class': 'form-input'}),
+        'email': forms.EmailInput(attrs={'class': 'form-input'}),
+        'is_principal': forms.CheckboxInput(attrs={'class': 'form-checkbox principal-checkbox'}),
+    },
+    labels={
+        'nom': 'Nom',
+        'prenom': 'Prénom', 
+        'fonction': 'Fonction',
+        'phone_number': 'Téléphone',
+        'email': 'Email',
+        'is_principal': 'Contact principal',
+    },
+    extra=0,  # Don't show extra empty forms by default
     min_num=1,  # Require at least 1 contact
     max_num=10,  # Limit to 10 contacts max
     validate_min=True,
