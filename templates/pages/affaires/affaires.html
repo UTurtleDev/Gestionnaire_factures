@@ -119,7 +119,7 @@
         <div class="pagination-nav">
             <!-- Bouton Précédent -->
             {% if affaires.has_previous %}
-            <a href="?page=1" class="btn">« Première</a>
+            <a href="?page=1" class="btn">«</a>
             {% endif %}
             
             <!-- Numéros de pages -->
@@ -133,7 +133,7 @@
             
             <!-- Bouton Suivant -->
             {% if affaires.has_next %}
-            <a href="?page={{ affaires.paginator.num_pages }}" class="btn">Dernière »</a>
+            <a href="?page={{ affaires.paginator.num_pages }}" class="btn">»</a>
             {% endif %}
         </div>
         <div class="pagination-info">

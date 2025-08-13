@@ -45,6 +45,7 @@
     --btn_new_hover: #a3cef9;
     --btn_delete_color: rgba(255, 144, 144, 0.915);
     --btn_delete_hover: rgba(255, 105, 105, 0.915);
+    --btn_pagination_bg: #7FAEDC;
 
 
     --svg-color: rgb(148 163 184);
@@ -726,6 +727,11 @@ h3 {
     margin-top: 10px;
 }
 
+.pagination-info {
+    margin-top: 15px;
+    color: #007bff;
+}
+
 .pagination-nav .btn {
     display: inline-block;
     padding: 8px 12px;
@@ -734,6 +740,9 @@ h3 {
     border: 1px solid #ddd;
     background-color: #f8f9fa;
     color: #007bff;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 8px;
 }
 
 .pagination-nav .btn:hover {
@@ -744,7 +753,10 @@ h3 {
     display: inline-block;
     padding: 8px 12px;
     margin: 0 2px;
-    background-color: #007bff;
+    background-color: var(--btn_pagination_bg);
     color: white;
     border: 1px solid #007bff;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 8px;
 }
