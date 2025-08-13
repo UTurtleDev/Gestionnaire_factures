@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Client, Contact
 from affaires.models import Affaire
-from .forms import ClientForm, ContactForm
+from .forms import ClientForm, ContactForm, ContactFormSet
 
 # Create your views here.
 
@@ -14,13 +14,33 @@ def clients(request):
 def client_create(request):
     if request.method == 'POST':
         form = ClientForm(request.POST)
-        if form.is_valid():
-            form.save()
+        contact_formset = ContactFormSet(request.POST, prefix='contact')
+        
+        if form.is_valid() and contact_formset.is_valid():
+            # Save the client
+            client = form.save()
+            
+            # Process contacts
+            for contact_form in contact_formset:
+                if contact_form.cleaned_data and not contact_form.cleaned_data.get('DELETE', False):
+                    # Skip empty forms
+                    if hasattr(contact_form, '_is_empty_form') and contact_form._is_empty_form:
+                        continue
+                    
+                    # Create contact instance
+                    contact = contact_form.save(commit=False)
+                    contact.client = client
+                    contact.save()
+            
             return redirect('clients:clients')
     else:
         form = ClientForm()
+        contact_formset = ContactFormSet(prefix='contact')
     
-    return render(request, 'pages/clients/client_create_form.html', {'form': form})
+    return render(request, 'pages/clients/client_create_form.html', {
+        'form': form,
+        'contact_formset': contact_formset
+    })
 
 
 def client_detail(request, pk):

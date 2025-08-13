@@ -50,7 +50,8 @@ class Contact(models.Model):
     class Meta:
         verbose_name = "Contact"
         verbose_name_plural = "Contacts"
-        ordering = ['-is_principal', 'nom']
+        # ordering = ['-is_principal', 'nom']
+        ordering = ['nom']
 
         # Contrainte : un seul contact principal par client
         constraints = [
@@ -63,7 +64,7 @@ class Contact(models.Model):
 
 
     def __str__(self):
-        nom_complet = f"{self.prenom} {self.nom}".strip()
+        nom_complet = f"{self.nom} {self.prenom}".strip()
         if self.fonction:
             return f"{nom_complet}"
         return nom_complet

@@ -1,0 +1,109 @@
+{% extends "base_form.html" %}
+{% load static %}
+
+{% block title %} Nouveau Contact {% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Nouveau Contact</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <form method="post" id="contact-form">
+                {% csrf_token %}
+                
+                <!-- Section Contact -->
+                <div class="form-section">
+                    <h3 class="section-title">Informations Contact</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">{{ form.client.label }}</label>
+                        {{ form.client }}
+                        {% if form.client.errors %}
+                            <div class="field-error">{{ form.client.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.nom.label }}</label>
+                            {{ form.nom }}
+                            {% if form.nom.errors %}
+                                <div class="field-error">{{ form.nom.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.prenom.label }}</label>
+                            {{ form.prenom }}
+                            {% if form.prenom.errors %}
+                                <div class="field-error">{{ form.prenom.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">{{ form.fonction.label }}</label>
+                        {{ form.fonction }}
+                        {% if form.fonction.errors %}
+                            <div class="field-error">{{ form.fonction.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.phone_number.label }}</label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                                <div class="field-error">{{ form.phone_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="field-error">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            {{ form.is_principal }}
+                            {{ form.is_principal.label }}
+                        </label>
+                        {% if form.is_principal.errors %}
+                            <div class="field-error">{{ form.is_principal.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Display form errors -->
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                
+                <div class="form_btn_group">
+                    <a href="{% url 'clients:contacts' %}" class="supprimer">Annuler</a>
+                    <button type="submit" class="form_btn">Créer le contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/client-form.css' %}">
+{% endblock extra_css %}
+
+{% block extra_js %}
+<script src="{% static 'js/client-form.js' %}"></script>
+{% endblock extra_js %}

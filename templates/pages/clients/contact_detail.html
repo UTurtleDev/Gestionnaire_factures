@@ -1,0 +1,73 @@
+{% extends "base_form.html" %}
+
+{% block title %}{{ contact.prenom }} {{ contact.nom }}{% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>{{ contact.prenom }} {{ contact.nom }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <div class="">
+                <div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Prénom</p>
+                            <p class="form-input">{{ contact.prenom }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Nom</p>
+                            <p class="form-input">{{ contact.nom }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <p class="form-label">Fonction</p>
+                        <p class="form-input">{{ contact.fonction }}</p>
+                    </div>
+
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Email</p>
+                            <p class="form-input">{{ contact.email }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Téléphone</p>
+                            <p class="form-input">{{ contact.phone_number }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="form-label">Statut</p>
+                        <p class="form-input">
+                            {% if contact.is_principal %}
+                                Contact Principal
+                            {% else %}
+                                Contact Secondaire
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="form-label">Client Associé</div>
+                    <div class="form-group">
+                        <p class="form-label">Entité : {{ contact.client.entity_name }}</p>
+                        <p class="form-label">Adresse : {{ contact.client.address }}</p>
+                        <p class="form-label">{{ contact.client.zip_code }} {{ contact.client.city }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form_btn_group">
+                <a href="{% url 'clients:contacts' %}" class="form_btn">Retour</a>
+                <a href="{% url 'clients:modifier_contact' contact.pk %}" class="form_btn">Modifier</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

@@ -6,3 +6,7 @@ plan.md
 db.sqlite3
 modelstest.py
 __pycache__/
+
+# Claude Code
+.claude_history
+.claude_cache/

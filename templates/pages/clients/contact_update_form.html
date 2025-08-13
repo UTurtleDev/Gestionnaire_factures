@@ -1,0 +1,109 @@
+{% extends "base_form.html" %}
+
+{% block title %} Modification contact {% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Modifications du contact : {{ contact.prenom }} {{ contact.nom }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="">
+                    <div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.prenom.label }}</label>
+                                {{ form.prenom }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">{{ form.nom.label }}</label>
+                                {{ form.nom }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.fonction.label }}</label>
+                            {{ form.fonction }}
+                        </div>
+
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.help_text %}
+                                    <small>{{ form.email.help_text }}</small>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">{{ form.phone_number.label }}</label>
+                                {{ form.phone_number }}
+                                {% if form.phone_number.help_text %}
+                                    <small>{{ form.phone_number.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group-horizontal">
+                            <label class="form-label form-label-with-margin">{{ form.is_principal.label }}</label>
+                            {{ form.is_principal }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form_btn_group">
+                    <a href="{% url 'clients:contacts' %}" class="form_btn">Retour</a>
+                    <button type="submit" class="form_btn">Enregistrer</button>
+                </div>
+                <div class="div_btn-delete"><button type="button" class="btn-delete" onclick="openDeleteModal()">Supprimer</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- La modale de confirmation -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmer la suppression</h3>
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>êtes-vous sur de vouloir supprimer le contact <strong>{{ contact.prenom }} {{ contact.nom }}</strong> ?</p>
+                <p>Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="form_btn" onclick="closeDeleteModal()">Annuler</button>
+                <form method="post" action="{% url 'clients:delete_contact' contact.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        
+        // Ferme la modale si l'utilisateur clique en dehors
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('deleteModal')) {
+                closeDeleteModal();
+            }
+        }
+    </script>
+
+</section>
+
+{% endblock content %}

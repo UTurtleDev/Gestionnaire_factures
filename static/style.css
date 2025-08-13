@@ -230,6 +230,18 @@ h2 {
     position: relative;
 }
 
+.form-group-horizontal {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    width: 100%;
+    position: relative;
+}
+
+.form-label-with-margin {
+    margin-right: 15px;
+}
+
 .form-label {
     color: var(--text-color);
     line-height: var(--h2-line-height);
@@ -660,10 +672,10 @@ h3 {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    display: flex;
     align-items: center;
     justify-content: center;
 }
+
 
 .modal-content {
     background-color: white;
