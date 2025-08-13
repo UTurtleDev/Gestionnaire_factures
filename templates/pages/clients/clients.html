@@ -100,8 +100,37 @@
         {% endif %}
 
     </table>
+    <!-- Navigation de pagination -->
+    <div class="pagination-container">
+        
+        <div class="pagination-nav">
+            <!-- Bouton Précédent -->
+            {% if clients.has_previous %}
+            <a href="?page=1" class="btn">« Première</a>
+            {% endif %}
+            
+            <!-- Numéros de pages -->
+            {% for num in clients.paginator.page_range %}
+            {% if clients.number == num %}
+            <span class="current-page">{{ num }}</span>
+            {% else %}
+            <a href="?page={{ num }}" class="btn">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            
+            <!-- Bouton Suivant -->
+            {% if clients.has_next %}
+            <a href="?page={{ clients.paginator.num_pages }}" class="btn">Dernière »</a>
+            {% endif %}
+        </div>
+        <div class="pagination-info">
+            <p>
+                Page {{ clients.number }} sur {{ clients.paginator.num_pages }}
+            </p>
+        </div>
+    </div>
     
-
+    
 </section>
 
 

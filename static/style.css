@@ -713,3 +713,38 @@ h3 {
 .close:hover {
     color: #777;
 }
+
+
+/* <!-- Le CSS pour la navigation --> */
+
+.pagination-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination-nav {
+    margin-top: 10px;
+}
+
+.pagination-nav .btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.pagination-nav .btn:hover {
+    background-color: #e9ecef;
+}
+
+.current-page {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}

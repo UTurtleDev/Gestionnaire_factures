@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
 from .models import Client, Contact
 from affaires.models import Affaire
 from .forms import ClientForm, ContactForm, ContactFormSet
@@ -9,7 +10,12 @@ def clients(request):
     clients = Client.objects.all()
     sorted_clients = sorted(clients, key=lambda client: client.entity_name.lower())
 
-    return render(request, 'pages/clients/clients.html', context={'clients': sorted_clients})
+    paginator = Paginator(sorted_clients,10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'pages/clients/clients.html', context={'clients': page_obj})
 
 def client_create(request):
     if request.method == 'POST':

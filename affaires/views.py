@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from .models import Affaire 
 from .forms import AffaireForm
 
@@ -7,7 +8,12 @@ def affaires(request):
     affaires = Affaire.objects.all()
     sorted_affaires = sorted(affaires, key=lambda affaire: affaire.reste_a_facturer, reverse=True)
     total_facture_affaire = sum(affaire.total_facture_ht for affaire in affaires)
-    return render(request, 'pages/affaires/affaires.html', context={"affaires": sorted_affaires, "total_facture_affaire":total_facture_affaire})  
+
+    paginator = Paginator(sorted_affaires, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'pages/affaires/affaires.html', context={"affaires": page_obj, "total_facture_affaire":total_facture_affaire})  
 
 def affaire_detail(request, pk):
     affaire_detail = get_object_or_404(Affaire, pk=pk)

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
 from .models import Invoice, Payment
 from affaires.models import Affaire
 from datetime import datetime
@@ -13,6 +14,11 @@ def factures(request):
     date = datetime.today().date()
     affaires= Affaire.objects.all()
 
+    paginator = Paginator(sorted_factures, 10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     for facture in sorted_factures:
         facture.day_late = (date - facture.due_date).days
 
@@ -21,7 +27,8 @@ def factures(request):
             facture.client_entity_name = "Client supprimé"
             facture.save()
 
-    return render(request, 'pages/factures/factures.html', context={"factures": sorted_factures, "date": date, "affaires": affaires})  
+    # return render(request, 'pages/factures/factures.html', context={"factures": sorted_factures, "date": date, "affaires": affaires})  
+    return render(request, 'pages/factures/factures.html', context={"factures": page_obj, "date": date, "affaires": affaires})  
 
 def facture_create(request):
     if request.method == "POST":
