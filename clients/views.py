@@ -86,7 +86,14 @@ def client_delete(request, pk):
 def contacts(request):
     contacts = Contact.objects.all()
     sorted_contacts = sorted(contacts, key=lambda contact: contact.nom.lower())
-    return render(request, 'pages/clients/contacts.html', context={'contacts': sorted_contacts})
+
+    paginator = Paginator(sorted_contacts,10)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+
+    return render(request, 'pages/clients/contacts.html', context={'contacts': page_obj})
 
 
 def contact_create(request):

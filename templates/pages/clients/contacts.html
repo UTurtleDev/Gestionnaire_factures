@@ -82,6 +82,36 @@
 
             {% endif %}
         </table>
+        <!-- Navigation de pagination -->
+        <div class="pagination-container">
+            
+            <div class="pagination-nav">
+                <!-- Bouton Précédent -->
+                {% if contacts.has_previous %}
+                <a href="?page=1" class="btn">« Première</a>
+                {% endif %}
+                
+                <!-- Numéros de pages -->
+                {% for num in contacts.paginator.page_range %}
+                {% if contacts.number == num %}
+                <span class="current-page">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="btn">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+                
+                <!-- Bouton Suivant -->
+                {% if contacts.has_next %}
+                <a href="?page={{ contacts.paginator.num_pages }}" class="btn">Dernière »</a>
+                {% endif %}
+            </div>
+            <div class="pagination-info">
+                <p>
+                    Page {{ contacts.number }} sur {{ contacts.paginator.num_pages }}
+                </p>
+            </div>
+        </div>
+
     </section>
 
 <script>
