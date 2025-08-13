@@ -8,6 +8,7 @@ class Affaire(models.Model):
     client = models.ForeignKey('clients.Client', on_delete=models.SET_NULL, null=True, related_name='affaires')
     client_entity_name = models.CharField(max_length=100, blank=True, null=True)
     affaire_number = models.CharField(max_length=10, unique=True, db_index=True)
+    author = models.ForeignKey('users.CustomUser', on_delete=models.SET_NULL, related_name='affaires', null=True, blank=True)
     affaire_description = models.TextField(max_length=200)
     budget = models.DecimalField(max_digits=10, decimal_places=2)
     

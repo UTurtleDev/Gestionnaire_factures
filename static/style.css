@@ -110,6 +110,13 @@ body {
 
 }
 
+.menu hr {
+    background-color: #338ce6;
+    height: 1px;
+    border: none;
+    margin: 10px 0 10px 0;
+}
+
 .copyright {
     font-size: 16px;
     color: #4C4C4C;
