@@ -16,7 +16,27 @@
     <div class="sidebar">
         <div class="logo"><img src="{% static 'logo.png' %}" alt="Logo P2 Ingénierie"></div>
         <div class="menu">
-            <div class="menu-item"><a href="{% url "dashboard:dashboard" %}">Dashboard</a></div>
+            <div class="menu-item">
+                <div class="menu-text">
+                    <p>Dashboard</p>
+                    <img src="{% static 'img/chevron.svg' %}" class="icone-titre" alt="Chevron">
+                </div>
+                <div class="sous-liste">
+                    <div class="items-sous-liste">
+                        <a href="{% url "dashboard:dashboard" %}">Général</a>
+                    </div>
+                    <div class="items-sous-liste">
+                        <a href="{% url "affaires:affaires" %}">Affaires</a>
+                    </div>
+                    <div class="items-sous-liste">
+                        <a href="{% url "factures:factures" %}">Factures</a>
+                    </div>
+                    <div class="items-sous-liste">
+                        <a href="{% url "clients:clients" %}">Clients</a>
+                    </div>
+
+                </div>
+            </div>
             <hr>
             <div class="menu-item"><a href="{% url "affaires:affaires" %}">Affaires</a></div>
             <div class="menu-item"><a href="{% url "clients:clients" %}">Clients</a></div>
