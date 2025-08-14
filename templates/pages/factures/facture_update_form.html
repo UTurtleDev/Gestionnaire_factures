@@ -12,7 +12,7 @@
 <section class="tableau">
     <div class="card">
         <div class="card-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="">
                     <div>
@@ -40,6 +40,19 @@
                             <div class="form-group">
                                 <label for="" class="form-label">{{ form.affaire.label }}</label>
                                 {{ form.affaire }}
+                            </div>
+                        </div>
+                        <div class="form_categories">
+                            <div class="form-group">
+                                <label class="form-label">{{ form.facture_pdf.label }}</label>
+                                {{ form.facture_pdf }}
+                                {% if facture.facture_pdf %}
+                                <div style="margin-top: 10px;">
+                                    <a href="{% url 'factures:download_pdf' facture.pk %}" target="_blank" style="color: #007bff; text-decoration: none;">
+                                        📄 Voir la facture actuelle
+                                    </a>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="form_categories">

@@ -12,7 +12,7 @@
 <section class="tableau">
     <div class="card">
         <div class="card-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="">
                     <div>
@@ -25,7 +25,10 @@
                                 <label class="form-label">{{ form.author.label }}</label>
                                 {{ form.author }}
                             </div>
-                            
+                            <div class="form-group">
+                                <label class="form-label">{{ form.facture_pdf.label }}</label>
+                                {{ form.facture_pdf }}
+                            </div>
                         </div>
                         
                         <div class="form_categories">

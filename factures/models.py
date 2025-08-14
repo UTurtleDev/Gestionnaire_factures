@@ -1,7 +1,12 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 
 # Create your models here.
+
+def validateur_extentions(value):
+    if not value.name.endswith('.pdf'):
+        raise ValidationError('Le fichier doit avoir l\'extension .pdf')
 
 class Invoice(models.Model):
     TYPE_CHOICES = [
@@ -30,6 +35,7 @@ class Invoice(models.Model):
     amount_ht = models.DecimalField(max_digits=10, decimal_places=2)
     vat_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20.0)
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='a_payer')
+    facture_pdf = models.FileField(upload_to='factures', validators = [validateur_extentions], null=True, blank=True)
 
     class Meta:
         verbose_name = "Facture"
@@ -77,7 +83,16 @@ class Invoice(models.Model):
 
         self.save()
 
+    def clean(self):
+        """Validation automatique des montants pour les avoirs"""
+        super().clean()
+        # Si c'est un avoir et que le montant est positif, le convertir en négatif
+        if self.type == 'avoir' and self.amount_ht and self.amount_ht > 0:
+            self.amount_ht = -self.amount_ht
+
     def save(self, *args, **kwargs):
+        # Appliquer les validations avant sauvegarde
+        self.clean()
         # Si le client existe, copie son nom dans client_entity_name
         if self.client:
             self.client_entity_name = self.client.entity_name

@@ -1,6 +1,6 @@
 
 from django.urls import path, include
-from .views import factures, facture_detail, facture_create, facture_update, facture_delete, reglement_create, reglements, reglement_detail, reglement_update, reglement_delete
+from .views import factures, facture_detail, facture_create, facture_update, facture_delete, reglement_create, reglements, reglement_detail, reglement_update, reglement_delete, download_facture_pdf
 
 app_name = 'factures'
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('<int:pk>/modifier/', facture_update, name='modifier'),
     path('<int:pk>', facture_detail, name='detail'),
     path('<int:pk>/supprimer/', facture_delete, name='delete'),
+    path('<int:pk>/pdf/', download_facture_pdf, name='download_pdf'),
     path('reglements/', reglements, name='reglements'),
     path('<int:pk>/reglement/', reglement_create, name='reglement'),
     path('<int:pk>/reglement/modifier/', reglement_update, name='reglement_modifier'),

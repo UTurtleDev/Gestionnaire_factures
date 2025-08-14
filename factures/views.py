@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
+from django.http import HttpResponse, Http404
+from django.conf import settings
+import os
 from .models import Invoice, Payment
 from affaires.models import Affaire
 from datetime import datetime
@@ -32,7 +35,7 @@ def factures(request):
 
 def facture_create(request):
     if request.method == "POST":
-        form = InvoiceForm(request.POST)
+        form = InvoiceForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('factures:factures')
@@ -51,7 +54,7 @@ def facture_update(request, pk):
     facture.date = facture.date.strftime('%Y-%m-%d')
 
     if request.method == 'POST':
-        form = InvoiceForm(request.POST, instance=facture)
+        form = InvoiceForm(request.POST, request.FILES, instance=facture)
         if form.is_valid():
             form.save()
             return redirect('factures:factures')
@@ -146,5 +149,20 @@ def reglement_delete(request, pk):
 
     return redirect('factures:reglements') 
 
+def download_facture_pdf(request, pk):
+    """Vue pour servir les fichiers PDF des factures de manière sécurisée"""
+    facture = get_object_or_404(Invoice, pk=pk)
     
+    if not facture.facture_pdf:
+        raise Http404("Aucun fichier PDF associé à cette facture")
+    
+    file_path = facture.facture_pdf.path
+    
+    if not os.path.exists(file_path):
+        raise Http404("Le fichier PDF n'existe pas")
+    
+    with open(file_path, 'rb') as pdf_file:
+        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f'inline; filename="Facture_{facture.invoice_number}.pdf"'
+        return response
     

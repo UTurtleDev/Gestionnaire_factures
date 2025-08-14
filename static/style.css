@@ -451,13 +451,9 @@ th {
     cursor: pointer;
 }
 
-svg {
-    overflow: visible;
-    width: 7.5px;
-    display: inline-block;
-    height: 16px;
-    vertical-align: -1.5px;
-    color: var(--th-color);
+.svg {
+
+    margin-top: -8px;
 }
 
 .param-btn {
@@ -532,6 +528,12 @@ tbody tr:hover {
 
 td:last-child {
     text-align: -webkit-right;
+}
+
+
+.actions-list {
+    display: flex;
+    flex-direction: row;
 }
 
 .actions {
