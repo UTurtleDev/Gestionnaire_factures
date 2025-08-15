@@ -30,10 +30,9 @@ class ClientForm(forms.ModelForm):
 class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
-        fields = ['client', 'nom', 'prenom', 'fonction', 'phone_number', 'email', 'is_principal']
+        fields = ['nom', 'prenom', 'fonction', 'phone_number', 'email', 'is_principal']
 
         widgets = {
-            'client': forms.Select(attrs={'class': 'form-input'}),
             'nom': forms.TextInput(attrs={'class': 'form-input'}),
             'prenom': forms.TextInput(attrs={'class': 'form-input'}),
             'fonction': forms.TextInput(attrs={'class': 'form-input'}),
@@ -42,7 +41,57 @@ class ContactForm(forms.ModelForm):
             'is_principal': forms.CheckboxInput(attrs={'class': 'form-checkbox principal-checkbox'}),
         }
         labels = {
-            'client': 'Client',
+            'nom': 'Nom',
+            'prenom': 'Prénom',
+            'fonction': 'Fonction',
+            'phone_number': 'Téléphone',
+            'email': 'Email',
+            'is_principal': 'Contact principal',
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Check if at least one field is filled
+        nom = cleaned_data.get('nom')
+        prenom = cleaned_data.get('prenom') 
+        fonction = cleaned_data.get('fonction')
+        phone_number = cleaned_data.get('phone_number')
+        email = cleaned_data.get('email')
+        
+        # If all fields are empty, this form should be considered empty
+        if not any([nom, prenom, fonction, phone_number, email]):
+            # Mark this form as empty - Django formsets will ignore empty forms
+            self._is_empty_form = True
+        else:
+            # If form has data, require at least nom or prenom
+            if not nom and not prenom:
+                raise forms.ValidationError("Au moins un nom ou prénom est requis pour un contact.")
+        
+        return cleaned_data
+    
+    def has_changed(self):
+        """Override to properly detect if form has changed"""
+        if hasattr(self, '_is_empty_form'):
+            return False
+        return super().has_changed()
+
+class ContactAffaireForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['affaire', 'nom', 'prenom', 'fonction', 'phone_number', 'email', 'is_principal']
+
+        widgets = {
+            'affaire': forms.Select(attrs={'class': 'form-input'}),
+            'nom': forms.TextInput(attrs={'class': 'form-input'}),
+            'prenom': forms.TextInput(attrs={'class': 'form-input'}),
+            'fonction': forms.TextInput(attrs={'class': 'form-input'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input'}),
+            'is_principal': forms.CheckboxInput(attrs={'class': 'form-checkbox principal-checkbox'}),
+        }
+        labels = {
+            'affaire': 'Affaire',
             'nom': 'Nom',
             'prenom': 'Prénom',
             'fonction': 'Fonction',
@@ -124,30 +173,7 @@ ContactFormSet = formset_factory(
     can_delete=True
 )
 
-# Create ContactInlineFormSet for client updates
-ContactInlineFormSet = inlineformset_factory(
-    Client, 
-    Contact,
-    fields=['nom', 'prenom', 'fonction', 'phone_number', 'email', 'is_principal'],
-    widgets={
-        'nom': forms.TextInput(attrs={'class': 'form-input'}),
-        'prenom': forms.TextInput(attrs={'class': 'form-input'}),
-        'fonction': forms.TextInput(attrs={'class': 'form-input'}),
-        'phone_number': forms.TextInput(attrs={'class': 'form-input'}),
-        'email': forms.EmailInput(attrs={'class': 'form-input'}),
-        'is_principal': forms.CheckboxInput(attrs={'class': 'form-checkbox principal-checkbox'}),
-    },
-    labels={
-        'nom': 'Nom',
-        'prenom': 'Prénom', 
-        'fonction': 'Fonction',
-        'phone_number': 'Téléphone',
-        'email': 'Email',
-        'is_principal': 'Contact principal',
-    },
-    extra=0,  # Don't show extra empty forms by default
-    min_num=1,  # Require at least 1 contact
-    max_num=10,  # Limit to 10 contacts max
-    validate_min=True,
-    can_delete=True
-)
+# Create ContactInlineFormSet for affaire updates (plus d'inline formset pour Client)
+# Les contacts sont maintenant gérés au niveau des affaires
+# ContactInlineFormSet est maintenant défini dans affaires/forms.py
+# car les contacts sont liés aux affaires

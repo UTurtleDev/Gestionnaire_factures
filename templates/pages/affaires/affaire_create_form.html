@@ -1,9 +1,9 @@
 {% extends "base_form.html" %}
+{% load static %}
 
 {% block title %} Nouvelle Affaire {% endblock title %}
 
 {% block content %}
-
 
 <div class="title">
     <H2>Nouvelle Affaire</H2>
@@ -12,66 +12,213 @@
 <section class="tableau">
     <div class="card">
         <div class="card-body">
-            <form method="post">
+            <form method="post" id="affaire-form">
                 {% csrf_token %}
-                <div class="">
-                    <div>
-                        <div class="form_categories">
-                            <div class="form-group">
-                                <label class="form-label">{{ form.affaire_number.label }}</label>
-                                {{ form.affaire_number }}
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">{{ form.client.label }}</label>
-                                {{ form.client }}
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">{{ form.author.label }}</label>
-                                {{ form.author }}
-                            </div>
-                        </div>
                 
-                        <div class="form_categories">
-                            <div class="form-group">
-                                <label class="form-label">{{ form.budget.label }}</label>
-                                {{ form.budget }}
-                            </div>
-                            {% comment %} <div class="form-group">
-                                <p class="form-label">Facturé</p>
-                                <p class="form-input">{{ affaire.formatted_total_facture_ht }}</p>
-                            </div> {% endcomment %}
+                <!-- Section Affaire -->
+                <div class="form-section">
+                    <h3 class="section-title">Informations Affaire</h3>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.affaire_number.label }}</label>
+                            {{ form.affaire_number }}
                         </div>
-                        <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.client.label }}</label>
+                            {{ form.client }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">{{ form.author.label }}</label>
+                            {{ form.author }}
+                        </div>
+                    </div>
+            
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.budget.label }}</label>
+                            {{ form.budget }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ form.affaire_description.label }}</label>
+                        {{ form.affaire_description }}
+                    </div>
+                </div>
+
+                <!-- Section Contacts -->
+                <div class="form-section">
+                    <div class="contacts-header">
+                        <h3 class="section-title">Contacts</h3>
+                        <button type="button" id="add-contact" class="btn-add-contact">+ Ajouter un contact</button>
+                    </div>
+                    
+                    <!-- Section pour sélectionner un contact existant -->
+                    <div class="existing-contact-section" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 5px; background-color: #f9f9f9;">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.existing_contact.label }}</label>
+                            {{ form.existing_contact }}
+                            {% if form.existing_contact.errors %}
+                                <div class="field-error">{{ form.existing_contact.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label class="form-label">
+                                <input type="checkbox" name="existing_contact_is_principal" id="existing-contact-principal" class="form-checkbox" checked disabled>
+                                Marquer comme contact principal
+                            </label>
+                            <small class="form-help-text">Si coché, ce contact sera défini comme contact principal de l'affaire.</small>
+                        </div>
+                        <small class="form-help-text">Optionnel : sélectionnez un contact existant pour ce client, ou créez-en un nouveau ci-dessous.</small>
+                    </div>
+                    
+                    <!-- Django Formset Management Form -->
+                    {{ contact_formset.management_form }}
+                    
+                    <!-- Display formset errors -->
+                    {% if contact_formset.non_form_errors %}
+                        <div class="formset-errors">
+                            {{ contact_formset.non_form_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <div id="contacts-container">
+                        {% for contact_form in contact_formset %}
+                            <div class="contact-form" id="contact-{{ forloop.counter0 }}">
+                                <div class="contact-header">
+                                    <h4>Contact {{ forloop.counter }}</h4>
+                                    <button type="button" class="btn-remove-contact" onclick="removeContact(this)" {% if forloop.first %}id="first-contact-remove-btn" style="display: none;"{% endif %}>×</button>
+                                </div>
+                                
+                                <!-- Display form errors -->
+                                {% if contact_form.non_field_errors %}
+                                    <div class="form-errors">
+                                        {{ contact_form.non_field_errors }}
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="form_categories">
+                                    <div class="form-group">
+                                        <label class="form-label">{{ contact_form.nom.label }}</label>
+                                        {{ contact_form.nom }}
+                                        {% if contact_form.nom.errors %}
+                                            <div class="field-error">{{ contact_form.nom.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">{{ contact_form.prenom.label }}</label>
+                                        {{ contact_form.prenom }}
+                                        {% if contact_form.prenom.errors %}
+                                            <div class="field-error">{{ contact_form.prenom.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">{{ contact_form.fonction.label }}</label>
+                                    {{ contact_form.fonction }}
+                                    {% if contact_form.fonction.errors %}
+                                        <div class="field-error">{{ contact_form.fonction.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="form_categories">
+                                    <div class="form-group">
+                                        <label class="form-label">{{ contact_form.phone_number.label }}</label>
+                                        {{ contact_form.phone_number }}
+                                        {% if contact_form.phone_number.errors %}
+                                            <div class="field-error">{{ contact_form.phone_number.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">{{ contact_form.email.label }}</label>
+                                        {{ contact_form.email }}
+                                        {% if contact_form.email.errors %}
+                                            <div class="field-error">{{ contact_form.email.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        {{ contact_form.is_principal }}
+                                        <span style="display: none;">{{ contact_form.is_principal.label }}</span>
+                                        Contact principal
+                                    </label>
+                                    {% if contact_form.is_principal.errors %}
+                                        <div class="field-error">{{ contact_form.is_principal.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Delete checkbox (hidden, managed by JavaScript) -->
+                                {% if contact_form.DELETE %}
+                                    <div style="display: none;">{{ contact_form.DELETE }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        
+                        <!-- Hidden template for new contacts -->
+                        <div class="contact-form" id="contact-template" style="display: none;">
+                            <div class="contact-header">
+                                <h4>Contact</h4>
+                                <button type="button" class="btn-remove-contact" onclick="removeContact(this)">×</button>
+                            </div>
+                            
+                            <div class="form_categories">
+                                <div class="form-group">
+                                    <label class="form-label">Nom</label>
+                                    <input type="text" name="contact-__INDEX__-nom" class="form-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Prénom</label>
+                                    <input type="text" name="contact-__INDEX__-prenom" class="form-input">
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
-                                <label class="form-label">{{ form.affaire_description.label }}</label>
-                                {{ form.affaire_description }}
+                                <label class="form-label">Fonction</label>
+                                <input type="text" name="contact-__INDEX__-fonction" class="form-input">
+                            </div>
+                            
+                            <div class="form_categories">
+                                <div class="form-group">
+                                    <label class="form-label">Téléphone</label>
+                                    <input type="text" name="contact-__INDEX__-phone_number" class="form-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="contact-__INDEX__-email" class="form-input">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" name="contact-__INDEX__-is_principal" class="form-checkbox principal-checkbox">
+                                    Contact principal
+                                </label>
                             </div>
                         </div>
-                        {% comment %} <div>
-                            <p class="form-label">Facturation</p>
-                            <div class="form-area">
-                                {% for facture in affaire.invoices.all %}
-                                    <p>{{ facture.invoice_number }} - {{ facture.formatted_amount_ht }}</p>
-                                {% endfor %}
-                            </div>
-                        </div> {% endcomment %}
                     </div>
                 </div>
                          
                 <div class="form_btn_group">
-                    <a href="{% url 'affaires:affaires' %}" class="form_btn">Retour</a>
+                    <a href="{% url 'affaires:affaires' %}" class="supprimer">Annuler</a>
                     <button type="submit" class="form_btn">Créer l'affaire</button>
                 </div>
             </form>
         </div>
     </div>
-
-    
-
 </section>
 
-
-
-
-
 {% endblock content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/client-form.css' %}">
+{% endblock extra_css %}
+
+{% block extra_js %}
+<script src="{% static 'js/client-form.js' %}"></script>
+{% endblock extra_js %}

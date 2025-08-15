@@ -69,6 +69,31 @@
                         <button type="button" id="add-contact" class="btn-add-contact">+ Ajouter un contact</button>
                     </div>
                     
+                    <!-- Existing contacts (read-only display) -->
+                    {% if existing_contacts %}
+                        <div class="existing-contacts-section" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 5px; background-color: #f9f9f9;">
+                            <h4>Contacts existants</h4>
+                            {% for contact in existing_contacts %}
+                                <div class="existing-contact-item" style="padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 3px; background-color: white;">
+                                    <div style="display: flex; justify-content: between; align-items: center;">
+                                        <div>
+                                            <strong>{{ contact.nom }} {{ contact.prenom }}</strong>
+                                            {% if contact.is_principal %}<span style="color: #4CAF50; font-weight: bold;"> (Principal)</span>{% endif %}
+                                            <br>
+                                            {% if contact.fonction %}<em>{{ contact.fonction }}</em><br>{% endif %}
+                                            {% if contact.phone_number %}📞 {{ contact.phone_number }}<br>{% endif %}
+                                            {% if contact.email %}✉️ {{ contact.email }}<br>{% endif %}
+                                            <small style="color: #666;">Affaire: {{ contact.affaire.affaire_number }}</small>
+                                        </div>
+                                        <div>
+                                            <a href="{% url 'clients:modifier_contact' contact.pk %}" class="form_btn" style="margin-left: 10px;">Modifier</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
                     <!-- Django Formset Management Form -->
                     {{ contact_formset.management_form }}
                     
@@ -83,10 +108,8 @@
                         {% for contact_form in contact_formset %}
                             <div class="contact-form" id="contact-{{ forloop.counter0 }}">
                                 <div class="contact-header">
-                                    <h4>Contact {{ forloop.counter }}</h4>
-                                    {% if not forloop.first %}
-                                        <button type="button" class="btn-remove-contact" onclick="removeContact(this)">×</button>
-                                    {% endif %}
+                                    <h4>Nouveau Contact {{ forloop.counter }}</h4>
+                                    <button type="button" class="btn-remove-contact" onclick="removeContact(this)">×</button>
                                 </div>
                                 
                                 <!-- Display form errors -->
@@ -161,7 +184,7 @@
                         <!-- Hidden template for new contacts -->
                         <div class="contact-form" id="contact-template" style="display: none;">
                             <div class="contact-header">
-                                <h4>Contact</h4>
+                                <h4>Nouveau Contact</h4>
                                 <button type="button" class="btn-remove-contact" onclick="removeContact(this)">×</button>
                             </div>
                             

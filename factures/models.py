@@ -25,7 +25,7 @@ class Invoice(models.Model):
 
     date = models.DateField()
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='facture')
-    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.CASCADE, related_name="invoices", db_index=True)
+    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.PROTECT, related_name="invoices", db_index=True)
     invoice_number = models.CharField(max_length=10, unique=True, db_index=True)
     client = models.ForeignKey('clients.Client', on_delete=models.SET_NULL, related_name='invoices', db_index=True, null=True)
     contact = models.ForeignKey('clients.Contact', on_delete=models.SET_NULL, related_name='invoices', blank=True, null=True)
@@ -103,7 +103,7 @@ class Invoice(models.Model):
 class Payment(models.Model):
     date = models.DateField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='payments')
+    invoice = models.ForeignKey(Invoice, on_delete=models.PROTECT, related_name='payments')
     payment_method = models.CharField(max_length=50)
 
     class Meta:

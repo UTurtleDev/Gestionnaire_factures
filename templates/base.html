@@ -52,11 +52,58 @@
             <input type="text" placeholder="Rechercher">
         </div>
     </nav>
+    
+    <!-- Messages Django -->
+    {% if messages %}
+        <div class="messages-container" style="margin: 20px; z-index: 1000;">
+            {% for message in messages %}
+                <div class="message message-{{ message.tags }}" style="
+                    padding: 12px 20px; 
+                    margin-bottom: 10px; 
+                    border-radius: 5px; 
+                    font-weight: 500;
+                    {% if message.tags == 'error' %}
+                        background-color: #fee; 
+                        color: #c33; 
+                        border: 1px solid #fcc;
+                    {% elif message.tags == 'success' %}
+                        background-color: #efe; 
+                        color: #383; 
+                        border: 1px solid #cfc;
+                    {% elif message.tags == 'warning' %}
+                        background-color: #ffc; 
+                        color: #863; 
+                        border: 1px solid #fd6;
+                    {% else %}
+                        background-color: #def; 
+                        color: #368; 
+                        border: 1px solid #ace;
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
         
     {% block content %}{% endblock content %}
     
     </section>
     
+    <script>
+        // Auto-hide success messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessages = document.querySelectorAll('.message-success');
+            successMessages.forEach(function(message) {
+                setTimeout(function() {
+                    message.style.opacity = '0';
+                    setTimeout(function() {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
 
 </body>
 </html>

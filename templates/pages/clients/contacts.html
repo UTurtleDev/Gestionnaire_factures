@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="title">
-        <h2>Contacts</h2>
+        <h2>Contacts ({{ contacts.paginator.count }})</h2>
         <div class="title_btn">
             <div class="new"><a href="{% url 'clients:create_contact' %}">+ Nouveau contact</a></div>
         </div>
@@ -59,7 +59,7 @@
                     </td>
                     <td clospan="1">
                         <div class="addresse">
-                            <p>{{ contact.client }}</p>
+                            <p>{{ contact.affaire.client.entity_name }}</p>
                         </div>
                     </td>
                     <td clospan="1">

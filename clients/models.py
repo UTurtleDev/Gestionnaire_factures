@@ -24,11 +24,17 @@ class Client(models.Model):
     
     @property
     def contact_principal(self):
-        return self.contacts.filter(is_principal=True).first()
+        # Récupère le contact principal de la première affaire (ou None)
+        premiere_affaire = self.affaires.first()
+        if premiere_affaire:
+            return premiere_affaire.contacts.filter(is_principal=True).first()
+        return None
     
     @property
     def tous_les_contacts(self):
-        return self.contacts.all()
+        # Récupère tous les contacts de toutes les affaires du client
+        from clients.models import Contact
+        return Contact.objects.filter(affaire__client=self)
     
     @property
     def total_affaire_client(self):
@@ -39,7 +45,7 @@ class Client(models.Model):
     
 
 class Contact(models.Model):
-    client = models.ForeignKey('clients.Client', on_delete=models.CASCADE, related_name='contacts')
+    affaire = models.ForeignKey('affaires.Affaire', on_delete=models.SET_NULL, related_name='contacts', null=True)
     nom = models.CharField(max_length=100, blank=True, null=True)
     prenom = models.CharField(max_length=100, blank=True, null=True)
     fonction = models.CharField(max_length=100, blank=True, null=True)
@@ -53,12 +59,12 @@ class Contact(models.Model):
         # ordering = ['-is_principal', 'nom']
         ordering = ['nom']
 
-        # Contrainte : un seul contact principal par client
+        # Contrainte : un seul contact principal par affaire (si affaire existe)
         constraints = [
             models.UniqueConstraint(
-                fields=['client', 'is_principal'],
-                condition=models.Q(is_principal=True),
-                name='unique_principal_contact_per_client'
+                fields=['affaire', 'is_principal'],
+                condition=models.Q(is_principal=True, affaire__isnull=False),
+                name='unique_principal_contact_per_affaire'
             )
         ]
 
@@ -72,15 +78,15 @@ class Contact(models.Model):
 
     def save(self, *args, **kwargs):
         # Si on marque ce contact comme principal, 
-        # démarquer les autres contacts principaux du même client
-        if self.is_principal:
+        # démarquer les autres contacts principaux de la même affaire
+        if self.is_principal and self.affaire:
             self.__class__.objects.filter(
-                client=self.client, 
+                affaire=self.affaire, 
                 is_principal=True
             ).exclude(pk=self.pk).update(is_principal=False)
         
-        # Si c'est le premier contact du client, le marquer automatiquement comme principal
-        if not self.__class__.objects.filter(client=self.client).exists():
+        # Si c'est le premier contact de l'affaire, le marquer automatiquement comme principal
+        if self.affaire and not self.__class__.objects.filter(affaire=self.affaire).exists():
             self.is_principal = True
             
         super().save(*args, **kwargs)

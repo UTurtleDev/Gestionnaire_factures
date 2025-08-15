@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Ensure UI consistency for principal contacts
     ensurePrincipalContactUI();
+    
+    // Initialize client-based contact selection
+    initializeExistingContactSelection();
 });
 
 /**
@@ -81,9 +84,13 @@ function removeContact(button) {
     const contactForm = button.closest('.contact-form');
     if (!contactForm) return;
     
-    // UI check: Don't allow removal if it's the only visible contact
+    // Check if an existing contact is selected
+    const existingContactSelect = document.getElementById('existing-contact-select');
+    const hasExistingContact = existingContactSelect && existingContactSelect.value;
+    
+    // UI check: Don't allow removal if it's the only visible contact AND no existing contact is selected
     const visibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not([style*="display: none"])');
-    if (visibleContacts.length <= 1) {
+    if (visibleContacts.length <= 1 && !hasExistingContact) {
         alert('Au moins un contact est requis.');
         return;
     }
@@ -109,6 +116,14 @@ function removeContact(button) {
         if (firstVisibleContact) {
             firstVisibleContact.checked = true;
         }
+    }
+    
+    // After removal, check if we need to hide the first contact remove button again
+    const remainingVisibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not([style*="display: none"])');
+    const firstContactRemoveBtn = document.getElementById('first-contact-remove-btn');
+    
+    if (remainingVisibleContacts.length <= 1 && !hasExistingContact && firstContactRemoveBtn) {
+        firstContactRemoveBtn.style.display = 'none';
     }
 }
 
@@ -159,5 +174,242 @@ function updateDjangoFormsetIndices() {
     if (totalFormsInput) {
         const visibleForms = document.querySelectorAll('.contact-form:not(#contact-template)').length;
         totalFormsInput.value = visibleForms;
+    }
+}
+
+/**
+ * Initialize existing contact selection functionality
+ */
+function initializeExistingContactSelection() {
+    console.log('=== DEBUT initializeExistingContactSelection ===');
+    
+    const clientSelect = document.getElementById('client-select');
+    const existingContactSelect = document.getElementById('existing-contact-select');
+    const principalCheckbox = document.getElementById('existing-contact-principal');
+    
+    console.log('Elements trouvés:');
+    console.log('- clientSelect:', !!clientSelect, clientSelect?.value);
+    console.log('- existingContactSelect:', !!existingContactSelect, existingContactSelect?.value);
+    console.log('- principalCheckbox:', !!principalCheckbox, principalCheckbox?.disabled);
+    
+    if (!clientSelect || !existingContactSelect) {
+        console.log('ERREUR: Elements manquants, sortie de la fonction');
+        return;
+    }
+    
+    // Initialize the principal checkbox state
+    if (principalCheckbox) {
+        const shouldDisable = !existingContactSelect.value;
+        principalCheckbox.disabled = shouldDisable;
+        console.log('Initialisation checkbox principal - disabled:', shouldDisable);
+    }
+    
+    // If client is already selected (update mode), load contacts immediately
+    if (clientSelect.value) {
+        console.log('Client déjà sélectionné:', clientSelect.value, '- chargement des contacts');
+        fetchContactsForClient(clientSelect.value, existingContactSelect);
+    }
+    
+    // Handle client selection change
+    clientSelect.addEventListener('change', function() {
+        const clientId = this.value;
+        console.log('Changement client:', clientId);
+        
+        if (clientId) {
+            // Fetch contacts for this client via AJAX
+            fetchContactsForClient(clientId, existingContactSelect);
+        } else {
+            // Clear the existing contact options
+            clearContactOptions(existingContactSelect);
+        }
+    });
+    
+    // Handle existing contact selection
+    existingContactSelect.addEventListener('change', function() {
+        console.log('Changement contact existant:', this.value);
+        handleExistingContactSelection(this);
+    });
+    
+    console.log('=== FIN initializeExistingContactSelection ===');
+}
+
+/**
+ * Fetch contacts for a specific client
+ */
+function fetchContactsForClient(clientId, selectElement) {
+    // Show loading state
+    selectElement.innerHTML = '<option value="">Chargement...</option>';
+    selectElement.disabled = true;
+    
+    // Check if we're in update mode by looking for affaire ID in the URL or form
+    const currentAffaireId = getCurrentAffaireId();
+    let apiUrl = `/affaires/api/client-contacts/${clientId}/`;
+    if (currentAffaireId) {
+        apiUrl += `?current_affaire_id=${currentAffaireId}`;
+    }
+    
+    // Make AJAX request to get contacts
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            populateContactOptions(selectElement, data.contacts);
+            
+            // Reset the principal checkbox state after loading contacts
+            const principalCheckbox = document.getElementById('existing-contact-principal');
+            if (principalCheckbox) {
+                principalCheckbox.disabled = true;
+                principalCheckbox.checked = false;
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des contacts:', error);
+            selectElement.innerHTML = '<option value="">Erreur de chargement</option>';
+        })
+        .finally(() => {
+            selectElement.disabled = false;
+        });
+}
+
+/**
+ * Get current affaire ID from URL (for update mode)
+ */
+function getCurrentAffaireId() {
+    const urlParts = window.location.pathname.split('/');
+    // Look for pattern like /affaires/123/modifier/
+    const modifierIndex = urlParts.indexOf('modifier');
+    if (modifierIndex > 0 && urlParts[modifierIndex - 1]) {
+        return urlParts[modifierIndex - 1];
+    }
+    return null;
+}
+
+/**
+ * Populate contact options in the select element
+ */
+function populateContactOptions(selectElement, contacts) {
+    // Clear existing options
+    selectElement.innerHTML = '<option value="">Sélectionner un contact existant</option>';
+    
+    // Add contact options
+    contacts.forEach(contact => {
+        const option = document.createElement('option');
+        option.value = contact.id;
+        
+        // Build contact display text
+        let displayText = `${contact.nom} ${contact.prenom}`;
+        if (contact.fonction) {
+            displayText += ` - ${contact.fonction}`;
+        }
+        
+        // Mark contacts that are already in this affaire
+        if (contact.already_in_affaire) {
+            displayText += ' (Déjà dans cette affaire)';
+            option.style.color = '#999';
+            option.disabled = true;
+        }
+        
+        option.textContent = displayText;
+        selectElement.appendChild(option);
+    });
+}
+
+/**
+ * Clear contact options
+ */
+function clearContactOptions(selectElement) {
+    selectElement.innerHTML = '<option value="">Sélectionner d\'abord un client</option>';
+    selectElement.disabled = true;
+}
+
+/**
+ * Handle existing contact selection
+ */
+function handleExistingContactSelection(selectElement) {
+    const contactId = selectElement.value;
+    const principalCheckbox = document.getElementById('existing-contact-principal');
+    const firstContactRemoveBtn = document.getElementById('first-contact-remove-btn');
+    
+    console.log('Contact sélectionné:', contactId, 'Principal checkbox trouvée:', !!principalCheckbox);
+    
+    if (contactId) {
+        // Enable the principal checkbox
+        if (principalCheckbox) {
+            principalCheckbox.disabled = false;
+            console.log('Checkbox principal activée');
+        }
+        
+        // Show the remove button for first contact since we have an existing contact selected
+        if (firstContactRemoveBtn) {
+            firstContactRemoveBtn.style.display = 'block';
+        }
+        
+        // Optional: Provide visual feedback that an existing contact is selected
+        const existingSection = selectElement.closest('.existing-contact-section');
+        if (existingSection) {
+            existingSection.style.backgroundColor = '#e8f5e8';
+            existingSection.style.borderColor = '#4CAF50';
+        }
+        
+        // Optional: Show a message to the user
+        showContactSelectionMessage('Contact existant sélectionné. Vous pouvez aussi ajouter des contacts supplémentaires ci-dessous.');
+    } else {
+        // Disable and uncheck the principal checkbox
+        if (principalCheckbox) {
+            principalCheckbox.disabled = true;
+            principalCheckbox.checked = false;
+        }
+        
+        // Hide the remove button for first contact to ensure at least one contact
+        if (firstContactRemoveBtn) {
+            firstContactRemoveBtn.style.display = 'none';
+        }
+        
+        // Reset visual feedback
+        const existingSection = selectElement.closest('.existing-contact-section');
+        if (existingSection) {
+            existingSection.style.backgroundColor = '#f9f9f9';
+            existingSection.style.borderColor = '#e0e0e0';
+        }
+        
+        hideContactSelectionMessage();
+    }
+}
+
+/**
+ * Show contact selection message
+ */
+function showContactSelectionMessage(message) {
+    let messageElement = document.getElementById('contact-selection-message');
+    
+    if (!messageElement) {
+        messageElement = document.createElement('div');
+        messageElement.id = 'contact-selection-message';
+        messageElement.style.cssText = `
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            color: #155724;
+            font-size: 14px;
+        `;
+        
+        const existingSection = document.querySelector('.existing-contact-section');
+        if (existingSection) {
+            existingSection.appendChild(messageElement);
+        }
+    }
+    
+    messageElement.textContent = message;
+    messageElement.style.display = 'block';
+}
+
+/**
+ * Hide contact selection message
+ */
+function hideContactSelectionMessage() {
+    const messageElement = document.getElementById('contact-selection-message');
+    if (messageElement) {
+        messageElement.style.display = 'none';
     }
 }

@@ -54,6 +54,26 @@
                         </div>
                     </div>
 
+                    <!-- Section Contacts -->
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Contacts de l'affaire</p>
+                            {% if contacts %}
+                                {% for contact in contacts %}
+                                    <div class="contact-item" style="margin-bottom: 10px; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">
+                                        <p><strong>{{ contact.nom }} {{ contact.prenom }}</strong> 
+                                        {% if contact.is_principal %}<span style="color: #4CAF50;">(Principal)</span>{% endif %}</p>
+                                        {% if contact.fonction %}<p>Fonction : {{ contact.fonction }}</p>{% endif %}
+                                        {% if contact.email %}<p>Email : {{ contact.email }}</p>{% endif %}
+                                        {% if contact.phone_number %}<p>Téléphone : {{ contact.phone_number }}</p>{% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="form-input">Aucun contact</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
                 </div>
             </div>
             

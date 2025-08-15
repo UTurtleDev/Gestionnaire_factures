@@ -39,6 +39,16 @@ class Affaire(models.Model):
     def formatted_reste_a_facturer(self):
         return f"{self.reste_a_facturer:,.2f} €".replace(",", " ").replace(".", ",")
     
+    @property
+    def contact_principal(self):
+        """Récupère le contact principal de cette affaire"""
+        return self.contacts.filter(is_principal=True).first()
+    
+    @property
+    def tous_les_contacts(self):
+        """Récupère tous les contacts de cette affaire"""
+        return self.contacts.all()
+
     def save(self, *args, **kwargs):
         # Sauvegarde le nom du client
         if self.client:

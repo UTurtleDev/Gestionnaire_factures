@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.conf import settings
+from django.contrib import messages
+from django.db.models import ProtectedError
 import os
 from .models import Invoice, Payment
 from affaires.models import Affaire
@@ -40,7 +42,22 @@ def facture_create(request):
             form.save()
             return redirect('factures:factures')
     else:
-        form = InvoiceForm(initial={'type': 'facture', 'date': datetime.today().strftime('%Y-%m-%d'), 'vat_rate': 20.00})
+        # Récupérer le paramètre affaire depuis l'URL si présent
+        initial_data = {
+            'type': 'facture', 
+            'date': datetime.today().strftime('%Y-%m-%d'), 
+            'vat_rate': 20.00
+        }
+        
+        affaire_id = request.GET.get('affaire')
+        if affaire_id:
+            try:
+                affaire = Affaire.objects.get(pk=affaire_id)
+                initial_data['affaire'] = affaire
+            except Affaire.DoesNotExist:
+                pass  # Si l'affaire n'existe pas, on ignore le paramètre
+                
+        form = InvoiceForm(initial=initial_data)
            
     return render(request, 'pages/factures/facture_create_form.html', {'form': form})
 
@@ -67,8 +84,14 @@ def facture_delete(request, pk):
     facture = get_object_or_404(Invoice, pk=pk)
 
     if request.method == 'POST':
-        facture.delete()
-        return redirect('factures:factures')
+        try:
+            facture_number = facture.invoice_number  # Sauvegarder pour le message
+            facture.delete()
+            messages.success(request, f"La facture {facture_number} a été supprimée avec succès.")
+            return redirect('factures:factures')
+        except ProtectedError:
+            messages.error(request, f"Impossible de supprimer la facture {facture.invoice_number} car elle contient des paiements. Vous devez d'abord supprimer les paiements liés.")
+            return redirect('factures:factures')
    
 def reglements(request):
     paiements = Payment.objects.all()
