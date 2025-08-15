@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Chiffre d'affaires{% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Facturation</H2>
+</div>
+
+<section class="tableau">
+    <div class="cards-container">
+        <h3>Chiffre d'affaires : {{ formatted_total_facturation }}</h3>
+        <div class="dashboard-card">
+            <div class="chart-container">
+                <form method="GET" class="year-selector">
+                    <label for="years">Sélectionner les années à comparer :</label>
+                    <select name="years" multiple size="3" onchange="this.form.submit()">
+                        {% for year in available_years %}
+                            <option value="{{ year }}" {% if year in selected_years %}selected{% endif %}>
+                                {{ year }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+                
+                {% if cumulative_chart_path %}
+                    <img src="{{ MEDIA_URL }}{{ cumulative_chart_path }}" alt="Graphique des chiffres d'affaires cumulés" class="revenue-chart">
+                {% else %}
+                    <p>Aucune donnée disponible pour générer le graphique.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="dashboard-card">
+            <div class="chart-container">
+                <form method="GET" class="year-selector">
+                    <label for="years">Sélectionner les années à comparer :</label>
+                    <select name="years" multiple size="3" onchange="this.form.submit()">
+                        {% for year in available_years %}
+                            <option value="{{ year }}" {% if year in selected_years %}selected{% endif %}>
+                                {{ year }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+                
+                {% if chart_path %}
+                    <img src="{{ MEDIA_URL }}{{ chart_path }}" alt="Graphique des chiffres d'affaires" class="revenue-chart">
+                {% else %}
+                    <p>Aucune donnée disponible pour générer le graphique.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    
+
+</section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+
+
+{% endblock content %}

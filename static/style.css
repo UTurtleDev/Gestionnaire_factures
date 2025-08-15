@@ -826,3 +826,46 @@ h3 {
     font-weight: bold;
     border-radius: 8px;
 }
+
+/* Styles pour le graphique des chiffres d'affaires */
+.chart-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.year-selector {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.year-selector label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: var(--h3-color);
+}
+
+.year-selector select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    min-width: 150px;
+}
+
+.year-selector select:focus {
+    outline: none;
+    border-color: var(--sidebar-color);
+}
+
+.revenue-chart {
+    max-width: 800px;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

@@ -12,8 +12,26 @@
     <div class="cards-container">
         <h3>Chiffre d'affaires : {{ formatted_total_facturation }}</h3>
         <div class="dashboard-card">
-            <div>Chiffre d'affaires : {{ formatted_total_facturation }}</div>
+            <div class="chart-container">
+                <form method="GET" class="year-selector">
+                    <label for="years">Sélectionner les années à comparer :</label>
+                    <select name="years" multiple size="3" onchange="this.form.submit()">
+                        {% for year in available_years %}
+                            <option value="{{ year }}" {% if year in selected_years %}selected{% endif %}>
+                                {{ year }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+                
+                {% if cumulative_chart_path %}
+                    <img src="{{ MEDIA_URL }}{{ cumulative_chart_path }}" alt="Graphique des chiffres d'affaires cumulés" class="revenue-chart">
+                {% else %}
+                    <p>Aucune donnée disponible pour générer le graphique.</p>
+                {% endif %}
+            </div>
         </div>
+
         <h3>Créances : {{ total_factures_dues }}</h3>
         <h3>Il y a {{ affaires_en_cours|length }} affaires en cour{% if affaires_en_cours|length != 1 %}s{% endif %} : {{ total_affaires_en_cours }} restant à facturer</h3>
         <div class="dashboard-card">
