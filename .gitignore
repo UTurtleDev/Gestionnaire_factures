@@ -6,6 +6,10 @@ plan.md
 db.sqlite3
 modelstest.py
 __pycache__/
+factures/*
+mediafiles/charts/*
+static/charts/*
+staticfiles/charts/*
 
 # Claude Code
 .claude_history
