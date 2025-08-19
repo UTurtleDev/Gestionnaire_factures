@@ -7,49 +7,6 @@ from collections import defaultdict
 from django.conf import settings
 import os
 
-# Ah je vois ! Pour fixer l'axe Y avec des intervalles de
-#   200k€ (200 000, 400 000, 600 000, etc.), il faudrait ajouter
-#    ces modifications dans les fonctions de création de
-#   graphiques :
-
-#   Modification nécessaire :
-
-#   Après la création du graphique et avant plt.savefig(),
-#   ajouter :
-
-#   # Fixer l'axe Y avec des intervalles de 200k
-#   ax = plt.gca()
-#   ax.set_ylim(0, None)  # Commencer à 0, laisser matplotlib 
-#   déterminer le max
-#   ax.yaxis.set_major_locator(plt.MultipleLocator(200000))  # 
-#   Intervalles de 200k
-
-#   Ou pour fixer complètement l'échelle :
-
-#   # Fixer l'axe Y de 0 à 1.2M avec intervalles de 200k
-#   ax = plt.gca()
-#   ax.set_ylim(0, 1200000)
-#   ax.set_yticks(range(0, 1200001, 200000))  # [0, 200k, 400k, 
-#   600k, 800k, 1M, 1.2M]
-
-#   Ou version dynamique basée sur les données :
-
-#   # Calculer le maximum et l'arrondir au 200k supérieur
-#   max_value = max([max(monthly_values) for monthly_values in
-#   all_monthly_data])
-#   max_rounded = ((max_value // 200000) + 1) * 200000
-#   ax.set_ylim(0, max_rounded)
-#   ax.set_yticks(range(0, int(max_rounded) + 1, 200000))
-
-#   Cela forcerait l'axe Y à afficher des graduations tous les
-#   200 000€ au lieu de laisser matplotlib choisir
-
-
-
-
-
-
-
 
 # Comparatif des chiffres d'affaires mensuels
 def get_monthly_revenue_by_year(invoices, years):
@@ -108,53 +65,6 @@ def create_revenue_chart(revenue_data, years, output_path):
     plt.close()
 
 
-def create_revenue_histogram_chart(revenue_data, years, output_path):
-    """
-    Génère un histogramme des chiffres d'affaires avec matplotlib
-    """
-    plt.figure(figsize=(12, 6))
-    plt.style.use('default')
-    
-    months = list(range(1, 13))
-    month_labels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 
-                   'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
-    
-    colors = ['#7FAEDC', '#4ECDC4', '#338ce6', '#FF6B6B', '#45B7D1']
-    
-    # Calculer la largeur des barres et les positions
-    bar_width = 0.35
-    x_positions = np.arange(len(months))
-    
-    sorted_years = sorted(years)
-    
-    for i, year in enumerate(sorted_years):
-        monthly_values = []
-        for month in months:
-            monthly_values.append(revenue_data.get(year, {}).get(month, 0))
-        
-        # Décaler les barres pour les afficher côte à côte
-        offset = (i - len(sorted_years)/2 + 0.5) * bar_width
-        
-        plt.bar(x_positions + offset, monthly_values,
-                bar_width,
-                color=colors[i % len(colors)],
-                label=f'{year}',
-                alpha=0.8)
-    
-    plt.title('Comparaison mensuelle du chiffre d\'affaires par année', fontsize=16, fontweight='bold', pad=20)
-    plt.xticks(x_positions, month_labels)
-    plt.grid(True, alpha=0.3, axis='y')
-    plt.legend(loc='upper left')
-    plt.tight_layout()
-    
-    # Formatage de l'axe Y avec des milliers séparés
-    ax = plt.gca()
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}€'.replace(',', ' ')))
-    
-    plt.savefig(output_path, dpi=150, bbox_inches='tight')
-    plt.close()
-
-
 def generate_revenue_chart(years=None):
     """
     Fonction principale pour générer le graphique des revenus
@@ -176,32 +86,6 @@ def generate_revenue_chart(years=None):
     output_path = os.path.join(charts_dir, output_filename)
     
     create_revenue_chart(revenue_data, years, output_path)
-    
-    # Retourner le chemin relatif pour le template avec MEDIA_URL
-    return f'charts/{output_filename}'
-
-
-def generate_revenue_histogram_chart(years=None):
-    """
-    Fonction principale pour générer l'histogramme des revenus
-    """
-    if years is None:
-        years = [2024, 2025]
-    
-    # Import local pour éviter les problèmes de circularité
-    from factures.models import Invoice
-    
-    invoices = Invoice.objects.filter(date__year__in=years)
-    revenue_data = get_monthly_revenue_by_year(invoices, years)
-    
-    # Utiliser le répertoire MEDIA pour les fichiers générés dynamiquement
-    charts_dir = os.path.join(settings.MEDIA_ROOT, 'charts')
-    os.makedirs(charts_dir, exist_ok=True)
-    
-    output_filename = f"revenue_histogram_chart_{'_'.join(map(str, sorted(years)))}.png"
-    output_path = os.path.join(charts_dir, output_filename)
-    
-    create_revenue_histogram_chart(revenue_data, years, output_path)
     
     # Retourner le chemin relatif pour le template avec MEDIA_URL
     return f'charts/{output_filename}'
@@ -297,61 +181,6 @@ def generate_cumulative_revenue_chart(years=None):
     
     # Retourner le chemin relatif pour le template avec MEDIA_URL
     return f'charts/{output_filename}'
-
-
-def calculate_monthly_averages(revenue_data, years):
-    """
-    Calcule les moyennes mensuelles et les comparaisons entre années
-    """
-    averages = {
-        'by_year': {},
-        'overall_comparison': {}
-    }
-    
-    for year in years:
-        year_data = revenue_data.get(year, {})
-        monthly_values = [year_data.get(month, 0) for month in range(1, 13)]
-        
-        # Calculer les statistiques pour l'année
-        total_year = sum(monthly_values)
-        months_with_data = len([v for v in monthly_values if v > 0])
-        average_monthly = total_year / 12 if total_year > 0 else 0
-        average_active_months = total_year / months_with_data if months_with_data > 0 else 0
-        
-        averages['by_year'][year] = {
-            'total_annual': total_year,
-            'average_monthly': average_monthly,
-            'average_active_months': average_active_months,
-            'months_with_data': months_with_data,
-            'formatted_total': f"{total_year:,.2f} €".replace(",", " ").replace(".", ","),
-            'formatted_monthly': f"{average_monthly:,.0f} €".replace(",", " "),
-            'formatted_active_monthly': f"{average_active_months:,.0f} €".replace(",", " ")
-        }
-    
-    # Comparaison entre années si on en a au moins 2
-    if len(years) >= 2:
-        sorted_years = sorted(years)
-        current_year = sorted_years[-1]
-        previous_year = sorted_years[-2]
-        
-        current_avg = averages['by_year'][current_year]['average_monthly']
-        previous_avg = averages['by_year'][previous_year]['average_monthly']
-        
-        if previous_avg > 0:
-            difference = current_avg - previous_avg
-            percentage_change = (difference / previous_avg) * 100
-            
-            averages['overall_comparison'] = {
-                'current_year': current_year,
-                'previous_year': previous_year,
-                'difference': difference,
-                'percentage_change': percentage_change,
-                'formatted_difference': f"{difference:,.0f} €".replace(",", " "),
-                'formatted_percentage': f"{percentage_change:+.1f}%",
-                'is_positive': difference >= 0
-            }
-    
-    return averages
 
 
 def get_available_years():

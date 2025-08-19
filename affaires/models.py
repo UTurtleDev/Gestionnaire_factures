@@ -40,6 +40,16 @@ class Affaire(models.Model):
         return f"{self.reste_a_facturer:,.2f} €".replace(",", " ").replace(".", ",")
     
     @property
+    def taux_avancement(self):
+        # Calcule le taux d'avancement de l'affaire (pourcentage facturé)
+        if self.budget > 0:
+            return (self.total_facture_ht / self.budget) * 100
+        return 0
+    
+    def formatted_taux_avancement(self):
+        return f"{self.taux_avancement:.1f} %"
+    
+    @property
     def contact_principal(self):
         """Récupère le contact principal de cette affaire"""
         return self.contacts.filter(is_principal=True).first()

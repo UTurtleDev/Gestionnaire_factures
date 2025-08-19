@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock title %}
+{% block title %}Dashboard Principal{% endblock title %}
 
 {% block content %}
 
 <div class="title">
-    <H2>Dashboard</H2>
+    <H2>Dashboard Principal</H2>
 </div>
 
 <section class="tableau">
@@ -32,32 +32,14 @@
             </div>
         </div>
 
-        <h3>Créances : {{ total_factures_dues }}</h3>
-        <h3>Il y a {{ affaires_en_cours|length }} affaires en cour{% if affaires_en_cours|length != 1 %}s{% endif %} : {{ total_affaires_en_cours }} restant à facturer</h3>
+        <h3>Créances Totale : {{ total_factures_dues_cumule }}</h3>
+        <h3>Factures en retard {{ current_year }} : {{ total_factures_retard }}</h3>
+        <h3>Factures en retard {{ passed_year }} : {{ total_passed_factures_retard }}</h3>
         <div class="dashboard-card">
-            <table>
+            <table class="custom-table-3col">
                 <tbody>
-                    {% if affaires_en_cours %}
-                        {% for affaire in affaires_en_cours %}
-                        <tr class="clickable-row" data-url="{% url 'affaires:detail' affaire.id %}">
-                            <td clospan="1">
-                                {{ affaire.affaire_number }}
-                            </td>
-                            <td clospan="1">{{ affaire.client.entity_name }}</td>
-                            <td clospan="1">{{ affaire.formatted_reste_a_facturer }}</td>
-                        </tr>
-                        {% endfor %}           
-                    {% endif %}
-                </tbody>
-            </table>
-
-        </div>
-        <h3>Factures en retard : {{ total_factures_retard }}</h3>
-        <div class="dashboard-card">
-            <table>
-                <tbody>
-                    {% if factures_retard %}
-                        {% for facture in factures_retard %}
+                    {% if factures_retard_cumule %}
+                        {% for facture in factures_retard_cumule %}
                         <tr class="clickable-row" data-url="{% url 'factures:detail' facture.id %}">
                             <td clospan="1">
                                 {{ facture.invoice_number }}
@@ -70,6 +52,24 @@
 
                 </tbody>
             </table>
+        </div>
+        <h3>Il y a {{ affaires_en_cours|length }} affaires en cour{% if affaires_en_cours|length != 1 %}s{% endif %} : {{ total_affaires_en_cours }} restant à facturer</h3>
+        <div class="dashboard-card">
+            <table class="custom-table-4col">
+                <tbody>
+                    {% if affaires_en_cours %}
+                        {% for affaire in affaires_en_cours %}
+                        <tr class="clickable-row" data-url="{% url 'affaires:detail' affaire.id %}">
+                            <td clospan="1">{{ affaire.affaire_number }}</td>
+                            <td clospan="1">{{ affaire.client.entity_name }}</td>
+                            <td clospan="1">{{ affaire.formatted_reste_a_facturer }}</td>
+                            <td clospan="1">{{ affaire.formatted_taux_avancement }}</td>
+                        </tr>
+                        {% endfor %}           
+                    {% endif %}
+                </tbody>
+            </table>
+
         </div>
     </div>
 
