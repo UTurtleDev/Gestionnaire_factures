@@ -47,32 +47,32 @@
             <tbody>
                 {% for contact in contacts %}
                 <tr data-url="{% url 'clients:detail_contact' contact.pk %}" class="clickable-row">
-                    <td clospan="1">
+                    <td colspan="1">
                         <div class="addresse">
                             <p>{{ contact.nom }}</p>
                         </div>
                     </td>
-                    <td clospan="1">
+                    <td colspan="1">
                         <div class="addresse">
                             <p>{{ contact.prenom }}</p>
                         </div>
                     </td>
-                    <td clospan="1">
+                    <td colspan="1">
                         <div class="addresse">
                             <p>{{ contact.affaire.client.entity_name }}</p>
                         </div>
                     </td>
-                    <td clospan="1">
+                    <td colspan="1">
                         <div class="addresse">
                             <p>{{ contact.email }}</p>
                         </div>
                     </td>
-                    <td clospan="1">
+                    <td colspan="1">
                         <div class="addresse">
                             <p>{{ contact.phone_number }}</p>
                         </div>
                     </td>
-                    <td clospan="1">
+                    <td colspan="1">
 
                     </td>
                 </tr>

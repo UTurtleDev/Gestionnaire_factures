@@ -47,7 +47,7 @@ class Affaire(models.Model):
         return 0
     
     def formatted_taux_avancement(self):
-        return f"{self.taux_avancement:.1f} %"
+        return f"{self.taux_avancement:.0f} %"
     
     @property
     def contact_principal(self):

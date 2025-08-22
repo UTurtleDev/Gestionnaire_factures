@@ -246,7 +246,7 @@ h2 {
     height: 25px;
     border-radius: 50%;
     background-color: #a2e5bb;
-    margin-left: 25px;
+    margin: 0px auto;
 }
 
 .title_btn {
@@ -420,8 +420,12 @@ h2 {
 .table {
     min-width: 100%;
     text-indent: 0;
-    border-collapse: collapse;
+    border-collapse: separate;
     border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
+    background: #f7FAFC;
 }
 
 thead {
@@ -455,10 +459,6 @@ th {
     cursor: pointer;
 }
 
-.svg {
-
-    margin-top: -8px;
-}
 
 .param-btn {
     background-color: inherit;
@@ -475,27 +475,169 @@ th {
     height: 20px;
 }
 
+.param-img-svg {
+    width: 25px;
+    height: 25px;
+}
+
 td {
     border-bottom: 1px;
     border-bottom-style: solid;
     border-color: var(--td-border-color);
-    height: 75px;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+/* Styles pour le tableau principal (.table) - Unifié */
+.table thead {
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+}
+
+.table th {
+    padding: 15px 12px;
+    text-align: left;
+    border: none;
+    color: black;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.table td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #f1f3f4;
+    font-size: 15px;
+    /* position: relative; */
+    z-index: 2;
+    height: 60px !important;
+    max-height: 60px;
+    /* padding: 20px 25px; */
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    overflow: hidden;
+    /* vertical-align: middle; */
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+.table tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+.table tr:hover::before {
+    width: 4px;
+}
+.table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,249,250,0.8) 100%);
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+.table tr:hover td {
+    border-bottom-color: rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
+}
+
+/* Largeurs des colonnes - Tableau principal */
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    width: 12%;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    width: 25%;
+    padding: 16px 25px;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    width: 18%;
+    padding: 16px 25px;
+}
+
+.table th:nth-child(4),
+.table td:nth-child(4) {
+    width: 15%;
+    text-align: right;
+    font-weight: 600;
+}
+
+.table th:nth-child(5),
+.table td:nth-child(5) {
+    width: 12%;
+    text-align: right;
+    font-weight: 600;
+}
+
+.table th:nth-child(6),
+.table td:nth-child(6) {
+    width: 12%;
+    text-align: right;
+    font-weight: 600;
+}
+
+.table th:nth-child(7),
+.table td:nth-child(7) {
+    width: 6%;
+    text-align: center;
+    padding: 15px 12px;
+}
+
+/* Ajustement pour toutes les colonnes problématiques */
+.table th:nth-child(6),
+.table td:nth-child(6) {
+    padding: 15px 12px;
+}
+
+/* Layout spécifique pour la page clients (4 colonnes) */
+.clients-table th:nth-child(1),
+.clients-table td:nth-child(1) {
+    width: 35% !important;
+}
+.clients-table th:nth-child(2),
+.clients-table td:nth-child(2) {
+    width: 35% !important;
+}
+.clients-table th:nth-child(3),
+.clients-table td:nth-child(3) {
+    width: 25% !important;
+}
+.clients-table th:nth-child(4),
+.clients-table td:nth-child(4) {
+    width: 5% !important;
+}
+
+/* Réduction du padding pour compenser l'espacement des coordonnées */
+.clients-table td {
+    padding: 9px 25px !important;
+}
+
+/* Espacement entre email et téléphone dans la colonne coordonnées */
+.clients-table td:nth-child(2) .coordonnees:not(:first-child) {
+    margin-top: 6px;
 }
 
 tbody tr:hover {
     background-color: var(--tr-bg-hover);
-
 }
 
 .div-td {
     color: var(--th-color);
-    font-size: 14px;
+    font-size: 15px;
     line-height: 20px;
-    height: 75px;
-    padding-right: 16px;
-    padding-left: 8px;
-    padding-bottom: 8px;
-    padding-top: 8px;
+    padding: 20px 25px;
     white-space: nowrap;
     display: flex;
     align-items: center;
@@ -509,7 +651,7 @@ tbody tr:hover {
     border: 1px solid var(--mail-border-color);
     border-radius: 50px;
     padding: 2px 4px;
-    margin-top: 6px;
+    margin-top: 2px;
 }
 
 .span-coordonnees {
@@ -522,10 +664,7 @@ tbody tr:hover {
 .addresse p {
     font-size: 14px;
     color: var(--adresse-color);
-    padding-bottom: 2px;
-    padding-left: 12px;
-    padding-right: 12px;
-    padding-top: 2px;
+    /* padding: 18px 24px 18px 12px; */
     text-wrap: nowrap;
     line-height: 20px;
 }
@@ -537,7 +676,10 @@ td:last-child {
 
 .actions-list {
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
     flex-direction: row;
+    padding: 0 24px 0 12px;
 }
 
 .actions {
@@ -548,14 +690,23 @@ td:last-child {
     justify-content: center;
     margin-right: 8px;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     background-color: #fff;
 }
 
 .actions:hover {
     background-color: #b7ffd1;
 }
+
+.pourcent {
+    font-size: 12px;
+    color: var(--th-color);
+    padding: 4px 8px;
+    text-wrap: nowrap;
+    line-height: 20px;
+}
+
 
 .svg-actions {
     margin-left: 0;
@@ -572,12 +723,14 @@ td:last-child {
 .factures a {
     font-size: 14px;
     color: var(--adresse-color);
-    padding-bottom: 2px;
-    padding-left: 12px;
-    padding-right: 12px;
-    padding-top: 2px;
     text-wrap: nowrap;
     line-height: 20px;
+    display: inline-block;
+}
+
+.factures p {
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 /* .svg-actions:nth-child(2) {
@@ -715,21 +868,180 @@ a {
 
 /* Dashboard */
 
-.dashboard-card {
-    /* max-width: 900px; */
-    width: 95%;
-    margin: 30px auto;
-    background-color: var(--light-grey);
-    border-radius: 15px;
-    border: 1px solid var(--border-color);
-    padding: 20px;
-}
 
 h3 {
     color: var(--h3-color);
     font-size: 20px;
     line-height: 24px;
     margin-top: 20px;
+}
+
+/* Réinitialisation complète - Tableau moderne unifié */
+.top-affaires-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-radius: 12px;
+    overflow: hidden;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
+    background: #f7FAFC;
+}
+
+.top-affaires-table thead {
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+}
+
+.top-affaires-table th {
+    padding: 15px 12px;
+    text-align: left;
+    border: none;
+    color: black;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.top-affaires-table td {
+    padding: 20px 25px;
+    text-align: left;
+    border-bottom: 1px solid #f1f3f4;
+    font-size: 15px;
+    vertical-align: middle;
+    position: relative;
+    z-index: 2;
+}
+
+/* Largeurs des colonnes - Top 10 affaires */
+.top-affaires-table th:nth-child(1),
+.top-affaires-table td:nth-child(1) {
+    width: 15%;
+}
+
+.top-affaires-table th:nth-child(2),
+.top-affaires-table td:nth-child(2) {
+    width: 40%;
+}
+
+.top-affaires-table th:nth-child(3),
+.top-affaires-table td:nth-child(3) {
+    width: 25%;
+}
+
+.top-affaires-table th:nth-child(4),
+.top-affaires-table td:nth-child(4) {
+    width: 20%;
+    text-align: right;
+    font-weight: 600;
+}
+
+/* Effets simples pour le tableau */
+.top-affaires-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.top-affaires-table tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+.top-affaires-table tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+.top-affaires-table tr:hover::before {
+    width: 4px;
+}
+.top-affaires-table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,249,250,0.8) 100%);
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+.top-affaires-table tr:hover td {
+    border-bottom-color: rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
+}
+
+/* Tableau clients - Style unifié */
+.top-affaires-clients-table {
+    width: 50%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-radius: 12px;
+    overflow: hidden;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
+    background: #f7FAFC;
+
+}
+
+.top-affaires-clients-table thead {
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+}
+
+.top-affaires-clients-table th {
+    padding: 15px 12px;
+    text-align: left;
+    border: none;
+    color: black;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.top-affaires-clients-table td {
+    padding: 20px 25px;
+    text-align: left;
+    border-bottom: 1px solid #f1f3f4;
+    font-size: 15px;
+    vertical-align: middle;
+    position: relative;
+    z-index: 2;
+}
+
+/* Largeurs des colonnes - Clients */
+.top-affaires-clients-table th:nth-child(1),
+.top-affaires-clients-table td:nth-child(1) {
+    width: 60%;
+}
+
+.top-affaires-clients-table th:nth-child(2),
+.top-affaires-clients-table td:nth-child(2) {
+    width: 40%;
+    text-align: right;
+    font-weight: 600;
+}
+
+.top-affaires-clients-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.top-affaires-clients-table tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+.top-affaires-clients-table tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+.top-affaires-clients-table tr:hover::before {
+    width: 4px;
+}
+.top-affaires-clients-table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,249,250,0.8) 100%);
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+.top-affaires-clients-table tr:hover td {
+    border-bottom-color: rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
 }
 
 .dashboard-card h4 {
@@ -740,6 +1052,327 @@ h3 {
     padding-bottom: 20px;
 }
 
+/* Container pour les cards clients */
+.clients-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 30px;
+    margin: 30px 0;
+    padding: 0 20px;
+}
+
+.client-card {
+    background: #f7FAFC;
+    border-radius: 15px;
+    border: 1px solid #e1e5e9;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.client-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), #4dabf7);
+}
+
+.client-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.client-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.client-name {
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.client-total {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.client-total::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.client-total:hover::before {
+    left: 100%;
+}
+
+.affaires-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.affaire-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #f1f3f4;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.affaire-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+    transition: width 0.3s ease;
+}
+
+.affaire-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.affaire-item:hover::before {
+    width: 4px;
+}
+
+.affaire-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    z-index: 1;
+    position: relative;
+}
+
+.affaire-number {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.affaire-desc {
+    color: #6c757d;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.affaire-amounts {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    z-index: 1;
+    position: relative;
+}
+
+.reste-amount {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.progress-badge {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.progress-badge:hover::before {
+    left: 100%;
+}
+
+/* Cards de moyennes de facturation */
+.moyennes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+    padding: 0 10px;
+}
+
+.moyenne-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.moyenne-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(135deg, #7FAEDC, #4dabf7);
+}
+
+.moyenne-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.moyenne-card-year {
+    background: linear-gradient(135deg, #7FAEDC, #4dabf7);
+}
+
+.moyenne-card-evolution {
+    position: relative;
+}
+
+.moyenne-card-evolution.positive {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9f0 100%);
+}
+
+.moyenne-card-evolution.positive::before {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+}
+
+.moyenne-card-evolution.negative {
+    background: linear-gradient(135deg, #ffffff 0%, #fff0f0 100%);
+}
+
+.moyenne-card-evolution.negative::before {
+    background: linear-gradient(135deg, #FF6B6B, #FF8A80);
+}
+
+.moyenne-card h5 {
+    color: #338ce6;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+}
+
+.moyenne-card-evolution.positive h5 {
+    color: #2E7D32;
+}
+
+.moyenne-card-evolution.negative h5 {
+    color: #C62828;
+}
+
+.moyenne-card p {
+    margin: 12px 0;
+    color: #495057;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.moyenne-card strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.moyenne-card small {
+    color: #6c757d;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.evolution-value {
+    font-size: 1.3em;
+    font-weight: 700;
+    margin: 15px 0;
+    padding: 10px 0;
+}
+
+.evolution-value.positive {
+    color: #2E7D32;
+}
+
+.evolution-value.negative {
+    color: #C62828;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .clients-cards-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 10px;
+    }
+    
+    .client-card {
+        padding: 20px;
+    }
+    
+    .client-name {
+        font-size: 18px;
+    }
+    
+    .affaire-item {
+        padding: 15px;
+    }
+    
+    .moyennes-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .moyenne-card {
+        padding: 20px;
+    }
+}
+
 .ca {
     display: flex;
     flex-direction: row;
@@ -747,52 +1380,200 @@ h3 {
 }
 
 .custom-table-3col {
-    width: 40%;
+    width: 100%;
     table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
+    background: #f7FAFC;
 }
 
 .custom-table-3col td {
-    height: 50px;
+    height: 60px;
+    padding: 20px 25px;
+    border-bottom: 1px solid #f1f3f4;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.custom-table-3col tr:last-child td {
+    border-bottom: none;
+}
+
+.custom-table-3col tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.custom-table-3col tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+
+.custom-table-3col tr:hover::before {
+    width: 4px;
+}
+
+.custom-table-3col tr:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,249,250,0.8) 100%);
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.custom-table-3col tr:hover td {
+    border-bottom-color: rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
 }
 
 .custom-table-3col td:nth-child(1) {
-    width: 40%;
+    width: 45%;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 15px;
+    z-index: 2;
+    position: relative;
 }
 
 .custom-table-3col td:nth-child(2) {
-    width: 60%;
+    width: 35%;
+    color: #495057;
+    font-size: 15px;
+    z-index: 2;
+    position: relative;
 }
 
 .custom-table-3col td:nth-child(3) {
-    width: 30%;
+    width: 20%;
+    color: #6c757d;
+    font-size: 15px;
+    z-index: 2;
+    position: relative;
+}
+
+/* Style spécifique pour le dashboard card du top 10 */
+.dashboard-card {
+    /* background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); */
+    width: 95%;
+    margin: 30px auto;
+    background-color: #f7FAFC;
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    padding: 20px 20px 20px 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
 }
 
 
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), #4dabf7);
+}
+
+
+/* Tableau 4 colonnes - Style moderne harmonisé */
 .custom-table-4col {
-    width: 55%;
+    width: 100%;
     table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
+    background: #f7FAFC;
 }
 
 .custom-table-4col td {
-    height: 50px;
+    height: 60px;
+    padding: 20px 25px;
+    border-bottom: 1px solid #f1f3f4;
+    position: relative;
+    transition: all 0.3s ease;
+    vertical-align: middle;
+}
+
+.custom-table-4col tr:last-child td {
+    border-bottom: none;
+}
+
+.custom-table-4col tr {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.custom-table-4col tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary-color), #4dabf7);
+    transition: width 0.3s ease;
+    z-index: 1;
+}
+
+.custom-table-4col tr:hover::before {
+    width: 4px;
+}
+
+.custom-table-4col tr:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,249,250,0.8) 100%);
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.custom-table-4col tr:hover td {
+    border-bottom-color: rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
 }
 
 .custom-table-4col td:nth-child(1) {
     width: 20%;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 15px;
+    z-index: 2;
+    position: relative;
 }
 
 .custom-table-4col td:nth-child(2) {
-    width: 28%;
+    width: 35%;
+    color: #495057;
+    font-size: 15px;
+    z-index: 2;
+    position: relative;
 }
 
 .custom-table-4col td:nth-child(3) {
-    width: 21%;
-    text-align: -webkit-right;
+    width: 25%;
+    color: #495057;
+    font-size: 15px;
+    text-align: right;
+    z-index: 2;
+    position: relative;
 }
 
 .custom-table-4col td:nth-child(4) {
     width: 20%;
     text-align: center;
+    z-index: 2;
+    position: relative;
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 15px;
 }
 
 

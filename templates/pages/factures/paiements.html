@@ -74,19 +74,19 @@
         <tbody>
             {% for paiement in paiements %}
             <tr data-url="{% url 'factures:reglement_detail' paiement.pk %}" class="clickable-row">
-                <td clospan="1">
+                <td colspan="1">
                     <div class="factures">
                         <p>{{ paiement.date }}</p>
                     </div>
                 </td>
-                <td clospan="1">
+                <td colspan="1">
                     <div class="factures">
                         <a href="{% url 'factures:detail' paiement.invoice.id %}">
                             <p>{{ paiement.invoice }}</p>
                         </a>
                     </div>
                 </td>
-                <td clospan="1">
+                <td colspan="1">
                     <div class="factures">
                         {% if paiement.invoice.client %}
                             <a href="{% url 'clients:detail' paiement.invoice.client.id %}">{{ paiement.invoice.client.entity_name }}</a>
@@ -95,24 +95,24 @@
                         {% endif %}
                     </div>
                 </td>
-                <td clospan="1">
+                <td colspan="1">
                     <div class="factures">
                         <a href="">
                             <P>{{ paiement.invoice.affaire.affaire_number }}</P>
                         </a>
                     </div>
                 </td>
-                <td clospan="1">
+                <td colspan="1">
                     <div class="factures">
                         <P>{{ paiement.formatted_amount }}</P>
                     </div>
                 </td>
-                <td clospan="1">
+                <td colspan="1">
                     <div class="factures">
                         <p>{{ paiement.payment_method }}</p>
                     </div>
                 </td>
-                <td clospan="1">
+                <td colspan="1">
                     {% comment %} <div class="actions">
                         <a href="{% url 'factures:reglement' paiement.pk %}">
                             <svg class= "param-svg" width="800px" height="800px" viewBox="0 -196 1416 1416" class="icon"  version="1.1" xmlns="http://www.w3.org/2000/svg">

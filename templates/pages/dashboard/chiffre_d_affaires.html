@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Chiffre d'affaires{% endblock title %}
+{% block title %}Dashboard Facturation{% endblock title %}
 
 {% block content %}
 
@@ -58,10 +58,10 @@
             <h4>Comparatif des moyennes de facturation</h4>
             
             {% if monthly_averages and monthly_averages.by_year %}
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div class="moyennes-container">
                     {% for year, stats in monthly_averages.by_year.items %}
-                        <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid #7FAEDC;">
-                            <h5 style="color: #338ce6; margin-bottom: 10px;">{{ year }}</h5>
+                        <div class="moyenne-card">
+                            <h5>{{ year }}</h5>
                             <p><strong>Total annuel:</strong> {{ stats.formatted_total }}</p>
                             <p><strong>Moyenne mensuelle:</strong> {{ stats.formatted_monthly }}</p>
                             <p><strong>Moyenne (mois actifs):</strong> {{ stats.formatted_active_monthly }}</p>
@@ -70,10 +70,10 @@
                     {% endfor %}
                     
                     {% if monthly_averages.overall_comparison %}
-                        <div style="background: {% if monthly_averages.overall_comparison.is_positive %}#f0f9f0{% else %}#fff0f0{% endif %}; padding: 15px; border-radius: 8px; border-left: 4px solid {% if monthly_averages.overall_comparison.is_positive %}#4CAF50{% else %}#FF6B6B{% endif %};">
-                            <h5 style="color: {% if monthly_averages.overall_comparison.is_positive %}#2E7D32{% else %}#C62828{% endif %}; margin-bottom: 10px;">Évolution</h5>
+                        <div class="moyenne-card moyenne-card-evolution {% if monthly_averages.overall_comparison.is_positive %}positive{% else %}negative{% endif %}">
+                            <h5>Évolution</h5>
                             <p><strong>{{ monthly_averages.overall_comparison.current_year }} vs {{ monthly_averages.overall_comparison.previous_year }}:</strong></p>
-                            <p style="font-size: 1.2em; font-weight: bold; color: {% if monthly_averages.overall_comparison.is_positive %}#2E7D32{% else %}#C62828{% endif %};">
+                            <p class="evolution-value {% if monthly_averages.overall_comparison.is_positive %}positive{% else %}negative{% endif %}">
                                 {{ monthly_averages.overall_comparison.formatted_difference }} 
                                 ({{ monthly_averages.overall_comparison.formatted_percentage }})
                             </p>

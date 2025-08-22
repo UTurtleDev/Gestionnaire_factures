@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Affaires{% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Affaires</H2>
+</div>
+
+<section class="tableau">
+    <div class="cards-container">
+        <h3>Top 10 des affaires</h3>
+        <div class="dashboard-card">
+            {% if top_10_affaires %}
+            <table class="top-affaires-table">
+                <thead>
+                    <tr>
+                        <th>NUMÉRO</th>
+                        <th>DESCRIPTION</th>
+                        <th>CLIENT</th>
+                        <th>BUDGET</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for affaire in top_10_affaires %}
+                    <tr data-url="{% url 'affaires:detail' affaire.pk %}" class="clickable-row">
+                        <td>{{ affaire.affaire_number }}</td>
+                        <td>{{ affaire.affaire_description|truncatechars:50 }}</td>
+                        <td>{{ affaire.client_entity_name }}</td>
+                        <td>{{ affaire.formatted_budget }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Aucune affaire trouvée.</p>
+            {% endif %}
+        </div>
+        <h3>Top 10 du total des affaires par client</h3>
+        <div class="dashboard-card">
+            {% if top_10_clients %}
+            <table class="top-affaires-clients-table">
+                <thead>
+                    <tr>
+                        <th>CLIENT</th>
+                        <th>TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in top_10_clients %}
+                    <tr>
+                        <td>{{ client.entity_name }}</td>
+                        <td>{{ client.formatted_total_budget }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Aucun client trouvé.</p>
+            {% endif %}
+        </div>
+        <h3>Affaires en cours ({{ affaires_en_cours|length }})</h3>
+        <div class="dashboard-card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>NUMÉRO</th>
+                        <th>DESCRIPTION</th>
+                        <th>CLIENT</th>
+                        <th>BUDGET</th>
+                        <th>FACTURÉ</th>
+                        <th>A FACTURER</th>
+                        <th>AVANCEMENT</th>
+                    </tr>
+                </thead>
+                
+                {% if affaires_en_cours %}
+                <tbody>
+                    {% for affaire in affaires_en_cours %}
+                    <tr data-url="{% url 'affaires:detail' affaire.pk %}" class="clickable-row">
+                        <td>{{ affaire.affaire_number }}</td>
+                        <td>{{ affaire.affaire_description }}</td>
+                        <td>{{ affaire.client_entity_name }}</td>
+                        <td>{{ affaire.formatted_budget }}</td>
+                        <td>{{ affaire.formatted_total_facture_ht }}</td>
+                        <td>{{ affaire.formatted_reste_a_facturer }}</td>
+                        <td style="text-align: center;">
+                            {% if affaire.formatted_taux_avancement != '100 %' %}
+                                <span class="pourcent">{{ affaire.formatted_taux_avancement }}</span>
+                            {% else %}
+                                <div class="cercle-vert"></div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% endif %}
+
+            </table>
+        </div>
+    </div>
+
+
+    
+
+</section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+
+
+{% endblock content %}

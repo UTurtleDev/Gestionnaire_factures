@@ -159,3 +159,89 @@ def chiffre_d_affaires(request):
         'monthly_averages': monthly_averages,
         'selected_years': selected_years,
     })
+
+
+def clients(request):
+    from django.db.models import Sum, Count
+    from clients.models import Client
+    from factures.models import Invoice
+    
+    # Top 5 des meilleurs clients par CA (chiffre d'affaires facturé)
+    top_5_clients_ca = []
+    clients_with_invoices = Client.objects.filter(affaires__invoices__isnull=False).distinct()
+    
+    for client in clients_with_invoices:
+        total_facture = sum(invoice.amount_ht for invoice in Invoice.objects.filter(affaire__client=client))
+        nb_affaires = client.affaires.count()
+        
+        if total_facture > 0:
+            client.total_facture = total_facture
+            client.formatted_total_facture = f"{total_facture:,.2f} €".replace(",", " ").replace(".", ",")
+            client.nb_affaires = nb_affaires
+            top_5_clients_ca.append(client)
+    
+    # Trier par total facturé décroissant et prendre les 5 premiers
+    top_5_clients_ca = sorted(top_5_clients_ca, key=lambda x: x.total_facture, reverse=True)[:5]
+    
+    # Affaires en cours par client avec détails
+    clients_affaires_en_cours = []
+    all_clients = Client.objects.all()
+    
+    for client in all_clients:
+        affaires_en_cours = [affaire for affaire in client.affaires.all() if affaire.reste_a_facturer > 0]
+        if affaires_en_cours:
+            total_reste = sum(affaire.reste_a_facturer for affaire in affaires_en_cours)
+            client_data = {
+                'client': client,
+                'affaires_en_cours': affaires_en_cours,
+                'nb_affaires_en_cours': len(affaires_en_cours),
+                'total_reste_a_facturer': total_reste,
+                'formatted_total_reste': f"{total_reste:,.2f} €".replace(",", " ").replace(".", ",")
+            }
+            clients_affaires_en_cours.append(client_data)
+    
+    # Trier par nom de client alphabétique
+    clients_affaires_en_cours = sorted(clients_affaires_en_cours, key=lambda x: x['client'].entity_name.lower())
+    
+    return render(request, 'pages/dashboard/clients.html', {
+        'top_5_clients_ca': top_5_clients_ca,
+        'clients_affaires_en_cours': clients_affaires_en_cours,
+    })
+
+
+def affaires(request):
+    from django.db.models import Sum
+    from clients.models import Client
+    
+    # Top 10 des affaires par budget (ordre décroissant)
+    top_10_affaires = Affaire.objects.all().order_by('-budget')[:10]
+    
+    # Top 10 des clients par total d'affaires
+    top_10_clients_raw = Client.objects.annotate(
+        total_budget=Sum('affaires__budget')
+    ).exclude(total_budget=None).order_by('-total_budget')[:10]
+    
+    # Formatage des montants
+    top_10_clients = []
+    for client in top_10_clients_raw:
+        client.formatted_total_budget = f"{client.total_budget:,.2f} €".replace(",", " ").replace(".", ",")
+        top_10_clients.append(client)
+
+    # Affaires en cours
+    affaires = Affaire.objects.all()
+    affaires_en_cours = [affaire for affaire in affaires if affaire.reste_a_facturer > 0]
+    affaires_en_cours_sorted = sorted(affaires_en_cours, key=lambda affaire: affaire.reste_a_facturer, reverse=True)
+    total_affaires_en_cours = f"{sum(affaire.reste_a_facturer for affaire in affaires_en_cours):,.2f} €".replace(",", " ").replace(".", ",")
+
+
+    
+    return render(request, 'pages/dashboard/affaires.html', {
+        'top_10_affaires': top_10_affaires,
+        'top_10_clients': top_10_clients,
+        'affaires': affaires,
+        'affaires_en_cours': affaires_en_cours_sorted,
+        'total_affaires_en_cours': total_affaires_en_cours
+    })
+
+
+

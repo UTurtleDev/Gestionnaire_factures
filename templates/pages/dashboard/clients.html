@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Clients{% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Clients</H2>
+</div>
+
+<section class="tableau">
+    <div class="cards-container">
+        <h3>Top 5 des meilleurs clients par CA</h3>
+        <div class="dashboard-card">
+            {% if top_5_clients_ca %}
+            <table class="custom-table-3col">
+                <tbody>
+                    {% for client in top_5_clients_ca %}
+                    <tr class="clickable-row" data-url="{% url 'clients:detail' client.id %}">
+                        <td>{{ client.entity_name }}</td>
+                        <td>{{ client.formatted_total_facture }}</td>
+                        <td>{{ client.nb_affaires }} affaire{% if client.nb_affaires > 1 %}s{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Aucun client trouvé.</p>
+            {% endif %}
+        </div>
+
+        <h3>Affaires en cours par client</h3>
+        {% if clients_affaires_en_cours %}
+        <div class="clients-cards-container">
+            {% for client_data in clients_affaires_en_cours %}
+            <div class="client-card">
+                <div class="client-header">
+                    <h4 class="client-name">{{ client_data.client.entity_name }}</h4>
+                    <div class="client-total">{{ client_data.formatted_total_reste }} restant</div>
+                </div>
+                <div class="affaires-list">
+                    {% for affaire in client_data.affaires_en_cours %}
+                    <div class="affaire-item clickable-row" data-url="{% url 'affaires:detail' affaire.pk %}">
+                        <div class="affaire-info">
+                            <span class="affaire-number">{{ affaire.affaire_number }}</span>
+                            <span class="affaire-desc">{{ affaire.affaire_description|truncatechars:40 }}</span>
+                        </div>
+                        <div class="affaire-amounts">
+                            <div class="reste-amount">{{ affaire.formatted_reste_a_facturer }}</div>
+                            <div class="progress-badge">{{ affaire.formatted_taux_avancement }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="dashboard-card">
+            <p>Aucune affaire en cours.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+
+
+{% endblock content %}
