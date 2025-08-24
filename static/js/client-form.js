@@ -44,7 +44,7 @@ function addContact() {
     
     // Clone the template
     const newContact = template.cloneNode(true);
-    newContact.style.display = 'block';
+    newContact.classList.remove('hidden');
     newContact.id = `contact-${currentIndex}`;
     
     // Update the header
@@ -89,7 +89,7 @@ function removeContact(button) {
     const hasExistingContact = existingContactSelect && existingContactSelect.value;
     
     // UI check: Don't allow removal if it's the only visible contact AND no existing contact is selected
-    const visibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not([style*="display: none"])');
+    const visibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)');
     if (visibleContacts.length <= 1 && !hasExistingContact) {
         alert('Au moins un contact est requis.');
         return;
@@ -103,7 +103,7 @@ function removeContact(button) {
     const deleteCheckbox = contactForm.querySelector('input[name$="-DELETE"]');
     if (deleteCheckbox) {
         deleteCheckbox.checked = true;
-        contactForm.style.display = 'none';
+        contactForm.classList.add('hidden');
     } else {
         // If no DELETE field, just remove (newly added forms)
         contactForm.remove();
@@ -112,18 +112,18 @@ function removeContact(button) {
     
     // UI feedback: If we removed the principal contact, suggest user select another
     if (wasPrincipal) {
-        const firstVisibleContact = document.querySelector('.contact-form:not(#contact-template):not([style*="display: none"]) .principal-checkbox');
+        const firstVisibleContact = document.querySelector('.contact-form:not(#contact-template):not(.hidden) .principal-checkbox');
         if (firstVisibleContact) {
             firstVisibleContact.checked = true;
         }
     }
     
     // After removal, check if we need to hide the first contact remove button again
-    const remainingVisibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not([style*="display: none"])');
+    const remainingVisibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)');
     const firstContactRemoveBtn = document.getElementById('first-contact-remove-btn');
     
     if (remainingVisibleContacts.length <= 1 && !hasExistingContact && firstContactRemoveBtn) {
-        firstContactRemoveBtn.style.display = 'none';
+        firstContactRemoveBtn.classList.add('hidden');
     }
 }
 
@@ -149,12 +149,10 @@ function handlePrincipalChangeUI(event) {
  */
 function ensurePrincipalContactUI() {
     const visiblePrincipalCheckboxes = [];
-    document.querySelectorAll('.contact-form:not(#contact-template)').forEach(form => {
-        if (form.style.display !== 'none') {
-            const checkbox = form.querySelector('.principal-checkbox');
-            if (checkbox) {
-                visiblePrincipalCheckboxes.push(checkbox);
-            }
+    document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)').forEach(form => {
+        const checkbox = form.querySelector('.principal-checkbox');
+        if (checkbox) {
+            visiblePrincipalCheckboxes.push(checkbox);
         }
     });
     
@@ -207,7 +205,8 @@ function initializeExistingContactSelection() {
     // If client is already selected (update mode), load contacts immediately
     if (clientSelect.value) {
         console.log('Client déjà sélectionné:', clientSelect.value, '- chargement des contacts');
-        fetchContactsForClient(clientSelect.value, existingContactSelect);
+        // Temporairement désactivé pour laisser Django gérer l'affichage
+        // fetchContactsForClient(clientSelect.value, existingContactSelect);
     }
     
     // Handle client selection change
@@ -340,7 +339,7 @@ function handleExistingContactSelection(selectElement) {
         
         // Show the remove button for first contact since we have an existing contact selected
         if (firstContactRemoveBtn) {
-            firstContactRemoveBtn.style.display = 'block';
+            firstContactRemoveBtn.classList.remove('hidden');
         }
         
         // Optional: Provide visual feedback that an existing contact is selected
@@ -361,7 +360,7 @@ function handleExistingContactSelection(selectElement) {
         
         // Hide the remove button for first contact to ensure at least one contact
         if (firstContactRemoveBtn) {
-            firstContactRemoveBtn.style.display = 'none';
+            firstContactRemoveBtn.classList.add('hidden');
         }
         
         // Reset visual feedback
@@ -401,7 +400,7 @@ function showContactSelectionMessage(message) {
     }
     
     messageElement.textContent = message;
-    messageElement.style.display = 'block';
+    messageElement.classList.remove('hidden');
 }
 
 /**
@@ -410,6 +409,6 @@ function showContactSelectionMessage(message) {
 function hideContactSelectionMessage() {
     const messageElement = document.getElementById('contact-selection-message');
     if (messageElement) {
-        messageElement.style.display = 'none';
+        messageElement.classList.add('hidden');
     }
 }

@@ -6,7 +6,7 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The Email field must be set')
+            raise ValueError("l'email doit etre renseigné")
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -25,7 +25,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=30, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_author = models.BooleanField(default=False, verbose_name="Peut être auteur")
+    is_author = models.BooleanField(default=False, verbose_name="Auteur")
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = CustomUserManager()

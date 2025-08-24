@@ -1,0 +1,94 @@
+{% extends "base_form.html" %}
+{% load static %}
+
+{% block title %} {{ user.first_name }} {{ user.last_name }} {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>{{ user.first_name }} {{ user.last_name }}</H2>
+    <div class="form_btn_group_H2">
+        <a href="{% url 'users:users' %}" class="form_btn">Retour</a>
+        <a href="{% url 'users:modifier' user.pk %}" class="form_btn">Modifier</a>
+    </div>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <div class="">
+                <div>
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Prénom</p>
+                            <p class="form-input">{{ user.first_name|default:"Non renseigné" }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Nom</p>
+                            <p class="form-input">{{ user.last_name|default:"Non renseigné" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <p class="form-label">Email</p>
+                        <p class="form-input">{{ user.email }}</p>
+                    </div>
+
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <p class="form-label">Date d'inscription</p>
+                            <p class="form-input">{{ user.date_joined|date:"d/m/Y à H:i" }}</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <p class="form-label">Dernière connexion</p>
+                            <p class="form-input">{{ user.last_login|date:"d/m/Y à H:i"|default:"Jamais connecté" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="form-label">Statut du compte</p>
+                        <div class="form-area">
+                            {% if user.is_active %}
+                                <p class="user-status-active">✅ Compte actif</p>
+                            {% else %}
+                                <p class="user-status-inactive">❌ Compte inactif</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="form-label">Permissions</p>
+                        <div class="form-area">
+                            {% if user.is_superuser %}
+                                <p class="user-permission-superuser">👑 Super Administrateur - Accès complet au système</p>
+                            {% elif user.is_staff %}
+                                <p class="user-permission-staff">⚙️ Administrateur - Accès à l'interface d'administration</p>
+                            {% endif %}
+                            
+                            {% if user.is_author %}
+                                <p class="user-permission-author">✏️ Auteur - Peut créer et gérer des affaires</p>
+                            {% endif %}
+                            
+                            {% if not user.is_staff and not user.is_superuser and not user.is_author %}
+                                <p class="user-permission-standard">👤 Utilisateur standard - Accès limité</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+{% endblock content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock extra_css %}

@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static "style.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
     <title>{% block title %}Dashboard{% endblock title %}</title>
 </head>
 <body>
@@ -48,38 +48,23 @@
     </div>
     <section class="main-container">
         <nav class="navbar">
-            <div class="recherche" style="display:none">
-                <input type="text" placeholder="Rechercher">
+            <div class="recherche">
+                <form method="GET" action="{% url 'search' %}">
+                    <input type="text" name="search" placeholder="Rechercher" value="{{ request.GET.search }}">
+                </form>
             </div>
+            {% if user.is_superuser %}
+            <div>
+                <a href="{% url "users:users" %}"><img class='param-img-user' src="{% static 'img/user.svg' %}" alt="Avatar"></a>
+            </div>
+            {% endif %}
         </nav>
     
     <!-- Messages Django -->
     {% if messages %}
-        <div class="messages-container" style="margin: 20px; z-index: 1000;">
+        <div class="messages-container">
             {% for message in messages %}
-                <div class="message message-{{ message.tags }}" style="
-                    padding: 12px 20px; 
-                    margin-bottom: 10px; 
-                    border-radius: 5px; 
-                    font-weight: 500;
-                    {% if message.tags == 'error' %}
-                        background-color: #fee; 
-                        color: #c33; 
-                        border: 1px solid #fcc;
-                    {% elif message.tags == 'success' %}
-                        background-color: #efe; 
-                        color: #383; 
-                        border: 1px solid #cfc;
-                    {% elif message.tags == 'warning' %}
-                        background-color: #ffc; 
-                        color: #863; 
-                        border: 1px solid #fd6;
-                    {% else %}
-                        background-color: #def; 
-                        color: #368; 
-                        border: 1px solid #ace;
-                    {% endif %}
-                ">
+                <div class="message message-{{ message.tags }}">
                     {{ message }}
                 </div>
             {% endfor %}

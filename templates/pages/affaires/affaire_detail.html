@@ -7,6 +7,10 @@
 
 <div class="title">
     <H2>Affaire {{ affaire.affaire_number }} - {{ affaire.client.entity_name }}</H2>
+        <div class="form_btn_group">
+            <a href="{% url 'affaires:affaires' %}" class="form_btn">Retour</a>
+            <a href="{% url 'affaires:modifier' affaire.pk %}" class="form_btn">Modifier</a>
+        </div>
 </div>
 
 <section class="tableau">
@@ -75,12 +79,6 @@
                     </div>
 
                 </div>
-            </div>
-            
-            
-            <div class="form_btn_group">
-                <a href="{% url 'affaires:affaires' %}" class="form_btn">Retour</a>
-                <a href="{% url 'affaires:modifier' affaire.pk %}" class="form_btn">Modifier</a>
             </div>
         </div>
     </div>

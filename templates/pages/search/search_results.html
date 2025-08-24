@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Résultats de recherche{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+<div class="content">
+    <div class="search-title">
+        <h1>Résultats de recherche pour : "{{ query }}"</h1>
+    </div>
+
+    {% if query %}
+        {% if has_results %}
+            {% if clients %}
+            <div class="search-section">
+                <h2>Clients ({{ clients|length }})</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                            <tr class="clickable-row" data-url="{% url 'clients:detail' client.id %}">
+                                <td>{{ client.entity_name }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if contacts %}
+            <div class="search-section">
+                <h2>Contacts ({{ contacts|length }})</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Client</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for contact in contacts %}
+                            <tr class="clickable-row" data-url="{% url 'clients:detail_contact' contact.id %}">
+                                <td>{{ contact.nom }}</td>
+                                <td>{{ contact.prenom }}</td>
+                                <td>{{ contact.email|default:"-" }}</td>
+                                <td>{{ contact.phone_number|default:"-" }}</td>
+                                <td>{{ contact.affaire.client_entity_name|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if affaires %}
+            <div class="search-section">
+                <h2>Affaires ({{ affaires|length }})</h2>
+                <div class="table-container">
+                    <table class="affaires-table">
+                        <thead>
+                            <tr>
+                                <th>Numéro</th>
+                                <th>Client</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for affaire in affaires %}
+                            <tr class="clickable-row" data-url="{% url 'affaires:detail' affaire.id %}">
+                                <td>{{ affaire.affaire_number }}</td>
+                                <td>{{ affaire.client_entity_name }}</td>
+                                <td>{{ affaire.affaire_description|truncatewords:10|default:"-" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if factures %}
+            <div class="search-section">
+                <h2>Factures ({{ factures|length }})</h2>
+                <div class="table-container">
+                    <table class="factures-table">
+                        <thead>
+                            <tr>
+                                <th>Numéro</th>
+                                <th>Client</th>
+                                <th>Affaire</th>
+                                <th>Montant HT</th>
+                                <th>Statut</th>
+                                <th>Date d'échéance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for facture in factures %}
+                            <tr class="clickable-row" data-url="{% url 'factures:detail' facture.id %}">
+                                <td>{{ facture.invoice_number }}</td>
+                                <td>{{ facture.client_entity_name }}</td>
+                                <td>{{ facture.affaire.affaire_number|default:"-" }}</td>
+                                <td>{{ facture.amount_ht|floatformat:2 }} €</td>
+                                <td>
+                                    <span class="status status-{{ facture.statut }}">
+                                        {% if facture.statut == 'payee' %}Payée
+                                        {% elif facture.statut == 'a_payer' %}À payer
+                                        {% elif facture.statut == 'partiellement_payee' %}Partiellement payée
+                                        {% elif facture.statut == 'en_retard' %}En retard
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ facture.due_date|date:"d/m/Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="no-results">
+                <p>Aucun résultat trouvé pour "{{ query }}"</p>
+                <p>Essayez avec d'autres mots-clés ou vérifiez l'orthographe.</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="no-query">
+            <p>Veuillez saisir un terme de recherche.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+{% endblock content %}

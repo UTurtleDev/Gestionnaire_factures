@@ -102,6 +102,14 @@ def affaire_update(request, pk):
         form = AffaireForm(request.POST, instance=affaire)
         contact_formset = ContactInlineFormSet(request.POST, instance=affaire, prefix='contact')
         
+        print(f"=== DEBUG AFFAIRE UPDATE ===")
+        print(f"Form valid: {form.is_valid()}")
+        print(f"Formset valid: {contact_formset.is_valid()}")
+        if not form.is_valid():
+            print(f"Form errors: {form.errors}")
+        if not contact_formset.is_valid():
+            print(f"Formset errors: {contact_formset.errors}")
+            
         if form.is_valid() and contact_formset.is_valid():
             # Save the affaire
             form.save()
@@ -110,7 +118,12 @@ def affaire_update(request, pk):
             existing_contact = form.cleaned_data.get('existing_contact')
             existing_contact_is_principal = request.POST.get('existing_contact_is_principal') == 'on'
             
+            print(f"Existing contact: {existing_contact}")
+            print(f"Is principal: {existing_contact_is_principal}")
+            
             if existing_contact:
+                print(f"Processing existing contact: {existing_contact.nom} {existing_contact.prenom}")
+                
                 # Check if this contact already exists for this affaire to avoid duplicates
                 existing_contact_for_affaire = Contact.objects.filter(
                     affaire=affaire,
@@ -119,9 +132,11 @@ def affaire_update(request, pk):
                     email=existing_contact.email
                 ).first()
                 
+                print(f"Contact already exists: {existing_contact_for_affaire is not None}")
+                
                 if not existing_contact_for_affaire:
                     # Copy the existing contact to this affaire only if it doesn't already exist
-                    Contact.objects.create(
+                    new_contact = Contact.objects.create(
                         affaire=affaire,
                         nom=existing_contact.nom,
                         prenom=existing_contact.prenom,
@@ -130,13 +145,16 @@ def affaire_update(request, pk):
                         email=existing_contact.email,
                         is_principal=existing_contact_is_principal
                     )
+                    print(f"Created new contact: {new_contact.id}")
                 elif existing_contact_is_principal:
                     # If contact already exists but we want to make it principal
                     existing_contact_for_affaire.is_principal = True
                     existing_contact_for_affaire.save()
+                    print(f"Updated existing contact as principal")
             
             # Save contacts
             contact_formset.save()
+            print("=== END DEBUG ===")
             
             return redirect('affaires:affaires')
     else:
@@ -173,6 +191,10 @@ def client_contacts_api(request, client_id):
         current_affaire_id = request.GET.get('current_affaire_id')
         
         contacts = Contact.objects.filter(affaire__client_id=client_id).distinct().order_by('nom', 'prenom')
+        
+        # Si aucun contact pour ce client, retourner tous les contacts
+        if not contacts.exists():
+            contacts = Contact.objects.all().order_by('nom', 'prenom')
         
         # If we're updating an affaire, exclude contacts that are already in this affaire
         if current_affaire_id:

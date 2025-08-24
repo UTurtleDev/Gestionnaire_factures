@@ -7,7 +7,7 @@ from clients.forms import ContactForm
 
 class AffaireForm(forms.ModelForm):
     existing_contact = forms.ModelChoiceField(
-        queryset=Contact.objects.none(),
+        queryset=Contact.objects.all().order_by('nom', 'prenom'),
         empty_label="Sélectionner un contact existant",
         required=False,
         widget=forms.Select(attrs={'class': 'form-input', 'id': 'existing-contact-select'}),
@@ -18,20 +18,8 @@ class AffaireForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['author'].queryset = CustomUser.objects.filter(is_author=True).order_by('first_name', 'last_name')
         
-        # If we have a client selected, populate existing contacts
-        if 'client' in self.data:
-            try:
-                client_id = int(self.data.get('client'))
-                self.fields['existing_contact'].queryset = Contact.objects.filter(
-                    affaire__client_id=client_id
-                ).distinct().order_by('nom', 'prenom')
-            except (ValueError, TypeError):
-                pass
-        elif self.instance.pk and self.instance.client:
-            # For updates, show contacts from the same client
-            self.fields['existing_contact'].queryset = Contact.objects.filter(
-                affaire__client=self.instance.client
-            ).distinct().order_by('nom', 'prenom')
+        # Pour simplifier, afficher toujours tous les contacts
+        self.fields['existing_contact'].queryset = Contact.objects.all().order_by('nom', 'prenom')
         
     class Meta:
         model = Affaire

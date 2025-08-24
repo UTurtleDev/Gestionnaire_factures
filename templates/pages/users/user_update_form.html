@@ -1,0 +1,156 @@
+{% extends "base_form.html" %}
+{% load static %}
+
+{% block title %} Modification Utilisateur {% endblock title %}
+
+{% block content %}
+
+
+<div class="title">
+    <H2>Modifications de : {{ user.first_name }} {{ user.last_name }}</H2>
+</div>
+
+<section class="tableau">
+    <div class="card">
+        <div class="card-body">
+            <form method="post" id="user-form">
+                {% csrf_token %}
+                
+                <!-- Section Utilisateur -->
+                <div class="form-section">
+                    <h3 class="section-title">Informations Utilisateur</h3>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.first_name.label }}</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="field-error">{{ form.first_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.last_name.label }}</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="field-error">{{ form.last_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">{{ form.email.label }} *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="field-error">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Section Permissions -->
+                <div class="form-section">
+                    <h3 class="section-title">Permissions</h3>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">
+                                {{ form.is_active }}
+                                {{ form.is_active.label }}
+                            </label>
+                            {% if form.is_active.errors %}
+                                <div class="field-error">{{ form.is_active.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                {{ form.is_staff }}
+                                {{ form.is_staff.label }}
+                            </label>
+                            {% if form.is_staff.errors %}
+                                <div class="field-error">{{ form.is_staff.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            {{ form.is_author }}
+                            {{ form.is_author.label }}
+                        </label>
+                        {% if form.is_author.errors %}
+                            <div class="field-error">{{ form.is_author.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Display non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                
+                <div class="form_btn_group">
+                    <a href="{% url 'users:users' %}" class="form_btn">Retour</a>
+                    <button type="submit" class="form_btn">Enregistrer</button>
+                </div>
+                <div class="div_btn-delete"><button type="button" class="btn-delete" onclick="openDeleteModal()">Supprimer</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- La modale de confirmation -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmer la suppression</h3>
+                <span class="close" onclick="closeDeleteModal()">&times;</span>
+            </div>
+            <div class="modal-body user-delete-modal">
+                <p>Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{{ user.first_name }} {{ user.last_name }}</strong> ?</p>
+                <p>Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="form_btn" onclick="closeDeleteModal()">Annuler</button>
+                <form method="post" action="{% url 'users:delete' user.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+        
+        // Ferme la modale si l'utilisateur clique en dehors
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('deleteModal')) {
+                closeDeleteModal();
+            }
+        }
+    </script>
+</section>
+
+
+
+
+
+
+{% endblock content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/client-form.css' %}">
+<link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock extra_css %}
+
+{% block extra_js %}
+<script src="{% static 'js/client-form.js' %}"></script>
+{% endblock extra_js %}

@@ -1,0 +1,84 @@
+/* Client Creation Form Styles */
+
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: var(--h3-size);
+    font-weight: var(--h3-weight);
+    color: var(--h3-color);
+    margin-bottom: 15px;
+}
+
+.contacts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-add-contact {
+    background-color: var(--btn_new_color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-add-contact:hover {
+    background-color: var(--btn_new_hover);
+}
+
+.contact-form {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+}
+
+.contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contact-header h4 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.btn-remove-contact {
+    background-color: var(--btn_delete_color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-remove-contact:hover {
+    background-color: var(--btn_delete_hover);
+}
+
+.principal-checkbox {
+    margin-right: 8px;
+}

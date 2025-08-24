@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.db.models import Q
 from factures.models import Invoice
 from affaires.models import Affaire
+from clients.models import Client, Contact
 from datetime import datetime
 from utils.charts import generate_revenue_chart, generate_revenue_histogram_chart, generate_cumulative_revenue_chart, get_available_years, get_monthly_revenue_by_year, calculate_monthly_averages
 
@@ -244,4 +246,50 @@ def affaires(request):
     })
 
 
+def search(request):
+    query = request.GET.get('search', '').strip()
+    context = {'query': query}
+    
+    if query:
+        # Recherche dans les clients
+        clients = Client.objects.filter(
+            Q(entity_name__icontains=query) | 
+            Q(address__icontains=query) |
+            Q(affaires__affaire_number__icontains=query) |
+            Q(email__icontains=query)
+        ).distinct()
+        
+        # Recherche dans les contacts
+        contacts = Contact.objects.filter(
+            Q(prenom__icontains=query) |
+            Q(nom__icontains=query) |
+            Q(email__icontains=query) |
+            Q(phone_number__icontains=query)
+        )
+        
+        # Recherche dans les affaires
+        affaires = Affaire.objects.filter(
+            Q(affaire_number__icontains=query) |
+            # Q(author__icontains=query) |
+            Q(affaire_description__icontains=query) |
+            Q(client_entity_name__icontains=query)
+        )
+        
+        # Recherche dans les factures
+        factures = Invoice.objects.filter(
+            Q(invoice_number__icontains=query) |
+            Q(client_entity_name__icontains=query) |
+            Q(invoice_object__icontains=query) |
+            Q(affaire__affaire_number__icontains=query)
+        )
+        
+        context.update({
+            'clients': clients,
+            'contacts': contacts,
+            'affaires': affaires,
+            'factures': factures,
+            'has_results': any([clients, contacts, affaires, factures])
+        })
+    
+    return render(request, 'pages/search/search_results.html', context)
 

@@ -1,0 +1,102 @@
+/* Styles spécifiques pour la gestion des utilisateurs */
+
+/* Lignes cliquables du tableau */
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: var(--tr-bg-hover, #f8fafc);
+}
+
+/* Statuts des utilisateurs */
+.user-status-active {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.user-status-inactive {
+    color: #f44336;
+    font-weight: bold;
+}
+
+/* Permissions utilisateurs */
+.user-permission-superuser {
+    color: #FF5722;
+    font-weight: bold;
+}
+
+.user-permission-staff {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+.user-permission-author {
+    color: #9C27B0;
+}
+
+.user-permission-standard {
+    color: #666666;
+}
+
+/* Styles pour les formulaires utilisateurs */
+.user-form-section {
+    margin-bottom: 30px;
+}
+
+.user-form-help-text {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Styles pour les permissions dans les d�tails utilisateur */
+.user-permissions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-permissions-list li {
+    margin-bottom: 8px;
+    padding: 5px 0;
+}
+
+/* Style pour la modale de suppression d'utilisateur */
+.user-delete-modal .modal-body p {
+    margin-bottom: 15px;
+}
+
+.user-delete-modal .modal-body strong {
+    color: #f44336;
+}
+
+/* Amélioration des styles de colonnes pour les utilisateurs */
+.users-table .user-info strong {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+}
+
+.users-table .user-email {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Alignement spécifique pour la colonne permissions du tableau utilisateurs */
+.users-table .permissions-column {
+    text-align: left;
+}
+
+.users-table .permissions-column .addresse {
+    text-align: left;
+}
+
+/* Responsive pour les permissions */
+@media (max-width: 768px) {
+    .user-permission-superuser,
+    .user-permission-staff,
+    .user-permission-author {
+        font-size: 0.9em;
+    }
+}

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Utilisateurs{% endblock title %}
+
+{% block content %}
+
+<div class="title">
+    <H2>Utilisateurs</H2>
+    <div class="title_btn">
+        <div class="new"><a href="{% url "users:create" %}">+ Nouvel utilisateur</a></div>
+    </div>
+</div>
+
+<section class="tableau">
+    <table class="table clients-table">
+        <thead>
+            <tr>
+                <th>
+                    <div class="th-div">
+                        <span>UTILISATEURS</span>
+                    </div>
+                </th>
+                <th>
+                    <div class="th-div">
+                        <span>COORDONNÉES</span>
+                    </div>
+                </th>
+                <th>
+                    <div class="th-div">
+                        <span>STATUT</span>
+                    </div>
+                </th>
+                <th>
+                    <div class="th-div">
+                        <span>PERMISSIONS</span>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        
+        {% if users %}
+        <tbody>
+            {% for user in users %}
+            <tr data-url="{% url 'users:detail' user.pk %}" class="clickable-row">
+                <td colspan="1">
+                    <div class="addresse">
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+                        {% comment %} <p>{{ user.email }}</p> {% endcomment %}
+                    </div>
+                </td>
+                <td colspan="1">
+                    <div>
+                        <div>
+                            <a href="mailto:{{ user.email }}" target="_blank" class="coordonnees">
+                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="envelope" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="param-svg svg">
+                                    <path fill="currentColor" d="M64 112c-8.8 0-16 7.2-16 16l0 22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1l0-22.1c0-8.8-7.2-16-16-16L64 112zM48 212.2L48 384c0 8.8 7.2 16 16 16l384 0c8.8 0 16-7.2 16-16l0-171.8L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64l384 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L64 448c-35.3 0-64-28.7-64-64L0 128z" class=""></path>
+                                </svg>
+                                <span class="span-coordonnees">{{ user.email }}</span>
+                            </a>
+                        </div>
+                        <div class="coordonnees">
+                            <span class="span-coordonnees">Inscrit le : {{ user.date_joined|date:"d/m/Y" }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td colspan="1">
+                    <div class="addresse">
+                        {% if user.is_active %}
+                            <p class="user-status-active">✅ Actif</p>
+                        {% else %}
+                            <p class="user-status-inactive">❌ Inactif</p>
+                        {% endif %}
+                        {% if user.last_login %}
+                            <p>Dernière connexion : {{ user.last_login|date:"d/m/Y H:i" }}</p>
+                        {% else %}
+                            <p>Jamais connecté</p>
+                        {% endif %}
+                    </div>
+                </td>
+                <td colspan="1" class="permissions-column">
+                    <div class="addresse">
+                        {% if user.is_superuser %}
+                            <p class="user-permission-superuser">👑 Super Administrateur</p>
+                        {% elif user.is_staff %}
+                            <p class="user-permission-staff">⚙️ Administrateur</p>
+                        {% else %}
+                            <p class="user-permission-standard">👤 Utilisateur</p>
+                        {% endif %}
+                        {% if user.is_author %}
+                            <p class="user-permission-author">✏️ Auteur</p>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+
+    </table>
+    
+    <!-- Navigation de pagination -->
+    <div class="pagination-container">
+        <div class="pagination-nav">
+            <!-- Bouton Précédent -->
+            {% if users.has_previous %}
+            <a href="?page=1" class="btn">«</a>
+            {% endif %}
+            
+            <!-- Numéros de pages -->
+            {% for num in users.paginator.page_range %}
+            {% if users.number == num %}
+            <span class="current-page">{{ num }}</span>
+            {% else %}
+            <a href="?page={{ num }}" class="btn">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+            
+            <!-- Bouton Suivant -->
+            {% if users.has_next %}
+            <a href="?page={{ users.paginator.num_pages }}" class="btn">»</a>
+            {% endif %}
+        </div>
+        <div class="pagination-info">
+            <p>
+                Page {{ users.number }} sur {{ users.paginator.num_pages }}
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function() {
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
+{% endblock content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock extra_css %}

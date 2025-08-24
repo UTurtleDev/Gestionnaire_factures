@@ -1,0 +1,28 @@
+/* Styles pour les formulaires d'affaires */
+
+.existing-contact-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.form-group.margin-top {
+    margin-top: 10px;
+}
+
+.btn-remove-contact.hidden {
+    display: none;
+}
+
+.contact-form.hidden,
+.modal.hidden,
+.delete-field.hidden,
+.principal-label.hidden {
+    display: none;
+}
+
+.modal:not(.hidden) {
+    display: flex;
+}

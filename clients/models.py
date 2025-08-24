@@ -70,9 +70,20 @@ class Contact(models.Model):
 
 
     def __str__(self):
-        nom_complet = f"{self.nom} {self.prenom}".strip()
+        # Gérer les valeurs None
+        nom = self.nom or ""
+        prenom = self.prenom or ""
+        nom_complet = f"{nom} {prenom}".strip()
+        
+        # Si pas de nom/prénom, utiliser l'email ou un placeholder
+        if not nom_complet:
+            if self.email:
+                nom_complet = self.email
+            else:
+                nom_complet = "Contact sans nom"
+        
         if self.fonction:
-            return f"{nom_complet}"
+            return f"{nom_complet} - {self.fonction}"
         return nom_complet
     
 
