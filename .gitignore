@@ -9,7 +9,7 @@ __pycache__/
 factures/*
 mediafiles/charts/*
 static/charts/*
-staticfiles/charts/*
+staticfiles/
 
 # Claude Code
 .claude_history
