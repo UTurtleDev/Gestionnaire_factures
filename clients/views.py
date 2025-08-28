@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.models import ProtectedError
 from .models import Client, Contact
 from affaires.models import Affaire
-from .forms import ClientForm, ContactAffaireForm, ContactFormSet
+from .forms import ClientForm, ContactAffaireForm
 
 # Create your views here.
 
@@ -26,61 +26,16 @@ def clients(request):
 def client_create(request):
     if request.method == 'POST':
         form = ClientForm(request.POST)
-        contact_formset = ContactFormSet(request.POST)
         
-        if form.is_valid() and contact_formset.is_valid():
+        if form.is_valid():
             client = form.save()
-            
-            # Process contacts - they need to be linked to an affaire
-            contacts_to_create = []
-            for contact_form in contact_formset:
-                if contact_form.cleaned_data and not hasattr(contact_form, '_is_empty_form'):
-                    contacts_to_create.append(contact_form.cleaned_data)
-            
-            # If there are contacts to create, we need an affaire
-            if contacts_to_create:
-                # Create a default affaire for this client
-                from affaires.models import Affaire
-                from users.models import CustomUser
-                
-                # Get the first author user or current user
-                default_author = request.user if hasattr(request.user, 'affaires') else CustomUser.objects.filter(is_superuser=True).first()
-                
-                if default_author:
-                    # Generate a unique affaire number
-                    from django.utils import timezone
-                    timestamp = timezone.now().strftime('%Y%m%d%H%M%S')
-                    affaire_number = f"AFF-{client.pk:03d}-{timestamp}"
-                    
-                    affaire = Affaire.objects.create(
-                        client=client,
-                        author=default_author,
-                        affaire_number=affaire_number,
-                        budget=0.0,
-                        affaire_description=f"Affaire par défaut pour {client.entity_name}"
-                    )
-                    
-                    # Create all contacts linked to this affaire
-                    for contact_data in contacts_to_create:
-                        Contact.objects.create(
-                            affaire=affaire,
-                            nom=contact_data.get('nom', ''),
-                            prenom=contact_data.get('prenom', ''),
-                            fonction=contact_data.get('fonction', ''),
-                            phone_number=contact_data.get('phone_number', ''),
-                            email=contact_data.get('email', ''),
-                            is_principal=contact_data.get('is_principal', False)
-                        )
-            
             messages.success(request, f'Client "{client.entity_name}" créé avec succès.')
             return redirect('clients:clients')
     else:
         form = ClientForm()
-        contact_formset = ContactFormSet()
     
     return render(request, 'pages/clients/client_create_form.html', {
         'form': form,
-        'contact_formset': contact_formset,
     })
 
 
@@ -109,61 +64,16 @@ def client_update(request, pk):
     
     if request.method == 'POST':
         form = ClientForm(request.POST, instance=client)
-        contact_formset = ContactFormSet(request.POST)
         
-        if form.is_valid() and contact_formset.is_valid():
+        if form.is_valid():
             client = form.save()
-            
-            # Only handle new contacts (non-empty forms)
-            new_contacts_added = False
-            for contact_form in contact_formset:
-                if contact_form.cleaned_data and not hasattr(contact_form, '_is_empty_form'):
-                    # This is a new contact to add
-                    contact_data = contact_form.cleaned_data
-                    
-                    # We need to assign to an affaire - use first affaire or create one
-                    if not client.affaires.exists():
-                        # Create a default affaire for this client if none exists
-                        from affaires.models import Affaire
-                        from users.models import CustomUser
-                        default_author = CustomUser.objects.filter(is_author=True).first()
-                        if default_author:
-                            affaire = Affaire.objects.create(
-                                client=client,
-                                author=default_author,
-                                affaire_number=f"AFF-{client.pk}-001",
-                                budget=0.0,
-                                affaire_description=f"Affaire par défaut pour {client.entity_name}"
-                            )
-                        else:
-                            # Skip saving if no author available
-                            continue
-                    else:
-                        affaire = client.affaires.first()
-                    
-                    # Create contact with affaire
-                    Contact.objects.create(
-                        affaire=affaire,
-                        nom=contact_data.get('nom', ''),
-                        prenom=contact_data.get('prenom', ''),
-                        fonction=contact_data.get('fonction', ''),
-                        phone_number=contact_data.get('phone_number', ''),
-                        email=contact_data.get('email', ''),
-                        is_principal=contact_data.get('is_principal', False)
-                    )
-                    new_contacts_added = True
-            
             return redirect('clients:clients')
     else:
         form = ClientForm(instance=client)
-        
-        # Initialize empty formset for new contacts only
-        contact_formset = ContactFormSet()
     
     return render(request, 'pages/clients/client_update_form.html', {
         'form': form, 
         'client': client,
-        'contact_formset': contact_formset,
         'existing_contacts': client_contacts,  # Pass existing contacts separately
     })
 

@@ -88,7 +88,6 @@
                         <p class="form-label">Réglements</p>
                             <div class="form-area">
                                 {% for reglement in facture.payments.all %}
-                                    {% comment %} <p>{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p> {% endcomment %}
                                     <p data-url="{% url 'factures:reglement_detail' reglement.pk %}" class="clickable-row">{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p>
                                 {% endfor %}
                             </div>

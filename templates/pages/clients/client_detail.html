@@ -58,35 +58,21 @@
                     </div>
 
                     {% for contact in client.contacts.all %}
-                    {% if contact != client.contact_principal %}
-                    <div class="form-label">Autres Contacts</div>
-                    <div class="form-group">
-                            <p class="form-label">Contact : {{ contact }}</p>
-                            <p class="form-label">Fonction : {{ contact.fonction }}</p>
-                            <p class="form-label">Email : {{ contact.email }}</p>
-                            <p class="form-label">Téléphone : {{ contact.phone_number }}</p>
-                            {% endif %}
+                        {% if contact != client.contact_principal %}
+                            <div class="form-label">Autres Contacts</div>
+                            <div class="form-group">
+                                    <p class="form-label">Contact : {{ contact }}</p>
+                                    <p class="form-label">Fonction : {{ contact.fonction }}</p>
+                                    <p class="form-label">Email : {{ contact.email }}</p>
+                                    <p class="form-label">Téléphone : {{ contact.phone_number }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}                    
+                    <p class="form-label">Affaires : {{ client.formatted_total_affaire_client }}</p>
+                    <div class="form-area">
+                        {% for affaire in client.affaires.all %}
+                            <p data-url="{% url 'affaires:detail' affaire.pk %}" class="clickable-row">{{ affaire.affaire_number }} - {{ affaire.affaire_description }} - {{ affaire.formatted_budget }}</p>
                         {% endfor %}
-                        </if>
-                    </div>
-                    
-                    {% comment %} <div class="form_categories">
-                        <div class="form-group">
-                            <p class="form-label">Téléphone</p>
-                            <p class="form-input">{{ client.phone_number }}</p>
-                        </div>
-                        
-                        <div class="form-group">
-                            <p class="form-label">Email</p>
-                            <p class="form-input">{{ client.email }}</p>
-                        </div>
-                    </div> {% endcomment %}
-                        <p class="form-label">Affaires : {{ client.formatted_total_affaire_client }}</p>
-                        <div class="form-area">
-                            {% for affaire in client.affaires.all %}
-                                <p>{{ affaire.affaire_number }} - {{ affaire.affaire_description }} - {{ affaire.formatted_budget }}</p>
-                            {% endfor %}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -97,7 +83,20 @@
 
 </section>
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Empêche la redirection si on clique sur un lien dans les actions
+                if (event.target.closest('.actions') || event.target.closest('a')) {
+                    return;
+                }
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
 
 
 

@@ -1,48 +1,74 @@
 # 📊 Gestionnaire de Factures 💼
 
-![Badge Django](https://img.shields.io/badge/Django-5.1-green?style=for-the-badge&logo=django&logoColor=white)
-![Badge Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white)
+![Badge Django](https://img.shields.io/badge/Django-5.2-green?style=for-the-badge&logo=django&logoColor=white)
+![Badge Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python&logoColor=white)
 ![Badge Pipenv](https://img.shields.io/badge/Pipenv-Gestion_Dépendances-orange?style=for-the-badge&logo=python&logoColor=white)
+![Badge Docker](https://img.shields.io/badge/Docker-Déploiement-blue?style=for-the-badge&logo=docker&logoColor=white)
 
 ## 🌟 Présentation
 
-**Gestionnaire de Factures** est une application web développée avec Django qui permet de gérer simplement et efficacement les clients, factures, affaires et règlements d'une entreprise. Cette interface intuitive est conçue pour faciliter le suivi financier et la relation client.
+**Gestionnaire de Factures** est une application web développée avec Django qui permet de gérer simplement et efficacement les clients, factures, affaires et règlements d'une entreprise. Cette interface intuitive est conçue pour faciliter le suivi financier et la relation client avec une architecture robuste Client → Affaire → Facture.
 
 ## ✨ Fonctionnalités
 
-### 👥 Gestion des clients
+### 👥 Gestion des clients et contacts
 - ✅ Création, consultation, modification et suppression de clients
+- ✅ Gestion des contacts associés avec contact principal
 - ✅ Stockage des informations essentielles (nom, adresse, coordonnées)
-- ✅ Interface conviviale pour naviguer entre les clients
-
-### 💰 Gestion des factures
-- ✅ Création de factures avec calcul automatique du montant TTC
-- ✅ Suivi du statut des paiements (payée, partiellement payée, en retard...)
-- ✅ Association des factures aux clients et aux affaires
-- ✅ Vue détaillée de chaque facture
+- ✅ Calcul automatique du total des affaires par client
 
 ### 📁 Gestion des affaires
-- ✅ Suivi des projets et budgets associés
-- ✅ Liaison entre affaires, clients et factures
-- ✅ Vue d'ensemble des montants facturés par projet
+- ✅ Création et suivi
+ des projets/budgets par client
+- ✅ Numérotation unique des affaires avec description
+- ✅ Calcul automatique du taux d'avancement (facturé/budget)
+- ✅ Création d'un facture à partir de l'affaire
+- ✅ Suivi du montant restant à facturer par affaire
 
-### 💳 Gestion des paiements
-- ✅ Enregistrement des règlements
+### 💰 Gestion des factures
+- ✅ Création de factures (facture, avoir) liées aux affaires
+- ✅ Calcul automatique du montant TTC avec taux de TVA personnalisable
+- ✅ Gestion des statuts de paiement (à payer, payée, en retard...)
+- ✅ Upload et stockage des PDF de factures
+- ✅ Mise à jour automatique du statut selon les règlements
+
+### 💳 Gestion des règlements
+- ✅ Enregistrement des paiements avec différents moyens de paiement
 - ✅ Mise à jour automatique du statut des factures
-- ✅ Historique complet des paiements
+- ✅ Historique complet des paiements avec balance restante
 
-### 📊 Tableau de bord
-- ✅ Vue d'ensemble de l'activité
+### 📊 Tableau de bord et analytics
+- ✅ Vue d'ensemble avec métriques clés
+- ✅ Top clients par chiffre d'affaires
+- ✅ Graphiques de revenus avec Matplotlib
+- ✅ Affaires en cours et totaux par client
 - ✅ Interface utilisateur moderne et réactive
+
+### 📤 Export et sauvegarde
+- ✅ Export CSV/Excel des clients, factures et règlements
+- ✅ Export complet de la base de données SQLite
+- ✅ Filtrage par dates pour les exports
+
+### 🔍 Fonctionnalités avancées
+- ✅ Recherche globale dans l'application
+- ✅ Système d'authentification personnalisé (email)
+- ✅ Pagination et tri des listes
+- ✅ Validation automatique des montants (avoirs négatifs)
+- ✅ Interface en français avec formatage européen des montants
 
 ## 🛠️ Technologies
 
-- **Backend**: Django 5.1, Python 3.10+
+- **Backend**: Django 5.2, Python 3.12
 - **Frontend**: HTML, CSS (interface responsive)
-- **Base de données**: SQLite (par défaut), adaptable à PostgreSQL
+- **Base de données**: SQLite (développement), PostgreSQL (production)
 - **Gestion des dépendances**: Pipenv
+- **Graphiques**: Matplotlib, NumPy
+- **Export**: OpenPyXL, ReportLab
+
 
 ## 🚀 Installation
+
+### Développement local
 
 ```bash
 # Cloner le dépôt
@@ -58,46 +84,75 @@ pipenv shell
 # Effectuer les migrations
 python manage.py migrate
 
-# Créer un super utilisateur (facultatif)
+# Créer un super utilisateur
 python manage.py createsuperuser
 
 # Lancer le serveur de développement
 python manage.py runserver
 ```
 
+
 ## 🔧 Configuration
 
-1. Créer un fichier `.env` à la racine du projet avec les informations suivantes:
+### Variables d'environnement
+Créer un fichier `.env` à la racine du projet :
 
-```
-SECRET_KEY=votre-clé-secrète
+```env
+SECRET_KEY=votre-clé-secrète-très-longue-et-sécurisée
 DEBUG=True
 ALLOWED_HOSTS=localhost,127.0.0.1
+CSRF_TRUSTED_ORIGINS=http://localhost:8000
+
+# Base de données PostgreSQL (pour production)
+DATABASE_URL=postgresql://user:password@db:5432/dbname
+POSTGRES_DB=gestfacts
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=motdepasse
 ```
-
-## 📷 Captures d'écran
-
-*Insérer des captures d'écran de l'application ici*
 
 ## 📝 Structure du projet
 
 ```
 Gestionnaire_factures/
 │
-├── affaires/        # Gestion des projets/affaires
-├── clients/         # Gestion des clients
-├── config/          # Configuration Django
-├── dashboard/       # Page d'accueil et tableau de bord
-├── factures/        # Gestion des factures et règlements
-├── static/          # Fichiers statiques (CSS, images)
-├── templates/       # Templates HTML
-├── users/           # Gestion des utilisateurs
+├── 📁 affaires/           # Gestion des projets/affaires
+├── 📁 clients/            # Gestion des clients et contacts
+├── 📁 config/             # Configuration Django principale
+├── 📁 dashboard/          # Tableau de bord et analytics
+├── 📁 factures/           # Gestion des factures et règlements
+├── 📁 nginx/              # Configuration Nginx pour Docker
+├── 📁 static/             # Fichiers statiques (CSS, images)
+├── 📁 templates/          # Templates HTML
+├── 📁 users/              # Système d'authentification personnalisé
+├── 📁 utils/              # Utilitaires (exports, graphiques)
 │
-├── Pipfile          # Dépendances du projet
-├── Pipfile.lock     # Versions verrouillées des dépendances
-└── manage.py        # Script de gestion Django
+l'application
+├── 📦 Pipfile             # Dépendances du projet
+├── 📦 Pipfile.lock        # Versions verrouillées
+├── 📄 requirements.txt    # Dépendances pour production
+└── ⚙️ manage.py           # Script de gestion Django
 ```
+
+## 🏗️ Architecture
+
+### Modèles et relations
+- **Client** ↔ **Contact** (un-à-plusieurs avec contact principal)
+- **Client** → **Affaire** → **Facture** (hiérarchie des données)
+- **Facture** ↔ **Paiement** (suivi automatique des règlements)
+
+### URLs principales
+- `/` - Tableau de bord principal
+- `/clients/` - Gestion des clients
+- `/affaires/` - Gestion des affaires
+- `/factures/` - Factures et règlements
+- `/admin/` - Interface d'administration Django
+
+## 📄 Licence
+
+Ce projet est sous licence [MIT](LICENSE).
 
 ---
 
-Développé avec ❤️ par UTurtle
+🚀 **Développé avec Django** 
+
+*Application de gestion de facturation moderne avec interface responsive et analytics avancés*

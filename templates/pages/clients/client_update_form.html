@@ -62,20 +62,16 @@
                     </div>
                 </div>
 
-                <!-- Section Contacts -->
+                <!-- Section Contacts (lecture seule) -->
                 <div class="form-section">
-                    <div class="contacts-header">
-                        <h3 class="section-title">Contacts</h3>
-                        <button type="button" id="add-contact" class="btn-add-contact">+ Ajouter un contact</button>
-                    </div>
+                    <h3 class="section-title">Contacts</h3>
                     
-                    <!-- Existing contacts (read-only display) -->
                     {% if existing_contacts %}
                         <div class="existing-contacts-section" style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 5px; background-color: #f9f9f9;">
-                            <h4>Contacts existants</h4>
+                            <p style="margin-bottom: 15px; color: #666;"><em>Les contacts sont gérés via les affaires. Pour ajouter ou modifier des contacts, créez d'abord une affaire pour ce client.</em></p>
                             {% for contact in existing_contacts %}
                                 <div class="existing-contact-item" style="padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 3px; background-color: white;">
-                                    <div style="display: flex; justify-content: between; align-items: center;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
                                             <strong>{{ contact.nom }} {{ contact.prenom }}</strong>
                                             {% if contact.is_principal %}<span style="color: #4CAF50; font-weight: bold;"> (Principal)</span>{% endif %}
@@ -92,139 +88,11 @@
                                 </div>
                             {% endfor %}
                         </div>
-                    {% endif %}
-                    
-                    <!-- Django Formset Management Form -->
-                    {{ contact_formset.management_form }}
-                    
-                    <!-- Display formset errors -->
-                    {% if contact_formset.non_form_errors %}
-                        <div class="formset-errors">
-                            {{ contact_formset.non_form_errors }}
+                    {% else %}
+                        <div style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 5px; background-color: #f9f9f9; color: #666;">
+                            <p><em>Aucun contact pour ce client. Les contacts seront créés lors de la création d'affaires.</em></p>
                         </div>
                     {% endif %}
-                    
-                    <div id="contacts-container">
-                        {% for contact_form in contact_formset %}
-                            <div class="contact-form" id="contact-{{ forloop.counter0 }}">
-                                <div class="contact-header">
-                                    <h4>Nouveau Contact {{ forloop.counter }}</h4>
-                                    <button type="button" class="btn-remove-contact" onclick="removeContact(this)">×</button>
-                                </div>
-                                
-                                <!-- Display form errors -->
-                                {% if contact_form.non_field_errors %}
-                                    <div class="form-errors">
-                                        {{ contact_form.non_field_errors }}
-                                    </div>
-                                {% endif %}
-                                
-                                <div class="form_categories">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ contact_form.nom.label }}</label>
-                                        {{ contact_form.nom }}
-                                        {% if contact_form.nom.errors %}
-                                            <div class="field-error">{{ contact_form.nom.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label">{{ contact_form.prenom.label }}</label>
-                                        {{ contact_form.prenom }}
-                                        {% if contact_form.prenom.errors %}
-                                            <div class="field-error">{{ contact_form.prenom.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">{{ contact_form.fonction.label }}</label>
-                                    {{ contact_form.fonction }}
-                                    {% if contact_form.fonction.errors %}
-                                        <div class="field-error">{{ contact_form.fonction.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="form_categories">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ contact_form.phone_number.label }}</label>
-                                        {{ contact_form.phone_number }}
-                                        {% if contact_form.phone_number.errors %}
-                                            <div class="field-error">{{ contact_form.phone_number.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="form-label">{{ contact_form.email.label }}</label>
-                                        {{ contact_form.email }}
-                                        {% if contact_form.email.errors %}
-                                            <div class="field-error">{{ contact_form.email.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">
-                                        {{ contact_form.is_principal }}
-                                        <span style="display: none;">{{ contact_form.is_principal.label }}</span>
-                                        Contact principal
-                                    </label>
-                                    {% if contact_form.is_principal.errors %}
-                                        <div class="field-error">{{ contact_form.is_principal.errors }}</div>
-                                    {% endif %}
-                                </div>
-                                
-                                <!-- Delete checkbox (hidden, managed by JavaScript) -->
-                                {% if contact_form.DELETE %}
-                                    <div style="display: none;">{{ contact_form.DELETE }}</div>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                        
-                        <!-- Hidden template for new contacts -->
-                        <div class="contact-form hidden" id="contact-template">
-                            <div class="contact-header">
-                                <h4>Nouveau Contact</h4>
-                                <button type="button" class="btn-remove-contact" onclick="removeContact(this)">×</button>
-                            </div>
-                            
-                            <div class="form_categories">
-                                <div class="form-group">
-                                    <label class="form-label">Nom</label>
-                                    <input type="text" name="contact-__INDEX__-nom" class="form-input">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">Prénom</label>
-                                    <input type="text" name="contact-__INDEX__-prenom" class="form-input">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">Fonction</label>
-                                <input type="text" name="contact-__INDEX__-fonction" class="form-input">
-                            </div>
-                            
-                            <div class="form_categories">
-                                <div class="form-group">
-                                    <label class="form-label">Téléphone</label>
-                                    <input type="text" name="contact-__INDEX__-phone_number" class="form-input">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" name="contact-__INDEX__-email" class="form-input">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label">
-                                    <input type="checkbox" name="contact-__INDEX__-is_principal" class="form-checkbox principal-checkbox">
-                                    Contact principal
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 
