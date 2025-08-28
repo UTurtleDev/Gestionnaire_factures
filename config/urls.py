@@ -12,6 +12,7 @@ urlpatterns = [
     path('factures/', include('factures.urls')),
     path('affaires/', include('affaires.urls')),
     path('users/', include('users.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 

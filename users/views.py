@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib import messages
 from .forms import UserCreateForm, UserUpdateForm
@@ -7,6 +8,7 @@ from .forms import UserCreateForm, UserUpdateForm
 User = get_user_model()
 
 # Create your views here.
+@login_required
 def users(request):
     users_list = User.objects.all().order_by('-date_joined')
     
@@ -18,6 +20,7 @@ def users(request):
     return render(request, 'pages/users/users.html', {'users': users})
 
 
+@login_required
 def user_create(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
@@ -31,11 +34,13 @@ def user_create(request):
     return render(request, 'pages/users/user_create_form.html', {'form': form})
 
 
+@login_required
 def user_detail(request, pk):
     user = User.objects.get(pk=pk)
-    return render(request, 'pages/users/user_detail.html', {'user': user})
+    return render(request, 'pages/users/user_detail.html', {'user_detail': user})
 
 
+@login_required
 def user_update(request, pk):
     user = User.objects.get(pk=pk)
     if request.method == 'POST':
@@ -43,13 +48,14 @@ def user_update(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Utilisateur modifié avec succès!')
-            return redirect('users:detail', pk=user.pk)
+            return redirect('users:users')
     else:
         form = UserUpdateForm(instance=user)
     
-    return render(request, 'pages/users/user_update_form.html', {'form': form, 'user': user})
+    return render(request, 'pages/users/user_update_form.html', {'form': form, 'user_detail': user})
 
 
+@login_required
 def user_delete(request, pk):
     user = User.objects.get(pk=pk)
     if request.method == 'POST':
@@ -57,4 +63,4 @@ def user_delete(request, pk):
         messages.success(request, 'Utilisateur supprimé avec succès!')
         return redirect('users:users')
     
-    return render(request, 'pages/users/user_delete.html', {'user': user})
+    return render(request, 'pages/users/user_delete.html', {'user_detail': user})

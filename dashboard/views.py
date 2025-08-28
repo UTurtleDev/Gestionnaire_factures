@@ -1,15 +1,44 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Q
+from django.http import JsonResponse
 from factures.models import Invoice
 from affaires.models import Affaire
 from clients.models import Client, Contact
 from datetime import datetime
 from utils.charts import generate_revenue_chart, generate_revenue_histogram_chart, generate_cumulative_revenue_chart, get_available_years, get_monthly_revenue_by_year, calculate_monthly_averages
+from utils.exports import (
+    export_database, export_clients_csv, export_clients_xlsx, 
+    export_affaires_csv, export_affaires_xlsx, export_factures_csv, export_factures_xlsx, 
+    export_database_csv, export_database_xlsx, export_contacts_csv, export_contacts_xlsx,
+    export_reglements_csv, export_reglements_xlsx
+)
+from users.forms import CustomAuthenticationForm
 
 # Create your views here.
 def login(request):
-    return render(request, 'registration/login.html')
+    if request.user.is_authenticated:
+        return redirect('dashboard:dashboard')
+    
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect('dashboard:dashboard')
+        else:
+            messages.error(request, 'Email ou mot de passe incorrect.')
+    else:
+        form = CustomAuthenticationForm()
+    
+    return render(request, 'registration/login.html', {'form': form})
 
+@login_required
 def dashboard(request):
     current_year = datetime.now().year
     passed_year = datetime.now().year - 1
@@ -106,6 +135,7 @@ def dashboard(request):
 
 
 
+@login_required
 def chiffre_d_affaires(request):
     # Facturation année en cours
     current_year = datetime.now().year
@@ -163,6 +193,7 @@ def chiffre_d_affaires(request):
     })
 
 
+@login_required
 def clients(request):
     from django.db.models import Sum, Count
     from clients.models import Client
@@ -211,6 +242,7 @@ def clients(request):
     })
 
 
+@login_required
 def affaires(request):
     from django.db.models import Sum
     from clients.models import Client
@@ -246,6 +278,7 @@ def affaires(request):
     })
 
 
+@login_required
 def search(request):
     query = request.GET.get('search', '').strip()
     context = {'query': query}
@@ -270,7 +303,9 @@ def search(request):
         # Recherche dans les affaires
         affaires = Affaire.objects.filter(
             Q(affaire_number__icontains=query) |
-            # Q(author__icontains=query) |
+            Q(author__email__icontains=query) |
+            Q(author__first_name__icontains=query) |
+            Q(author__last_name__icontains=query) |
             Q(affaire_description__icontains=query) |
             Q(client_entity_name__icontains=query)
         )
@@ -282,6 +317,17 @@ def search(request):
             Q(invoice_object__icontains=query) |
             Q(affaire__affaire_number__icontains=query)
         )
+
+        # Recherche dans les autheurs  
+        factures = Invoice.objects.filter(
+            Q(invoice_number__icontains=query) |
+            Q(client_entity_name__icontains=query) |
+            Q(invoice_object__icontains=query) |
+            Q(affaire__affaire_number__icontains=query) |
+            Q(author__email__icontains=query) |
+            Q(author__first_name__icontains=query) |
+            Q(author__last_name__icontains=query)
+        )
         
         context.update({
             'clients': clients,
@@ -292,4 +338,78 @@ def search(request):
         })
     
     return render(request, 'pages/search/search_results.html', context)
+
+
+@login_required
+def export_modal(request):
+    """Vue pour gérer les exports via la modale"""
+    if request.method == 'POST':
+        export_type = request.POST.get('export_type')
+        export_format = request.POST.get('export_format')
+        date_debut = request.POST.get('date_debut')
+        date_fin = request.POST.get('date_fin')
+        
+        try:
+            # Validation des dates si nécessaires
+            if date_debut:
+                date_debut = datetime.strptime(date_debut, '%Y-%m-%d').date()
+            if date_fin:
+                date_fin = datetime.strptime(date_fin, '%Y-%m-%d').date()
+            
+            # Export de la base de données
+            if export_type == 'database':
+                if export_format == 'sql':
+                    return export_database()
+                elif export_format == 'csv':
+                    return export_database_csv()
+                elif export_format == 'xlsx':
+                    return export_database_xlsx()
+            
+            # Export des clients
+            elif export_type == 'clients':
+                if export_format == 'csv':
+                    return export_clients_csv()
+                elif export_format == 'xlsx':
+                    return export_clients_xlsx()
+            
+            # Export des contacts
+            elif export_type == 'contacts':
+                if export_format == 'csv':
+                    return export_contacts_csv()
+                elif export_format == 'xlsx':
+                    return export_contacts_xlsx()
+            
+            # Export des règlements
+            elif export_type == 'reglements':
+                if export_format == 'csv':
+                    return export_reglements_csv(date_debut, date_fin)
+                elif export_format == 'xlsx':
+                    return export_reglements_xlsx(date_debut, date_fin)
+            
+            # Export des affaires
+            elif export_type == 'affaires':
+                if export_format == 'csv':
+                    return export_affaires_csv(date_debut, date_fin)
+                elif export_format == 'xlsx':
+                    return export_affaires_xlsx(date_debut, date_fin)
+            
+            # Export des factures
+            elif export_type == 'factures':
+                if export_format == 'csv':
+                    return export_factures_csv(date_debut, date_fin)
+                elif export_format == 'xlsx':
+                    return export_factures_xlsx(date_debut, date_fin)
+            
+        except ValueError as e:
+            return JsonResponse({'error': 'Format de date invalide'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'Erreur lors de l\'export: {str(e)}'}, status=500)
+    
+    return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+
+def logout_view(request):
+    logout(request)
+    # messages.success(request, 'Vous avez été déconnecté avec succès.')
+    return redirect('dashboard:login')
 

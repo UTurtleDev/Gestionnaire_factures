@@ -7,7 +7,7 @@
 
 
 <div class="title">
-    <H2>Modifications de : {{ user.first_name }} {{ user.last_name }}</H2>
+    <H2>Modifications de : {{ user_detail.first_name }} {{ user_detail.last_name }}</H2>
 </div>
 
 <section class="tableau">
@@ -108,12 +108,12 @@
                 <span class="close" onclick="closeDeleteModal()">&times;</span>
             </div>
             <div class="modal-body user-delete-modal">
-                <p>Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{{ user.first_name }} {{ user.last_name }}</strong> ?</p>
+                <p>Êtes-vous sûr de vouloir supprimer l'utilisateur <strong>{{ user_detail.first_name }} {{ user_detail.last_name }}</strong> ?</p>
                 <p>Cette action est irréversible.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="form_btn" onclick="closeDeleteModal()">Annuler</button>
-                <form method="post" action="{% url 'users:delete' user.pk %}">
+                <form method="post" action="{% url 'users:delete' user_detail.pk %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-delete">Supprimer</button>
                 </form>

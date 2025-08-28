@@ -10,6 +10,7 @@ factures/*
 mediafiles/charts/*
 static/charts/*
 staticfiles/
+.users.txt
 
 # Claude Code
 .claude_history

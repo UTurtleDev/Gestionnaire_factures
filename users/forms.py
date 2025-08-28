@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from .models import CustomUser
 
@@ -102,3 +102,25 @@ class UserCreateForm(UserForm):
     def __init__(self, *args, **kwargs):
         kwargs['is_update'] = False
         super().__init__(*args, **kwargs)
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'signin_input',
+            'placeholder': 'Email'
+        }),
+        label=''
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'signin_input', 
+            'placeholder': 'Password'
+        }),
+        label=''
+    )
+    
+    error_messages = {
+        'invalid_login': 'Email ou mot de passe incorrect.',
+        'inactive': 'Ce compte est inactif.',
+    }

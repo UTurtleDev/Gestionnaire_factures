@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="sidebar">
-        <div class="logo"><img src="{% static 'logo.png' %}" alt="Logo P2 Ingénierie"></div>
+        <div class="logo"><img src="{% static '/img/logo.png' %}" alt="Logo P2 Ingénierie"></div>
         <div class="menu">
             <div class="menu-item">
                 <div class="menu-text">
@@ -48,15 +48,22 @@
     </div>
     <section class="main-container">
         <nav class="navbar">
+            <div class="user-connected">
+                {{ user.first_name }} {{ user.last_name }}
+            </div>
             <div class="recherche">
                 <form method="GET" action="{% url 'search' %}">
                     <input type="text" name="search" placeholder="Rechercher" value="{{ request.GET.search }}">
                 </form>
             </div>
-            {% if user.is_superuser %}
+            {% if user.is_staff %}
             <div>
-                <a href="{% url "users:users" %}"><img class='param-img-user' src="{% static 'img/user.svg' %}" alt="Avatar"></a>
+                <a href="{% url "users:users" %}"><img class='param-img-user' src="{% static 'img/user.svg' %}" alt="Avatar" title="Utilisateurs"></a>
+                <img class='param-img-user' src="{% static 'img/export.svg' %}" alt="export" title="Export" id="exportIcon" style="cursor: pointer;">
+                <a href="{% url "dashboard:logout" %}"><img class='param-img-logout' src="{% static 'img/logout.svg' %}" alt="logout" title="Deconnexion"></a>
             </div>
+            {% else %}
+                <a href="{% url "dashboard:logout" %}"><img class='param-img-logout' src="{% static 'img/logout.svg' %}" alt="logout" title="Deconnexion"></a>
             {% endif %}
         </nav>
     
@@ -75,6 +82,54 @@
     
     </section>
     
+    <!-- Modale d'export -->
+    <div id="exportModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Export des données</h3>
+            <form id="exportForm" method="POST" action="{% url 'dashboard:export' %}">
+                {% csrf_token %}
+                
+                <!-- Choix du type d'export -->
+                <div class="form-group">
+                    <label>Type de données :</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="export_type" value="database" checked> Base de données</label>
+                        <label><input type="radio" name="export_type" value="clients"> Clients</label>
+                        <label><input type="radio" name="export_type" value="contacts"> Contacts</label>
+                        <label><input type="radio" name="export_type" value="factures"> Factures</label>
+                        <label><input type="radio" name="export_type" value="reglements"> Règlements</label>
+                        <label><input type="radio" name="export_type" value="affaires"> Affaires</label>
+                    </div>
+                </div>
+                
+                <!-- Champs de date (masqués par défaut) -->
+                <div class="form-group" id="dateFields" style="display: none;">
+                    <label>Période :</label>
+                    <div class="date-inputs">
+                        <input type="date" name="date_debut" placeholder="Date début">
+                        <input type="date" name="date_fin" placeholder="Date fin">
+                    </div>
+                </div>
+                
+                <!-- Choix du format -->
+                <div class="form-group">
+                    <label>Format :</label>
+                    <div class="radio-group" id="formatGroup">
+                        <label><input type="radio" name="export_format" value="sql" checked> Sauvegarde BD (SQL)</label>
+                        <label><input type="radio" name="export_format" value="csv"> CSV</label>
+                        <label><input type="radio" name="export_format" value="xlsx"> Excel (XLSX)</label>
+                    </div>
+                </div>
+                
+                <!-- Boutons -->
+                <div class="modal-buttons">
+                    <button type="button" id="cancelExport">Annuler</button>
+                    <button type="submit" id="exportButton">Exporter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <script>
         // Auto-hide success messages after 5 seconds
         document.addEventListener('DOMContentLoaded', function() {
@@ -86,6 +141,104 @@
                         message.remove();
                     }, 300);
                 }, 5000);
+            });
+            
+            // Gestion de la modale d'export
+            const exportIcon = document.getElementById('exportIcon');
+            const exportModal = document.getElementById('exportModal');
+            const cancelButton = document.getElementById('cancelExport');
+            const exportForm = document.getElementById('exportForm');
+            const exportTypeRadios = document.querySelectorAll('input[name="export_type"]');
+            const dateFields = document.getElementById('dateFields');
+            const formatGroup = document.getElementById('formatGroup');
+            
+            // Ouvrir la modale
+            if (exportIcon) {
+                exportIcon.addEventListener('click', function() {
+                    exportModal.style.display = 'flex';
+                });
+            }
+            
+            // Fermer la modale
+            cancelButton.addEventListener('click', function() {
+                exportModal.style.display = 'none';
+            });
+            
+            // Fermer en cliquant sur l'overlay
+            exportModal.addEventListener('click', function(e) {
+                if (e.target === exportModal) {
+                    exportModal.style.display = 'none';
+                }
+            });
+            
+            // Gestion des types d'export
+            exportTypeRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    const selectedType = this.value;
+                    
+                    // Afficher/masquer les champs de date
+                    if (selectedType === 'factures' || selectedType === 'affaires' || selectedType === 'reglements') {
+                        dateFields.style.display = 'block';
+                    } else {
+                        dateFields.style.display = 'none';
+                    }
+                    
+                    // Ajuster les options de format
+                    const formatRadios = formatGroup.querySelectorAll('input[type="radio"]');
+                    const formatLabels = formatGroup.querySelectorAll('label');
+                    
+                    if (selectedType === 'database') {
+                        // Pour la base de données : SQL, CSV, XLSX
+                        formatLabels[0].style.display = 'inline-block';
+                        formatLabels[1].style.display = 'inline-block';
+                        formatLabels[2].style.display = 'inline-block';
+                        formatRadios[0].checked = true;
+                        formatLabels[0].querySelector('input').value = 'sql';
+                        formatLabels[0].innerHTML = '<input type="radio" name="export_format" value="sql" checked> Sauvegarde BD (SQL)';
+                    } else {
+                        // Pour clients/contacts/factures/règlements/affaires : CSV, XLSX seulement
+                        formatLabels[0].style.display = 'none';
+                        formatLabels[1].style.display = 'inline-block';
+                        formatLabels[2].style.display = 'inline-block';
+                        formatRadios[1].checked = true;
+                    }
+                });
+            });
+            
+            // Soumission du formulaire
+            exportForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Créer un formulaire temporaire pour le téléchargement
+                const formData = new FormData(this);
+                const tempForm = document.createElement('form');
+                tempForm.method = 'POST';
+                tempForm.action = this.action;
+                tempForm.style.display = 'none';
+                
+                // Ajouter tous les champs
+                for (let [key, value] of formData.entries()) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    tempForm.appendChild(input);
+                }
+                
+                // Ajouter le token CSRF
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = csrfToken;
+                tempForm.appendChild(csrfInput);
+                
+                document.body.appendChild(tempForm);
+                tempForm.submit();
+                document.body.removeChild(tempForm);
+                
+                // Fermer la modale
+                exportModal.style.display = 'none';
             });
         });
     </script>

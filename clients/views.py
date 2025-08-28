@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.forms import inlineformset_factory
 from django.contrib import messages
@@ -9,6 +10,7 @@ from .forms import ClientForm, ContactAffaireForm, ContactFormSet
 
 # Create your views here.
 
+@login_required
 def clients(request):
     clients = Client.objects.all()
     sorted_clients = sorted(clients, key=lambda client: client.entity_name.lower())
@@ -20,6 +22,7 @@ def clients(request):
 
     return render(request, 'pages/clients/clients.html', context={'clients': page_obj})
 
+@login_required
 def client_create(request):
     # Création simplifiée du client sans formset contact
     # Les contacts seront créés au niveau des affaires
@@ -36,6 +39,7 @@ def client_create(request):
     })
 
 
+@login_required
 def client_detail(request, pk):
     client_detail = get_object_or_404(Client, pk=pk)
     # Les contacts sont maintenant liés aux affaires
@@ -51,6 +55,7 @@ def client_detail(request, pk):
     })
 
 
+@login_required
 def client_update(request, pk):
     client = get_object_or_404(Client, pk=pk)
     
@@ -118,6 +123,7 @@ def client_update(request, pk):
     })
 
 
+@login_required
 def client_delete(request, pk):
     client = get_object_or_404(Client, pk=pk)
 
@@ -134,6 +140,7 @@ def client_delete(request, pk):
     return redirect('clients:clients')
 
 
+@login_required
 def contacts(request):
     contacts = Contact.objects.all()
     # Tri sécurisé qui gère les cas où nom peut être None
@@ -147,6 +154,7 @@ def contacts(request):
     return render(request, 'pages/clients/contacts.html', context={'contacts': page_obj})
 
 
+@login_required
 def contact_create(request):
     if request.method == 'POST':
         form = ContactAffaireForm(request.POST)
@@ -159,11 +167,13 @@ def contact_create(request):
     
     return render(request, 'pages/clients/contact_create_form.html', {'form': form})
 
+@login_required
 def contact_detail(request, pk):
     contact_detail = get_object_or_404(Contact, pk=pk)
 
     return render(request, 'pages/clients/contact_detail.html', {'contact': contact_detail})
 
+@login_required
 def contact_update(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
 
@@ -178,6 +188,7 @@ def contact_update(request, pk):
     return render(request, 'pages/clients/contact_update_form.html', {'form': form, 'contact': contact})
 
 
+@login_required
 def contact_delete(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
 

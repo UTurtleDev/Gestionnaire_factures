@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.conf import settings
@@ -13,6 +14,7 @@ from .forms import InvoiceForm, PaymentForm
 
 # Create your views here.
 
+@login_required
 def factures(request):
     factures= Invoice.objects.all()
     sorted_factures = sorted(factures, key=lambda facture: facture.invoice_number, reverse=True)
@@ -35,6 +37,7 @@ def factures(request):
     # return render(request, 'pages/factures/factures.html', context={"factures": sorted_factures, "date": date, "affaires": affaires})  
     return render(request, 'pages/factures/factures.html', context={"factures": page_obj, "date": date, "affaires": affaires})  
 
+@login_required
 def facture_create(request):
     if request.method == "POST":
         form = InvoiceForm(request.POST, request.FILES)
@@ -61,11 +64,13 @@ def facture_create(request):
            
     return render(request, 'pages/factures/facture_create_form.html', {'form': form})
 
+@login_required
 def facture_detail(request, pk):
     facture_detail = get_object_or_404(Invoice, pk=pk)
 
     return render(request, 'pages/factures/facture_detail.html', {'facture': facture_detail})
 
+@login_required
 def facture_update(request, pk):
     facture = get_object_or_404(Invoice, pk=pk)
     facture.date = facture.date.strftime('%Y-%m-%d')
@@ -80,6 +85,7 @@ def facture_update(request, pk):
     
     return render(request, 'pages/factures/facture_update_form.html', {'form': form, 'facture': facture})
 
+@login_required
 def facture_delete(request, pk):
     facture = get_object_or_404(Invoice, pk=pk)
 
@@ -93,8 +99,9 @@ def facture_delete(request, pk):
             messages.error(request, f"Impossible de supprimer la facture {facture.invoice_number} car elle contient des paiements. Vous devez d'abord supprimer les paiements liés.")
             return redirect('factures:factures')
    
+@login_required
 def reglements(request):
-    paiements = Payment.objects.all()
+    paiements = Payment.objects.all().order_by('-date')
     factures = Invoice.objects.all()
 
     paginator = Paginator(paiements,10)
@@ -109,6 +116,7 @@ def reglements(request):
 
     return render(request, 'pages/factures/paiements.html', {'paiements': page_obj, 'factures': factures})
 
+@login_required
 def reglement_create(request, pk):
     facture = get_object_or_404(Invoice, pk=pk)
 
@@ -129,10 +137,12 @@ def reglement_create(request, pk):
     
     return render(request, 'pages/factures/paiement_create_form.html', {'form': form, 'facture': facture})
 
+@login_required
 def reglement_detail(request, pk):
     paiement_detail = get_object_or_404(Payment, pk=pk)
     return render(request, 'pages/factures/paiement_detail.html', {'paiement': paiement_detail})
 
+@login_required
 def reglement_update(request, pk):
     # Récupère le paiement existant à partir de son ID
     paiement = get_object_or_404(Payment, pk=pk)
@@ -161,6 +171,7 @@ def reglement_update(request, pk):
         'paiement': paiement
     })
 
+@login_required
 def reglement_delete(request, pk):
     paiement = get_object_or_404(Payment, pk=pk)
     facture  = paiement.invoice  # Récupère la facture associée au paiement  
@@ -172,6 +183,7 @@ def reglement_delete(request, pk):
 
     return redirect('factures:reglements') 
 
+@login_required
 def download_facture_pdf(request, pk):
     """Vue pour servir les fichiers PDF des factures de manière sécurisée"""
     facture = get_object_or_404(Invoice, pk=pk)

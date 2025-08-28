@@ -157,6 +157,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Ajout de la configuration d'authentification custom
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# Configuration d'authentification
+LOGIN_URL = 'dashboard:login'
+LOGIN_REDIRECT_URL = 'dashboard:dashboard'
+LOGOUT_REDIRECT_URL = 'dashboard:login'
+
 # Ajouter cette configuration pour la sécurité
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 

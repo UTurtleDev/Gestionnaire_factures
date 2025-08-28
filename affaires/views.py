@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.contrib import messages
@@ -8,6 +9,7 @@ from .forms import AffaireForm, ContactFormSet, ContactInlineFormSet
 from clients.models import Contact
 
 # Create your views here.
+@login_required
 def affaires(request):  
     affaires = Affaire.objects.all()
     sorted_affaires = sorted(affaires, key=lambda affaire: affaire.reste_a_facturer, reverse=True)
@@ -19,6 +21,7 @@ def affaires(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'pages/affaires/affaires.html', context={"affaires": page_obj, "total_facture_affaire":total_facture_affaire})  
 
+@login_required
 def affaire_detail(request, pk):
     affaire_detail = get_object_or_404(Affaire, pk=pk)
     # Ordonner les contacts pour que le contact principal apparaisse en premier
@@ -31,6 +34,7 @@ def affaire_detail(request, pk):
         'contact_principal': contact_principal
     })
 
+@login_required
 def affaire_create(request):
     if request.method == 'POST':
         form = AffaireForm(request.POST)
@@ -95,6 +99,7 @@ def affaire_create(request):
         'contact_formset': contact_formset
     })
 
+@login_required
 def affaire_update(request, pk):
     affaire = get_object_or_404(Affaire, pk=pk)
     
@@ -168,6 +173,7 @@ def affaire_update(request, pk):
     })
 
 
+@login_required
 def affaire_delete(request, pk):
     affaire = get_object_or_404(Affaire, pk=pk)
     
@@ -184,6 +190,7 @@ def affaire_delete(request, pk):
     return redirect('affaires:affaires')
 
 
+@login_required
 def client_contacts_api(request, client_id):
     """API endpoint to get contacts for a specific client"""
     try:
