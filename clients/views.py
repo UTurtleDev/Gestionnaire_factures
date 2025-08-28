@@ -24,18 +24,63 @@ def clients(request):
 
 @login_required
 def client_create(request):
-    # Création simplifiée du client sans formset contact
-    # Les contacts seront créés au niveau des affaires
     if request.method == 'POST':
         form = ClientForm(request.POST)
-        if form.is_valid():
+        contact_formset = ContactFormSet(request.POST)
+        
+        if form.is_valid() and contact_formset.is_valid():
             client = form.save()
+            
+            # Process contacts - they need to be linked to an affaire
+            contacts_to_create = []
+            for contact_form in contact_formset:
+                if contact_form.cleaned_data and not hasattr(contact_form, '_is_empty_form'):
+                    contacts_to_create.append(contact_form.cleaned_data)
+            
+            # If there are contacts to create, we need an affaire
+            if contacts_to_create:
+                # Create a default affaire for this client
+                from affaires.models import Affaire
+                from users.models import CustomUser
+                
+                # Get the first author user or current user
+                default_author = request.user if hasattr(request.user, 'affaires') else CustomUser.objects.filter(is_superuser=True).first()
+                
+                if default_author:
+                    # Generate a unique affaire number
+                    from django.utils import timezone
+                    timestamp = timezone.now().strftime('%Y%m%d%H%M%S')
+                    affaire_number = f"AFF-{client.pk:03d}-{timestamp}"
+                    
+                    affaire = Affaire.objects.create(
+                        client=client,
+                        author=default_author,
+                        affaire_number=affaire_number,
+                        budget=0.0,
+                        affaire_description=f"Affaire par défaut pour {client.entity_name}"
+                    )
+                    
+                    # Create all contacts linked to this affaire
+                    for contact_data in contacts_to_create:
+                        Contact.objects.create(
+                            affaire=affaire,
+                            nom=contact_data.get('nom', ''),
+                            prenom=contact_data.get('prenom', ''),
+                            fonction=contact_data.get('fonction', ''),
+                            phone_number=contact_data.get('phone_number', ''),
+                            email=contact_data.get('email', ''),
+                            is_principal=contact_data.get('is_principal', False)
+                        )
+            
+            messages.success(request, f'Client "{client.entity_name}" créé avec succès.')
             return redirect('clients:clients')
     else:
         form = ClientForm()
+        contact_formset = ContactFormSet()
     
     return render(request, 'pages/clients/client_create_form.html', {
         'form': form,
+        'contact_formset': contact_formset,
     })
 
 

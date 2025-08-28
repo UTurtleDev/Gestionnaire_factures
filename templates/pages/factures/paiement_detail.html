@@ -47,7 +47,7 @@
             
             
             <div class="form_btn_group">
-                <a href="{% url 'factures:reglements' %}" class="form_btn">Retour</a>
+                <a href="#" onclick="history.back(); return false;" class="form_btn">Retour</a>
                 <a href="{% url 'factures:reglement_modifier' paiement.pk %}" class="form_btn">Modifier</a>
             </div>
         </div>

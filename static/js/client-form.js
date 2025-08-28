@@ -84,46 +84,68 @@ function removeContact(button) {
     const contactForm = button.closest('.contact-form');
     if (!contactForm) return;
     
-    // Check if an existing contact is selected
+    // Check if we're in client creation mode (no existing contacts select)
     const existingContactSelect = document.getElementById('existing-contact-select');
-    const hasExistingContact = existingContactSelect && existingContactSelect.value;
+    const isCreationMode = !existingContactSelect;
     
-    // UI check: Don't allow removal if it's the only visible contact AND no existing contact is selected
-    const visibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)');
-    if (visibleContacts.length <= 1 && !hasExistingContact) {
-        alert('Au moins un contact est requis.');
-        return;
-    }
-    
-    // Check if we're removing the principal contact for UI feedback
-    const principalCheckbox = contactForm.querySelector('.principal-checkbox');
-    const wasPrincipal = principalCheckbox && principalCheckbox.checked;
-    
-    // Mark for deletion if it has a DELETE field (existing forms)
-    const deleteCheckbox = contactForm.querySelector('input[name$="-DELETE"]');
-    if (deleteCheckbox) {
-        deleteCheckbox.checked = true;
-        contactForm.classList.add('hidden');
-    } else {
-        // If no DELETE field, just remove (newly added forms)
+    if (isCreationMode) {
+        // In creation mode, always allow removal
+        // Check if we're removing the principal contact for UI feedback
+        const principalCheckbox = contactForm.querySelector('.principal-checkbox');
+        const wasPrincipal = principalCheckbox && principalCheckbox.checked;
+        
+        // For creation mode, always remove the form directly
         contactForm.remove();
         updateDjangoFormsetIndices();
-    }
-    
-    // UI feedback: If we removed the principal contact, suggest user select another
-    if (wasPrincipal) {
-        const firstVisibleContact = document.querySelector('.contact-form:not(#contact-template):not(.hidden) .principal-checkbox');
-        if (firstVisibleContact) {
-            firstVisibleContact.checked = true;
+        
+        // UI feedback: If we removed the principal contact, make the first remaining one principal
+        if (wasPrincipal) {
+            const firstVisibleContact = document.querySelector('.contact-form:not(#contact-template):not(.hidden) .principal-checkbox');
+            if (firstVisibleContact) {
+                firstVisibleContact.checked = true;
+            }
         }
-    }
-    
-    // After removal, check if we need to hide the first contact remove button again
-    const remainingVisibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)');
-    const firstContactRemoveBtn = document.getElementById('first-contact-remove-btn');
-    
-    if (remainingVisibleContacts.length <= 1 && !hasExistingContact && firstContactRemoveBtn) {
-        firstContactRemoveBtn.classList.add('hidden');
+    } else {
+        // Original logic for update mode
+        const hasExistingContact = existingContactSelect.value;
+        
+        // UI check: Don't allow removal if it's the only visible contact AND no existing contact is selected
+        const visibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)');
+        if (visibleContacts.length <= 1 && !hasExistingContact) {
+            alert('Au moins un contact est requis.');
+            return;
+        }
+        
+        // Check if we're removing the principal contact for UI feedback
+        const principalCheckbox = contactForm.querySelector('.principal-checkbox');
+        const wasPrincipal = principalCheckbox && principalCheckbox.checked;
+        
+        // Mark for deletion if it has a DELETE field (existing forms)
+        const deleteCheckbox = contactForm.querySelector('input[name$="-DELETE"]');
+        if (deleteCheckbox) {
+            deleteCheckbox.checked = true;
+            contactForm.classList.add('hidden');
+        } else {
+            // If no DELETE field, just remove (newly added forms)
+            contactForm.remove();
+            updateDjangoFormsetIndices();
+        }
+        
+        // UI feedback: If we removed the principal contact, suggest user select another
+        if (wasPrincipal) {
+            const firstVisibleContact = document.querySelector('.contact-form:not(#contact-template):not(.hidden) .principal-checkbox');
+            if (firstVisibleContact) {
+                firstVisibleContact.checked = true;
+            }
+        }
+        
+        // After removal, check if we need to hide the first contact remove button again
+        const remainingVisibleContacts = document.querySelectorAll('.contact-form:not(#contact-template):not(.hidden)');
+        const firstContactRemoveBtn = document.getElementById('first-contact-remove-btn');
+        
+        if (remainingVisibleContacts.length <= 1 && !hasExistingContact && firstContactRemoveBtn) {
+            firstContactRemoveBtn.classList.add('hidden');
+        }
     }
 }
 

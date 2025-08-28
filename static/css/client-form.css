@@ -46,6 +46,22 @@
     background-color: #fafafa;
 }
 
+/* Hidden elements */
+.contact-form.hidden,
+.modal.hidden,
+.delete-field.hidden,
+.principal-label.hidden {
+    display: none;
+}
+
+.btn-remove-contact.hidden {
+    display: none;
+}
+
+.modal:not(.hidden) {
+    display: flex;
+}
+
 .contact-header {
     display: flex;
     justify-content: space-between;

@@ -9,7 +9,7 @@
 <div class="title">
     <H2>{{ user_detail.first_name }} {{ user_detail.last_name }}</H2>
     <div class="form_btn_group_H2">
-        <a href="{% url 'users:users' %}" class="form_btn">Retour</a>
+        <a href="#" onclick="history.back(); return false;" class="form_btn">Retour</a>
         <a href="{% url 'users:modifier' user_detail.pk %}" class="form_btn">Modifier</a>
     </div>
 </div>

@@ -150,9 +150,10 @@ class BaseContactFormSet(forms.BaseFormSet):
                 if form.cleaned_data.get('is_principal'):
                     principal_count += 1
         
-        # Ensure we have at least one contact
-        if not valid_forms:
-            raise forms.ValidationError("Au moins un contact est requis.")
+        # For client creation, contacts are optional
+        # Remove the requirement for at least one contact
+        # if not valid_forms:
+        #     raise forms.ValidationError("Au moins un contact est requis.")
         
         # Ensure exactly one principal contact
         if principal_count == 0:
@@ -167,9 +168,9 @@ ContactFormSet = formset_factory(
     ContactForm,
     formset=BaseContactFormSet,
     extra=1,  # Start with 1 empty form
-    min_num=1,  # Require at least 1 contact
+    min_num=0,  # No minimum requirement (can be empty)
     max_num=10,  # Limit to 10 contacts max
-    validate_min=True,
+    validate_min=False,
     can_delete=True
 )
 

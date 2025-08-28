@@ -8,7 +8,7 @@
 <div class="title">
     <H2>Facture {{ facture.invoice_number }} - {{ facture.client.entity_name }}</H2>
     <div class="form_btn_group_H2">
-        <a href="{% url 'factures:factures' %}" class="form_btn">Retour</a>
+        <a href="#" onclick="history.back(); return false;" class="form_btn">Retour</a>
         <a href="{% url 'factures:modifier' facture.pk %}" class="form_btn">Modifier</a>
     </div>
     
@@ -88,7 +88,8 @@
                         <p class="form-label">Réglements</p>
                             <div class="form-area">
                                 {% for reglement in facture.payments.all %}
-                                    <p>{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p>
+                                    {% comment %} <p>{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p> {% endcomment %}
+                                    <p data-url="{% url 'factures:reglement_detail' reglement.pk %}" class="clickable-row">{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p>
                                 {% endfor %}
                             </div>
                     </div>
@@ -104,7 +105,20 @@
 </section>
 
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Empêche la redirection si on clique sur un lien dans les actions
+                if (event.target.closest('.actions') || event.target.closest('a')) {
+                    return;
+                }
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
 
 
 {% endblock content %}

@@ -624,6 +624,7 @@ h2 {
 
 .form-area p {
     padding-top: 12px;
+    cursor: pointer;
 }
 
 /* clients */

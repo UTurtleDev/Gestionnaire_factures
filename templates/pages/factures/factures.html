@@ -81,7 +81,7 @@
                         {% if facture.client %}
                             <a href="{% url 'clients:detail' facture.client.id %}">{{ facture.client.entity_name }}</a>
                         {% else %}
-                            {{ facture.client_entity_name }}
+                            <p>{{ facture.client_entity_name }}</p>
                         {% endif %}
                     </div>
                 </td>
@@ -165,11 +165,11 @@
             <a href="?page={{ factures.paginator.num_pages }}" class="btn">»</a>
             {% endif %}
         </div>
-        <div class="pagination-info">
+        {% comment %} <div class="pagination-info">
             <p>
                 Page {{ factures.number }} sur {{ factures.paginator.num_pages }}
             </p>
-        </div>
+        </div> {% endcomment %}
     </div>
     
 

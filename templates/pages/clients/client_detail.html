@@ -8,7 +8,7 @@
 <div class="title">
     <H2>{{ client.entity_name }}</H2>
         <div class="form_btn_group">
-            <a href="{% url 'clients:clients' %}" class="form_btn">Retour</a>
+            <a href="#" onclick="history.back(); return false;" class="form_btn">Retour</a>
             <a href="{% url 'clients:modifier' client.pk %}" class="form_btn">Modifier</a>
         </div>
 </div>

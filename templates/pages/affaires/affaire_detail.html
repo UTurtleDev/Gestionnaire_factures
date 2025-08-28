@@ -8,7 +8,7 @@
 <div class="title">
     <H2>Affaire {{ affaire.affaire_number }} - {{ affaire.client.entity_name }}</H2>
         <div class="form_btn_group">
-            <a href="{% url 'affaires:affaires' %}" class="form_btn">Retour</a>
+            <a href="#" onclick="history.back(); return false;" class="form_btn">Retour</a>
             <a href="{% url 'affaires:modifier' affaire.pk %}" class="form_btn">Modifier</a>
         </div>
 </div>
@@ -53,7 +53,7 @@
                         <p class="form-label">Facturation</p>
                         <div class="form-area">
                             {% for facture in affaire.invoices.all %}
-                                <p>{{ facture.invoice_number }} - {{ facture.formatted_amount_ht }}</p>
+                                <p data-url="{% url 'factures:detail' facture.pk %}" class="clickable-row">{{ facture.invoice_number }} - {{ facture.formatted_amount_ht }}</p>
                             {% endfor %}
                         </div>
                     </div>
@@ -87,7 +87,20 @@
 
 </section>
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clickableRows = document.querySelectorAll('.clickable-row');
+        clickableRows.forEach(row => {
+            row.addEventListener('click', function(event) {
+                // Empêche la redirection si on clique sur un lien dans les actions
+                if (event.target.closest('.actions') || event.target.closest('a')) {
+                    return;
+                }
+                window.location = this.dataset.url;
+            });
+        });
+    });
+</script>
 
 
 

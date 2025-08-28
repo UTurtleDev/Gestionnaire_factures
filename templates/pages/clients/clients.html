@@ -123,11 +123,11 @@
             <a href="?page={{ clients.paginator.num_pages }}" class="btn">»</a>
             {% endif %}
         </div>
-        <div class="pagination-info">
+        {% comment %} <div class="pagination-info">
             <p>
                 Page {{ clients.number }} sur {{ clients.paginator.num_pages }}
             </p>
-        </div>
+        </div> {% endcomment %}
     </div>
     
     
