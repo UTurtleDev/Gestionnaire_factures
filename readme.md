@@ -51,7 +51,7 @@
 ### 🔍 Fonctionnalités avancées
 - ✅ Recherche globale dans l'application
 - ✅ Système d'authentification personnalisé (email)
-<!-- - ✅ Pagination et tri des listes -->
+- ✅ Pagination
 - ✅ Validation automatique des montants (avoirs négatifs)
 - ✅ Interface en français avec formatage européen des montants
 
