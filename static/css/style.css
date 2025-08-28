@@ -649,7 +649,7 @@ h2 {
 thead {
     scrollbar-width: thin;
     line-height: 24px;
-    height: 75px;
+    height: 60px;
 }
 
 tr {
@@ -1712,7 +1712,7 @@ h3 {
     background-color: #f7FAFC;
     border-radius: 15px;
     border: 1px solid var(--border-color);
-    padding: 20px 20px 20px 20px;
+    padding: 0px 20px 20px 20px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
     position: relative;
     overflow: hidden;
