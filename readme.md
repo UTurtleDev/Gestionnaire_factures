@@ -3,7 +3,6 @@
 ![Badge Django](https://img.shields.io/badge/Django-5.2-green?style=for-the-badge&logo=django&logoColor=white)
 ![Badge Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python&logoColor=white)
 ![Badge Pipenv](https://img.shields.io/badge/Pipenv-Gestion_Dépendances-orange?style=for-the-badge&logo=python&logoColor=white)
-![Badge Docker](https://img.shields.io/badge/Docker-Déploiement-blue?style=for-the-badge&logo=docker&logoColor=white)
 
 ## 🌟 Présentation
 
@@ -52,7 +51,7 @@
 ### 🔍 Fonctionnalités avancées
 - ✅ Recherche globale dans l'application
 - ✅ Système d'authentification personnalisé (email)
-- ✅ Pagination et tri des listes
+<!-- - ✅ Pagination et tri des listes -->
 - ✅ Validation automatique des montants (avoirs négatifs)
 - ✅ Interface en français avec formatage européen des montants
 
