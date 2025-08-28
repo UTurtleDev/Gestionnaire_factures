@@ -84,6 +84,29 @@
                     </div>
                 </div>
 
+                <!-- Section Modification du mot de passe -->
+                <div class="form-section">
+                    <h3 class="section-title">Modification du mot de passe</h3>
+                    
+                    <div class="form_categories">
+                        <div class="form-group">
+                            <label class="form-label">{{ form.password.label }}</label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="field-error">{{ form.password.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">{{ form.confirm_password.label }}</label>
+                            {{ form.confirm_password }}
+                            {% if form.confirm_password.errors %}
+                                <div class="field-error">{{ form.confirm_password.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Display non-field errors -->
                 {% if form.non_field_errors %}
                     <div class="form-errors">

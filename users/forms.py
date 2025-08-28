@@ -91,11 +91,11 @@ class UserUpdateForm(UserForm):
         kwargs['is_update'] = True
         super().__init__(*args, **kwargs)
         
-        # Retirer les champs de mot de passe pour la modification simplifiée
+        # Les champs de mot de passe sont optionnels pour la modification
         if 'password' in self.fields:
-            del self.fields['password']
+            self.fields['password'].help_text = 'Laissez vide pour ne pas modifier le mot de passe.'
         if 'confirm_password' in self.fields:
-            del self.fields['confirm_password']
+            self.fields['confirm_password'].help_text = 'Confirmer le nouveau mot de passe.'
 
 
 class UserCreateForm(UserForm):
