@@ -13,6 +13,7 @@ gunicorn = "*"
 matplotlib = "*"
 numpy = "*"
 openpyxl = "*"
+pandas = "*"
 
 [dev-packages]
 pytest = "*"

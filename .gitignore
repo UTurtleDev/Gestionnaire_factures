@@ -6,8 +6,8 @@ plan.md
 db.sqlite3
 modelstest.py
 __pycache__/
-factures/*
 mediafiles/charts/*
+mediafiles/factures/*
 static/charts/*
 staticfiles/
 .users.txt
@@ -15,3 +15,9 @@ staticfiles/
 # Claude Code
 .claude_history
 .claude_cache/
+
+
+# fichiers temporaires d'import
+*.xlsx
+*.xls
+/import_data/
