@@ -54,10 +54,19 @@ def dashboard(request):
     total_factures_dues = f"{sum(facture.amount_ttc for facture in factures_dues):,.2f} €".replace(",", " ").replace(".", ",")
 
     # Total facture dues cumulé
-    total_facturation_cumulee =Invoice.objects.all()
+    total_facturation_cumulee = Invoice.objects.all()
+    total_factures_dues_cumule = [facture for facture in total_facturation_cumulee if facture.statut != "payee"]
+    
+    # Mise à jour automatique des statuts des factures non payées
+    for facture in total_factures_dues_cumule:
+        if facture.statut in ['a_payer', 'partiellement_payee']:
+            facture.update_statut()
+    
+    # Recalculer la liste après mise à jour des statuts
+    total_facturation_cumulee = Invoice.objects.all()
     total_factures_dues_cumule = [facture for facture in total_facturation_cumulee if facture.statut != "payee"]
     total_factures_dues_sorted = sorted(total_factures_dues_cumule, key=lambda facture: facture.due_date, reverse=False)
-    total_factures_dues_cumule = f"{sum(facture.amount_ttc for facture in total_factures_dues_cumule):,.2f} €".replace(",", " ").replace(".", ",")
+    total_factures_dues_cumule_montant = f"{sum(facture.amount_ttc for facture in total_factures_dues_cumule):,.2f} €".replace(",", " ").replace(".", ",")
 
 
     # Factures en retard N
@@ -71,7 +80,7 @@ def dashboard(request):
 
 
     # Total factures en retard cumulé
-    factures_retard_cumule = [facture for facture in total_facturation_cumulee if facture.statut == "en_retard"]
+    factures_retard_cumule = [facture for facture in total_factures_dues_cumule if facture.statut == "en_retard"]
 
     # Affaires en cours
     affaires = Affaire.objects.all()
@@ -113,7 +122,7 @@ def dashboard(request):
         'passed_year': passed_year,
         'facturation': facturation,
         'total_facturation': total_facturation,
-        'total_factures_dues_cumule': total_factures_dues_cumule,
+        'total_factures_dues_cumule': total_factures_dues_cumule_montant,
         'factures_dues_sorted': factures_dues_sorted,
         'formatted_total_facturation': formatted_total_facturation,
         'affaires_en_cours': affaires_en_cours_sorted,

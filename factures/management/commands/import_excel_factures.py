@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 affaire_desc = str(row['Designation affaire']).strip()
                 
                 # Estimer le budget basé sur le montant de la facture (à ajuster)
-                montant_ht = 0 # Montant à ajuster manuellement après import
+                montant_ht = 0.00 # Montant à ajuster manuellement après import
                 
                 affaire, created = Affaire.objects.get_or_create(
                     affaire_number=affaire_number,
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 #     vat_rate = (amount_tva / amount_ht) * 100
                 # else:
                 #     vat_rate = 20.0  # Taux par défaut
-                vat_rate = 20.0  # Taux par défaut
+                vat_rate = Decimal('20.0')  # Taux par défaut
                 
                 # Dates : conversion et nettoyage de la date excel en date python pour être reconnu par le model
                 date_facture = self.parse_date(row['Date Facture'])

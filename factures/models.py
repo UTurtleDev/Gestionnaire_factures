@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 # Create your models here.
 
@@ -50,7 +51,7 @@ class Invoice(models.Model):
     
     @property
     def amount_ttc(self):
-        return self.amount_ht * (1 + self.vat_rate / 100)
+        return self.amount_ht * (1 + self.vat_rate / Decimal('100'))
     
     def formatted_amount_ttc(self):
         return f"{self.amount_ttc:,.2f} €".replace(",", " ").replace(".", ",")
@@ -71,13 +72,15 @@ class Invoice(models.Model):
     
 
     def update_statut(self):
-        total_payments = sum(payment.amount for payment in self.payments.all())        
-        if total_payments >= self.amount_ttc:
+        total_payments = sum(payment.amount for payment in self.payments.all())   
+        amount_ttc = self.amount_ht * (1 + self.vat_rate / Decimal('100'))  # Calculer ici
+
+        if total_payments >= amount_ttc:
             self.statut = 'payee'
-        elif total_payments > 0:
-            self.statut = 'partiellement_payee'
-        elif self.due_date < datetime.now().date():
+        elif self.due_date < datetime.now().date() and total_payments < amount_ttc:
             self.statut = 'en_retard'
+        elif total_payments > 0 and self.due_date >= datetime.now().date():
+            self.statut = 'partiellement_payee'
         else:
             self.statut = 'a_payer'
 

@@ -88,7 +88,7 @@
                         <p class="form-label">Réglements</p>
                             <div class="form-area">
                                 {% for reglement in facture.payments.all %}
-                                    <p data-url="{% url 'factures:reglement_detail' reglement.pk %}" class="clickable-row">{{ reglement.payment_method}} le {{ reglement.date }} de {{ facture.formatted_amount_ttc }}</p>
+                                    <p data-url="{% url 'factures:reglement_detail' reglement.pk %}" class="clickable-row">{{ reglement.payment_method}} le {{ reglement.date }} de {{ reglement.formatted_amount }}</p>
                                 {% endfor %}
                             </div>
                     </div>

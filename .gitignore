@@ -11,6 +11,7 @@ mediafiles/factures/*
 static/charts/*
 staticfiles/
 .users.txt
+prompt.txt
 
 # Claude Code
 .claude_history
